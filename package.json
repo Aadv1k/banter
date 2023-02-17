@@ -1,0 +1,17 @@
+{
+  "name": "banter",
+  "version": "1.0.0",
+  "description": "the ultimate podcasting tool",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Aadvik <aadv1k@outlook.com>",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "ejs": "^3.1.8",
+    "mongodb": "^5.0.1",
+    "node-fetch-commonjs": "^3.2.4"
+  }
+}
