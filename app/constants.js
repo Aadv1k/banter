@@ -15,5 +15,14 @@ module.exports = {
     css: "text/css",
     js: "text/javascript",
     png: "image/png",
+    ico: "image/x-icon"
   },
+
+  ERR: {
+    badInput: {
+      error: 'bad-input',
+      message: 'the provided input was invalid',
+      code: 400
+    }
+  }
 };
