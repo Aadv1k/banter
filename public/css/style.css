@@ -1,8 +1,177 @@
-body {
-  background: rebeccapurple;
+h2 {
+  font-size: 2rem;
 }
 
-h1 {
-  font-family: "Ubuntu Mono";
-  font-size: 12rem;
+h3 {
+  font-size: 1.25rem;
+}
+
+p {
+  line-height: 1.4;
+}
+
+.title {
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
+.btn {
+  all: unset;
+  cursor: pointer;
+}
+.btn--primary {
+  background-color: black;
+  color: white;
+}
+.btn--secondary {
+  background-color: transparent;
+  outline: 1px solid black;
+  color: black;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+body {
+  background: #dbd5d2;
+}
+
+a {
+  color: inherit;
+}
+
+section.hero {
+  margin: 0 auto;
+}
+
+section {
+  max-width: 1000px;
+  margin: 1.5rem auto;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  background: inherit;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  border-bottom: 1px solid #f15b3e;
+}
+.navbar .nav__title {
+  font-size: 2rem;
+}
+.navbar .nav__links {
+  display: flex;
+  gap: 0.2rem;
+  width: 60%;
+}
+.navbar .nav__links button {
+  width: 100%;
+  text-align: center;
+  text-transform: capitalize;
+  padding-block: 0.5rem;
+  border-radius: 100px;
+}
+@media screen and (min-width: 500px) {
+  .navbar {
+    flex-direction: row;
+    position: fixed;
+    box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12), 0px 2px 4px -1px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    align-items: center;
+    padding: 0.8rem 1.3rem;
+  }
+  .navbar .nav__title {
+    font-size: 3rem;
+  }
+  .navbar .nav__links {
+    width: fit-content;
+    gap: 0.4rem;
+  }
+  .navbar .nav__links button {
+    width: 120px;
+  }
+}
+
+.hero {
+  background-color: #f15b3e;
+  color: black;
+  height: 300px;
+  display: flex;
+}
+.hero .hero__sub {
+  align-self: flex-end;
+  margin-bottom: 1rem;
+  margin-left: 1rem;
+  font-size: 2rem;
+  max-width: 25ch;
+}
+@media screen and (min-width: 500px) {
+  .hero .hero__sub {
+    font-size: 2.2rem;
+  }
+}
+
+.features {
+  width: 95%;
+}
+.features__title {
+  margin-block: 0.5rem;
+}
+.features__list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  justify-content: center;
+}
+.features .features__list li {
+  background: #f15b3e;
+  height: 150px;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  padding-inline: 0.5rem;
+}
+.features p {
+  max-width: 40ch;
+}
+.features .features__list div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+@media screen and (min-width: 500px) {
+  .features .features__list {
+    flex-direction: row;
+  }
+}
+
+.faq {
+  width: 95%;
+}
+.faq__title {
+  margin-block: 0.5rem;
+}
+.faq__list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.faq__list li {
+  border: 2px solid #f15b3e;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  padding: 1rem 0.5rem;
+}
+.faq__list div {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }

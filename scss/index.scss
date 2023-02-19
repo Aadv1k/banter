@@ -1,11 +1,172 @@
-$bg: rebeccapurple;
+@use "_variables" as *;
+@use "_components" as *;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Helvetica, Arial, sans-serif;
+}
 
 body {
-  background: $bg;
+  background: $main-bg;
 }
 
-h1 {
-  font-family: "Ubuntu Mono";
-  font-size: 12rem;
+a {
+  color: inherit;
+} 
+
+section.hero {
+  margin: 0 auto;
+}
+section {
+  max-width: 1000px;
+  margin: 1.5rem auto;
 }
 
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  background: inherit;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  border-bottom: 1px solid $accent;
+
+  .nav__title {
+    font-size: 2rem;
+  }
+
+  .nav__links {
+    display: flex;
+    gap: 0.2rem;
+    width: 60%;
+  }
+
+  .nav__links button {
+    width: 100%;
+    text-align: center;
+    text-transform: capitalize;
+    padding-block: 0.5rem;
+    border-radius: 100px;
+  }
+
+  @media screen and (min-width: 500px) {
+    flex-direction: row;
+    position: fixed;
+    box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.14) , 0px 1px 10px 0px rgba(0,0,0,0.12) , 0px 2px 4px -1px rgba(0,0,0,0.2);
+    width: 100%;
+    align-items: center;
+    padding: 0.8rem 1.3rem;
+
+    .nav__title {
+      font-size: 3rem;
+    }
+
+    .nav__links {
+      width: fit-content;
+      gap: 0.4rem;
+    }
+
+    .nav__links button {
+      width: 120px;
+    }
+  }
+}
+
+.hero {
+  background-color: $accent;
+  color: black;
+  height: 300px;
+  display: flex;
+
+  .hero__sub {
+    align-self: flex-end;
+    margin-bottom: 1rem;
+    margin-left: 1rem;
+    font-size: 2rem;
+    max-width: 25ch;
+  }
+
+  @media screen and (min-width: 500px) {
+    .hero__sub {
+      font-size: 2.2rem;
+    }
+  }
+}
+
+
+
+.features {
+  width: 95%;
+
+  &__title {
+    margin-block: .5rem;
+  }
+
+  &__list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    justify-content: center;
+  }
+
+  .features__list li {
+    background: $accent;
+    height: 150px;
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    padding-inline: .5rem;
+  }
+
+  p {
+    max-width: 40ch;
+  }
+
+  .features__list div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+
+  @media screen and (min-width: 500px) {
+
+    .features__list {
+      flex-direction: row;
+    }
+
+  }
+
+}
+
+.faq {
+  width: 95%;
+
+  &__title {
+    margin-block: .5rem;
+  }
+
+  &__list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  &__list li {
+    border: 2px solid $accent;
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    padding: 1rem .5rem;
+  }
+
+  &__list div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
