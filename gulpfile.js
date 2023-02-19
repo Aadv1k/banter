@@ -15,24 +15,39 @@ function buildStyles() {
     .pipe(sass().on("error", sass.logError))
     .pipe(rename("style.css"))
     .pipe(gulp.dest(stylesDestPath))
-    .pipe(browserSync.stream())
+    .pipe(browserSync.stream());
+}
+
+function initBrowser() {
+  browserSync.init(
+    { proxy: `http://localhost:${PORT}`, port: 4000, open: false },
+    () => console.log("started")
+  );
+}
+
+function reloadBrowserSync() {
+  browserSync.reload();
 }
 
 function runServer() {
   nodemon({
-    script: "./index.js",
+    script: serverPath,
     ext: "js",
-    ignore: ["./public/*"]
+    ignore: ["./public/*"],
   })
-  .on("start", () => { browserSync.init({ proxy: `http://localhost:${PORT}`, port: 4000, open: false}, () => console.log("started"))},)
-  .on("restart", () => {setTimeout(browserSync.reload, 3000)});
+    .on("restart", () => {
+      setTimeout(browserSync.reload, 1000);
+    });
 }
+
+
 
 function watchStyles() {
   gulp.series(buildStyles);
-  gulp.watch("./scss/**/*.scss", buildStyles);
+  gulp.watch(stylesSrcPath, gulp.series(buildStyles, reloadBrowserSync));
 }
 
 module.exports = {
-  dev: gulp.parallel(watchStyles, runServer),
+  dev: gulp.parallel(watchStyles, gulp.parallel(runServer, initBrowser)),
+  build: gulp.series(buildStyles),
 };
