@@ -13,7 +13,12 @@ const {
   MS_REDIRECT,
 } = require("./constants");
 
-const { User } = require("../models/UserModel.js");
+const { User, UserModel } = require("../models/UserModel.js");
+
+const USER_DB = new UserModel();
+
+const generatePassword = (length) => Math.random().toString(36).slice(2, length+2)
+
 
 function handleRouteFilepath(req, res) {
   const filename = req.url;
@@ -63,6 +68,9 @@ function handleRouteAuthMS(req, res) {
 }
 
 async function handleRouteAuthMSCallback(req, res) {
+
+  await USER_DB.init();
+
   const authToken = req.url.split("=").pop();
   if (!authToken) redirect(res, "/");
   const formData = querystring.stringify({
@@ -92,13 +100,22 @@ async function handleRouteAuthMSCallback(req, res) {
     },
   });
   const userData = await userRes.json();
+
   const user = new User(
     userData.given_name,
     userData.family_name,
     userData.email,
-    /* TODO: USE A PROPER PASSWORD FUNCTION HERE  */
-    "test"
-  );
+    generatePassword(8)
+  )
+
+  const userExists = await USER_DB.userExists(user);
+  res.writeHead(200, {"Content-type": MIME.html});
+  if (userExists) {
+    res.write(`<h1>Welcome back ${user.email}</h1>`);
+  } else {
+    await USER_DB.pushUser(user);
+    res.write(`<h1>Registered ${user.email}</h1>`);
+  }
 }
 
 module.exports = http.createServer(async (req, res) => {

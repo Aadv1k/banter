@@ -14,22 +14,33 @@ class User {
 
 class UserModel {
   constructor() {
+    this.client = new MongoClient(ATLAS_URL);
     this.db = null;
-    this.client = null;
+    this.users = null;
   }
 
   async init() {
-    this.client = new MongoClient(ATLAS_URL);
-    this.db = await client.db("UserDB");
+    await this.client.connect();
+    this.db = this.client.db("UserDB");
+    this.users = this.db.collection("users");
   }
 
   async pushUser(user) {
-    await this.db.insertOne({
+    await this.users.insertOne({
       fname: user.fname,
       lname: user.lname,
       email: user.email,
       password: user.password,
     });
+  }
+
+  async userExists(user) {
+    const userFound = await this.users.findOne({
+      email: user.email
+    })
+    console.log(userFound === null);
+    if (userFound === null) return false;
+    return true
   }
 
   async close() {

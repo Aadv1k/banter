@@ -25,8 +25,9 @@ function initBrowser() {
   );
 }
 
-function reloadBrowserSync() {
+function reloadBrowserSync(cb) {
   browserSync.reload();
+  cb();
 }
 
 function runServer() {
