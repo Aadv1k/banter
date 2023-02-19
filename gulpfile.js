@@ -43,12 +43,12 @@ function runServer() {
 
 
 
-function watchStyles() {
-  gulp.series(buildStyles);
+function watchFiles() {
   gulp.watch(stylesSrcPath, gulp.series(buildStyles, reloadBrowserSync));
+  gulp.watch("./views/*.ejs", gulp.series(reloadBrowserSync));
 }
 
 module.exports = {
-  dev: gulp.parallel(watchStyles, gulp.parallel(runServer, initBrowser)),
+  dev: gulp.parallel(watchFiles, gulp.parallel(runServer, initBrowser)),
   build: gulp.series(buildStyles),
 };

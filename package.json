@@ -5,9 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "build:sass": "node-sass --no-source-maps ./scss/index.scss -o ./public/css",
-    "watch:sass": "node-sass ./scss/index.scss -o ./public/css --watch",
-    "dev": "npm run watch:sass && node index.js"
+    "build": "gulp build",
+    "dev": "gulp dev"
   },
   "author": "Aadvik <aadv1k@outlook.com>",
   "license": "MIT",
