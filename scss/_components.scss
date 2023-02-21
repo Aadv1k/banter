@@ -24,11 +24,14 @@ p {
   &--primary {
     background-color: black;
     color: white;
+    border-radius: 1000px;
   }
 
   &--secondary {
     background-color: transparent;
     outline: 1px solid black;
     color: black;
+    border-radius: 1000px;
   }
 }
+
