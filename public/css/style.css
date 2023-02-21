@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap");
 h2 {
   font-size: 2rem;
 }
@@ -26,7 +27,7 @@ p {
 }
 .btn--secondary {
   background-color: transparent;
-  outline: 1px solid black;
+  border: 1px solid black;
   color: black;
   border-radius: 1000px;
 }
@@ -35,16 +36,11 @@ p {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: Helvetica, Arial, sans-serif;
+  font-family: Inter, Helvetica, Arial, sans-serif;
 }
 
 body {
   background: #dbd5d2;
-}
-
-span.coming-soon {
-  text-decoration: underline;
-  font-style: italic;
 }
 
 a {
@@ -63,18 +59,20 @@ section {
 .navbar {
   display: flex;
   justify-content: space-between;
+  flex-direction: column;
+  align-items: center;
   background: inherit;
   gap: 0.5rem;
   padding: 0.5rem;
-  border-bottom: 1px solid #f15b3e;
+  border-bottom: 3px solid #bb2a0e;
 }
 .navbar .nav__title {
   font-size: 2.3rem;
 }
 .navbar .nav__links {
   display: flex;
-  gap: 0.2rem;
-  width: 60%;
+  gap: 0.3rem;
+  width: 90%;
   align-items: center;
 }
 .navbar .nav__links button {
@@ -101,6 +99,7 @@ section {
     gap: 0.4rem;
   }
   .navbar .nav__links button {
+    height: auto;
     padding-block: 0.5rem;
     width: 120px;
   }

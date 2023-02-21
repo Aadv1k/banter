@@ -1,20 +1,16 @@
 @use "_variables" as *;
 @use "_components" as *;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: Helvetica, Arial, sans-serif;
+  font-family: Inter, Helvetica, Arial, sans-serif;
 }
 
 body {
   background: $main-bg;
-}
-
-span.coming-soon {
-  text-decoration: underline;
-  font-style: italic;
 }
 
 a {
@@ -32,10 +28,12 @@ section {
 .navbar {
   display: flex;
   justify-content: space-between;
+  flex-direction: column;
+  align-items: center;
   background: inherit;
   gap: 0.5rem;
   padding: 0.5rem;
-  border-bottom: 1px solid $accent;
+  border-bottom: 3px solid darken($accent, 20%);
 
   .nav__title {
     font-size: 2.3rem;
@@ -43,8 +41,8 @@ section {
 
   .nav__links {
     display: flex;
-    gap: 0.2rem;
-    width: 60%;
+    gap: 0.3rem;
+    width: 90%;
     align-items: center;
   }
 
@@ -74,6 +72,7 @@ section {
     }
 
     .nav__links button {
+      height: auto;
       padding-block: .5rem;
       width: 120px;
     }
