@@ -23,6 +23,12 @@ module.exports = {
       error: 'bad-input',
       message: 'the provided input was invalid',
       code: 400
+    },
+
+    userNotFound: {
+      error: "user-not-found",
+      message: "the given user is not registered",
+      code: 404,
     }
   }
 };

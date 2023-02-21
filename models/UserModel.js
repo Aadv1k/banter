@@ -2,11 +2,12 @@ const { MongoClient } = require("mongodb");
 
 const { ATLAS_PWD } = require("../app/constants.js");
 const ATLAS_URL = `mongodb+srv://user-1:${ATLAS_PWD}@banter-dev.acxedwo.mongodb.net`;
+const { v4: uuid} = require("uuid");
 
 class User {
-  constructor(fname, lname, email, password) {
-    this.fname = fname;
-    this.lname = lname;
+  constructor(id, name, email, password) {
+    this._id = id;
+    this.name = name;
     this.email = email;
     this.password = password;
   }
@@ -17,6 +18,7 @@ class UserModel {
     this.client = new MongoClient(ATLAS_URL);
     this.db = null;
     this.users = null;
+    this.sessionIDs 
   }
 
   async init() {
@@ -27,11 +29,34 @@ class UserModel {
 
   async pushUser(user) {
     await this.users.insertOne({
-      fname: user.fname,
-      lname: user.lname,
+      _id: user._id,
+      name: user.name,
       email: user.email,
       password: user.password,
     });
+  }
+
+  async pushSessionID(sessionID, userID) {
+    await this.sessions.insertOne({
+      sessionID,
+      userID,
+    })
+  }
+
+  async getUserFromSessionID(sessionID) {
+    const session = await this.sessions.findOne({
+      sessionID,
+    })
+
+    if (!session) {
+      return null;
+    }
+
+    const user = await this.users.findOne({
+      _id: session.userID,
+    })
+
+    return user ?? null;
   }
 
   async userExists(user) {

@@ -4,6 +4,7 @@ const ejs = require("ejs");
 const path = require("path");
 const querystring = require("querystring");
 const fetch = require("node-fetch-commonjs");
+const { v4: uuid} = require("uuid");
 
 const {
   MIME,
@@ -17,8 +18,10 @@ const { User, UserModel } = require("../models/UserModel.js");
 
 const USER_DB = new UserModel();
 
-const generatePassword = (length) => Math.random().toString(36).slice(2, length+2)
-
+const generatePassword = (length) =>
+  Math.random()
+    .toString(36)
+    .slice(2, length + 2);
 
 function handleRouteFilepath(req, res) {
   const filename = req.url;
@@ -54,6 +57,7 @@ function renderView(res, file, data) {
 function sendJsonErr(res, err) {
   res.writeHead(err.code, { "Content-type": MIME.json });
   res.write(JSON.stringify(err));
+  res.end();
 }
 
 function handleRouteAuthMS(req, res) {
@@ -68,7 +72,6 @@ function handleRouteAuthMS(req, res) {
 }
 
 async function handleRouteAuthMSCallback(req, res) {
-
   await USER_DB.init();
 
   const authToken = req.url.split("=").pop();
@@ -80,6 +83,7 @@ async function handleRouteAuthMSCallback(req, res) {
     redirect_uri: MS_REDIRECT,
     code: authToken,
   });
+
   const accessRes = await fetch(
     "https://login.microsoftonline.com/common/oauth2/v2.0/token",
     {
@@ -102,14 +106,13 @@ async function handleRouteAuthMSCallback(req, res) {
   const userData = await userRes.json();
 
   const user = new User(
-    userData.given_name,
-    userData.family_name,
+    userData.display_name,
     userData.email,
     generatePassword(8)
-  )
+  );
 
   const userExists = await USER_DB.userExists(user);
-  res.writeHead(200, {"Content-type": MIME.html});
+  res.writeHead(200, { "Content-type": MIME.html });
   if (userExists) {
     res.write(`<h1>Welcome back ${user.email}</h1>`);
   } else {
@@ -118,11 +121,41 @@ async function handleRouteAuthMSCallback(req, res) {
   }
 }
 
+async function handleRouteLogin(req, res) {
+  if (req.method === "GET") {
+    renderView(res, "login.ejs");
+  } else if (req.method === "POST") {
+    let body = "";
+
+    req.on("data", (chunk) => (body += chunk));
+    req.on("end", async () => {
+      const formData = querystring.parse(body);
+      if (![formData.email, formData.name, formData.password].every((e) => e)) {
+        sendJsonErr(res, ERR.badInput);
+      }
+      //await USER_DB.init();
+
+      const userID = uuid();
+      const sessionID = uuid();
+
+      const user = new User(userID, formData.name, formData.email, formData.password);
+      //await USER_DB.pushUser(user);
+      //await USER_DB.pushSession(sessionID, userID);
+
+      /* REDIRECT THE USER TO THE DASHBOARD */
+
+    });
+  }
+}
+
 module.exports = http.createServer(async (req, res) => {
   const URI = req.url;
   const ext = req.url.split(".").pop();
+
   if (URI === "/") {
     renderView(res, "index.ejs");
+  } else if (URI.startsWith("/login")) {
+    await handleRouteLogin(req, res);
   } else if (URI.startsWith("/auth/microsoft/callback")) {
     await handleRouteAuthMSCallback(req, res);
   } else if (URI.startsWith("/auth/microsoft")) {
@@ -130,7 +163,7 @@ module.exports = http.createServer(async (req, res) => {
   } else if (ext) {
     handleRouteFilepath(req, res);
   } else {
-    res.writeHead(404, {'Content-type': MIME.html});
+    res.writeHead(404, { "Content-type": MIME.html });
     res.write("<h1>hello found</h1>");
   }
   res.end();
