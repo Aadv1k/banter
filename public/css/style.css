@@ -75,6 +75,9 @@ section {
   width: 90%;
   align-items: center;
 }
+.navbar .nav__links button:nth-child(1) {
+  display: none;
+}
 .navbar .nav__links button {
   width: 100%;
   height: 35px;
@@ -93,6 +96,9 @@ section {
   }
   .navbar .nav__title {
     font-size: 3rem;
+  }
+  .navbar .nav__links button:nth-child(1) {
+    display: block;
   }
   .navbar .nav__links {
     width: fit-content;
