@@ -5,11 +5,12 @@
   <meta charset="UTF-8">
   <title>Banter</title>
   <link rel="stylesheet" href="css/style.css" media="all">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css" integrity="sha384-b6lVK+yci+bfDmaY1u0zE8YYJt0TZxLEAFyYSLHId4xoVvsrQu3INevFKo+Xir8e" crossorigin="anonymous">
 </head>
 <nav class="navbar">
   <span class="title nav__title">banter.</span>
   <div class="nav__links">
-    <button href="#" class="btn btn--primary">build</button>
+    <button href="#" class="btn btn--primary">Sign Up</button>
     <button href="#" class="btn btn--secondary">login</button>
   </div>
 </nav>
@@ -20,29 +21,19 @@
   </h2>
 </section>
 
-<!--
-
 <section class="features">
   <h2 class="features__title">Features</h2>
   <ul class="features__list">
-    <li>
-      <div>
-        <h3>Crosspost</h3>
-        <p>Expand your reach by sharing your content across multiple social media platforms at once with crossposting</p>
+
+    <% [{icon: "bi bi-signpost-split-fill", title: "Crosspost", text: "Expand your reach by sharing your content across multiple social media platforms at once with crossposting"}, {icon: "bi bi-stars", title: "Brand", text: "Stand out from the crowd by creating a unique brand that represents your podcast and personality"}, {icon: "bi bi-people-fill", title: "Connect", text: "Engage with your audience by increasing your visibility and reach across media platforms"}].forEach(e => { %>
+    <li class="list__itm">
+      <div class="itm__wrapper">
+        <i class="<%= e.icon %>"></i>
+        <h3><%= e.title %></h3>
+        <p><%= e.text %></p>
       </div>
     </li>
-    <li>
-      <div>
-        <h3>Brand</h3>
-        <p>Stand out from the crowd by creating a unique brand that represents your podcast and personality</p>
-      </div>
-    </li>
-    <li>
-      <div>
-        <h3>Connect</h3>
-        <p>Engage with your audience by increasing your visibility and reach across media platforms</p>
-      </div>
-    </li>
+    <% }) %>
   </ul>
 </section>
 
@@ -79,6 +70,5 @@
 
 </section>
 -->
-
 </html>
 

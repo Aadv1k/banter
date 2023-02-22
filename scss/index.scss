@@ -28,12 +28,10 @@ section {
 .navbar {
   display: flex;
   justify-content: space-between;
-  flex-direction: column;
   align-items: center;
   background: inherit;
   gap: 0.5rem;
   padding: 0.5rem;
-  border-bottom: 3px solid darken($accent, 20%);
 
   .nav__title {
     font-size: 2.3rem;
@@ -42,17 +40,17 @@ section {
   .nav__links {
     display: flex;
     gap: 0.3rem;
-    width: 90%;
+    width: 40%;
     align-items: center;
   }
 
-  .nav__links button:nth-child(1) {
+  .nav__links button:nth-child(2) {
     display: none;
   }
 
   .nav__links button {
+    padding-block: .6rem;
     width: 100%;
-    height: 35px;
     text-align: center;
     text-transform: capitalize;
     border-radius: 100px;
@@ -70,7 +68,7 @@ section {
       font-size: 3rem;
     }
 
-    .nav__links button:nth-child(1) {
+    .nav__links button:nth-child(2) {
       display: block;
     }
 
@@ -80,8 +78,6 @@ section {
     }
 
     .nav__links button {
-      height: auto;
-      padding-block: .5rem;
       width: 120px;
     }
   }
@@ -96,7 +92,7 @@ section {
   .hero__sub {
     align-self: flex-end;
     margin-bottom: 1rem;
-    margin-left: 1rem;
+    margin-left: .5rem;
     font-size: 2rem;
     max-width: 25ch;
   }
@@ -125,20 +121,24 @@ section {
     justify-content: center;
   }
 
-  .features__list li {
+  .list__itm {
     background: $accent;
-    height: 150px;
-    border-radius: 2px;
+    height: 200px;
+    border-radius: 3px;
     display: flex;
     align-items: center;
-    padding-inline: .5rem;
+    padding-inline: .8rem;
   }
 
   p {
     max-width: 40ch;
   }
 
-  .features__list div {
+  .list__itm i {
+    font-size: 1.5rem;
+  }
+
+  .itm__wrapper {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
