@@ -107,24 +107,37 @@ async function handleRouteAuthMSCallback(req, res) {
     },
   });
   const userData = await userRes.json();
+  const uid = uuid();
 
   const user = new User(
-    userData.display_name,
+    uid,
+    `${userData.givenname} ${userData.familyname}`,
     userData.email,
     crypto.randomBytes(16).toString("hex")
   );
 
   const userExists = await USER_DB.userExists(user);
-  res.writeHead(200, { "Content-type": MIME.html });
-
   if (userExists) {
-    res.write(`<h1>Welcome back ${user.email}</h1>`);
-  } else {
-    await USER_DB.pushUser(user);
-    res.write(`<h1>Registered ${user.email}</h1>`);
-  }
+    const sid = await USER_DB.getSessionIDFromUser(user);
+    res.writeHead(302, { 
+      "Location": "/dashboard",   
+      "Set-Cookie": `sessionid=${sid}`
+    });
 
+    res.end();
+    return;
+  } 
+
+  await USER_DB.pushUser(user);
+  const newSid = uuid();
+  await USER_DB.pushSessionID(uid, newSid);
+
+  res.writeHead(302, { 
+    "Location": "/dashboard",   
+    "Set-Cookie": `sessionid=${newSid}`
+  });
   res.end();
+
 }
 
 async function handleRouteLogin(req, res) {
@@ -157,13 +170,14 @@ async function handleRouteLogin(req, res) {
 
       if (userExists) {
         const sessionID = await USER_DB.getSessionIDFromUser(user);
-        res.writeHead(301, { "Location": "/dashboard", "Set-Cookie": `sessionid=${sessionID}`});
+        res.writeHead(302, { "Location": "/dashboard", "Set-Cookie": `sessionid=${sessionID}`});
         res.end();
+        return;
       }
 
       await USER_DB.pushUser(user);
       await USER_DB.pushSessionID(newSessionID, newUserID);
-      res.writeHead(301, { "Location": "/dashboard", "Set-Cookie": `sessionid=${newSessionID}` })
+      res.writeHead(302, { "Location": "/dashboard", "Set-Cookie": `sessionid=${newSessionID}` })
       res.end();
     });
   }
@@ -171,6 +185,7 @@ async function handleRouteLogin(req, res) {
 
 async function handleRouteDashboard(req, res) {
   let parsedCookie = cookie.parse(req.headers.cookie);
+  console.log(req.headers);
   res.writeHead(200, {"Content-type": MIME.html});
 
   if (parsedCookie.sessionid) {
