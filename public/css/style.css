@@ -66,6 +66,7 @@ section {
 }
 .navbar .nav__title {
   font-size: 2.3rem;
+  text-decoration: none;
 }
 .navbar .nav__links {
   display: flex;
@@ -113,15 +114,15 @@ section {
   height: 300px;
   display: flex;
 }
-.hero .hero__sub {
+.hero__sub {
   align-self: flex-end;
   margin-bottom: 1rem;
-  margin-left: 0.5rem;
+  margin-left: 1rem;
   font-size: 2rem;
   max-width: 25ch;
 }
 @media screen and (min-width: 500px) {
-  .hero .hero__sub {
+  .hero__sub {
     font-size: 2.2rem;
   }
 }

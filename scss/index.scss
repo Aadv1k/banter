@@ -35,6 +35,7 @@ section {
 
   .nav__title {
     font-size: 2.3rem;
+    text-decoration: none;
   }
 
   .nav__links {
@@ -89,16 +90,16 @@ section {
   height: 300px;
   display: flex;
 
-  .hero__sub {
+  &__sub {
     align-self: flex-end;
     margin-bottom: 1rem;
-    margin-left: .5rem;
+    margin-left: 1rem;
     font-size: 2rem;
     max-width: 25ch;
   }
 
   @media screen and (min-width: 500px) {
-    .hero__sub {
+    &__sub {
       font-size: 2.2rem;
     }
   }
