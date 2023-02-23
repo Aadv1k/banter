@@ -18,13 +18,14 @@ class UserModel {
     this.client = new MongoClient(ATLAS_URL);
     this.db = null;
     this.users = null;
-    this.sessionIDs 
+    this.sessions = null;
   }
 
   async init() {
     await this.client.connect();
     this.db = this.client.db("UserDB");
     this.users = this.db.collection("users");
+    this.sessions = this.db.collection("sessions");
   }
 
   async pushUser(user) {
@@ -41,6 +42,15 @@ class UserModel {
       sessionID,
       userID,
     })
+  }
+
+  async getSessionIDFromUser(user) {
+    const foundUser = await this.users.findOne({ email: user.email })
+    if (!foundUser) return null;
+    const userByID = await this.sessions.findOne({ userID: foundUser._id })
+    if (!userByID) return null;
+
+    return userByID.sessionID;
   }
 
   async getUserFromSessionID(sessionID) {
@@ -60,12 +70,10 @@ class UserModel {
   }
 
   async userExists(user) {
-    const userFound = await this.users.findOne({
-      email: user.email
-    })
-    console.log(userFound === null);
-    if (userFound === null) return false;
-    return true
+   if (await this.users.findOne({ email: user.email })) {
+     return true;
+   }
+    return false;
   }
 
   async close() {

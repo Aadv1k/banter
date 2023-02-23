@@ -4,6 +4,7 @@ const ejs = require("ejs");
 const path = require("path");
 const querystring = require("querystring");
 const fetch = require("node-fetch-commonjs");
+const cookie = require("cookie");
 const { v4: uuid} = require("uuid");
 
 const {
@@ -28,25 +29,30 @@ function handleRouteFilepath(req, res) {
   const ext = filename.split(".").pop();
 
   if (!MIME[ext]) {
+    renderView(res, "404.ejs", 404);
     return;
   }
+
   const filepath = path.join(__dirname, "../public", filename);
 
   if (existsSync(filepath)) {
     let file = readFileSync(filepath);
     res.writeHead(200, { "Content-type": MIME[ext] });
     res.write(file);
+  } else {
+    renderView(res, "404.ejs", 404);
   }
+  res.end();
 }
 
-function renderView(res, file, data) {
+function renderView(res, file, code, data) {
   const viewPath = path.join(__dirname, "../views", file);
   if (existsSync(viewPath)) {
     ejs.renderFile(viewPath, data ?? {}, (err, data) => {
       if (err) {
         console.error(err);
       }
-      res.writeHead(200, { "Content-type": MIME.html });
+      res.writeHead(code, { "Content-type": MIME.html });
       res.write(data);
     });
   } else {
@@ -69,6 +75,7 @@ function handleRouteAuthMS(req, res) {
   });
   const MSUrl = `https://login.microsoftonline.com/common/oauth2/v2.0/authorize?${query}`;
   res.writeHead(302, { Location: MSUrl });
+  res.end();
 }
 
 async function handleRouteAuthMSCallback(req, res) {
@@ -119,33 +126,60 @@ async function handleRouteAuthMSCallback(req, res) {
     await USER_DB.pushUser(user);
     res.write(`<h1>Registered ${user.email}</h1>`);
   }
+
+  res.end();
 }
 
-async function handleRouteLogin(req, res) {
+function handleRouteLogin(req, res) {
+  let parsedCookie = cookie.parse(req.headers.cookie);
+
   if (req.method === "GET") {
-    renderView(res, "login.ejs");
+    if (parsedCookie.sessionid) {
+      res.writeHead(301, {"Location": "/dashboard"});
+      res.end();
+      return;
+    }
+    renderView(res, "login.ejs", 200);
   } else if (req.method === "POST") {
     let body = "";
-
-    req.on("data", (chunk) => (body += chunk));
+    req.on("data", (chunk) => (body += chunk.toString()));
     req.on("end", async () => {
       const formData = querystring.parse(body);
+
       if (![formData.email, formData.name, formData.password].every((e) => e)) {
         sendJsonErr(res, ERR.badInput);
       }
-      //await USER_DB.init();
 
-      const userID = uuid();
-      const sessionID = uuid();
+      await USER_DB.init();
+      const newUserID = uuid();
+      const newSessionID = uuid();
+      const user = new User(newUserID, formData.name, formData.email, formData.password);
+      const userExists = await USER_DB.userExists(user);
 
-      const user = new User(userID, formData.name, formData.email, formData.password);
-      //await USER_DB.pushUser(user);
-      //await USER_DB.pushSession(sessionID, userID);
+      if (userExists) {
+        const sessionID = await USER_DB.getSessionIDFromUser(user);
+        res.writeHead(301, { "Location": "/dashboard", "Set-Cookie": `sessionid=${sessionID}`});
+        res.end();
+      }
 
-      /* REDIRECT THE USER TO THE DASHBOARD */
-
+      await USER_DB.pushUser(user);
+      await USER_DB.pushSessionID(newSessionID, newUserID);
+      res.writeHead(301, { "Location": "/dashboard", "Set-Cookie": `sessionid=${newSessionID}` })
+      res.end();
     });
   }
+}
+
+async function handleRouteDashboard(req, res) {
+  let parsedCookie = cookie.parse(req.headers.cookie);
+  res.writeHead(200, {"Content-type": MIME.html});
+
+  if (parsedCookie.sessionid) {
+    await USER_DB.init();
+    const user = await USER_DB.getUserFromSessionID(parsedCookie.sessionid);
+    res.write(`welcome ${user.email}!`);
+  }
+  res.end();
 }
 
 module.exports = http.createServer(async (req, res) => {
@@ -153,18 +187,16 @@ module.exports = http.createServer(async (req, res) => {
   const ext = req.url.split(".").pop();
 
   if (URI === "/") {
-    renderView(res, "index.ejs");
+    renderView(res, "index.ejs", 200);
   } else if (URI.startsWith("/login")) {
-    await handleRouteLogin(req, res);
+    handleRouteLogin(req, res);
+  } else if (URI.startsWith("/dashboard")) {
+    handleRouteDashboard(req, res);
   } else if (URI.startsWith("/auth/microsoft/callback")) {
     await handleRouteAuthMSCallback(req, res);
   } else if (URI.startsWith("/auth/microsoft")) {
     handleRouteAuthMS(req, res);
   } else if (ext) {
     handleRouteFilepath(req, res);
-  } else {
-    res.writeHead(404, { "Content-type": MIME.html });
-    res.write("<h1>hello found</h1>");
-  }
-  res.end();
+  } 
 });
