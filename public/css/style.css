@@ -53,7 +53,7 @@ section.hero {
 
 section {
   max-width: 1000px;
-  margin: 2rem auto;
+  margin: 2.5rem auto;
 }
 
 .navbar {
@@ -111,24 +111,19 @@ section {
 .hero {
   background-color: #f15b3e;
   color: black;
-  height: 300px;
+  height: 330px;
   display: flex;
 }
 .hero__sub {
   align-self: flex-end;
   margin-bottom: 1rem;
   margin-left: 1rem;
-  font-size: 2rem;
+  font-size: 2.2rem;
   max-width: 25ch;
-}
-@media screen and (min-width: 500px) {
-  .hero__sub {
-    font-size: 2.2rem;
-  }
 }
 
 .features {
-  width: 95%;
+  width: 90%;
 }
 .features__title {
   margin-block: 0.5rem;
@@ -138,26 +133,23 @@ section {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  justify-content: center;
+  justify-content: space-between;
 }
 .features .list__itm {
-  background: #f15b3e;
-  height: 200px;
+  border: 2px dotted #f15b3e;
+  background: #e7a991;
   border-radius: 3px;
+  padding: 2rem 1rem;
   display: flex;
-  align-items: center;
-  padding-inline: 0.8rem;
+  justify-content: space-between;
+  flex-direction: column;
 }
 .features p {
   max-width: 40ch;
+  margin-top: 0.5rem;
 }
 .features .list__itm i {
-  font-size: 1.5rem;
-}
-.features .itm__wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+  font-size: 2.2rem;
 }
 @media screen and (min-width: 500px) {
   .features .features__list {

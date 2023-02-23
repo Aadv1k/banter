@@ -24,11 +24,9 @@
 <section class="features">
   <h2 class="features__title">Features</h2>
   <ul class="features__list">
-
-    <% [{icon: "bi bi-signpost-split-fill", title: "Crosspost", text: "Expand your reach by sharing your content across multiple social media platforms at once with crossposting"}, {icon: "bi bi-stars", title: "Brand", text: "Stand out from the crowd by creating a unique brand that represents your podcast and personality"}, {icon: "bi bi-people-fill", title: "Connect", text: "Engage with your audience by increasing your visibility and reach across media platforms"}].forEach(e => { %>
+    <% [{icon: "bi bi-shuffle", title: "Crosspost", text: "Expand your reach by sharing your content across multiple social media platforms at once with crossposting"}, {icon: "bi bi-stars", title: "Brand", text: "Stand out from the crowd by creating a unique brand that represents your podcast and personality"}, {icon: "bi bi-people-fill", title: "Connect", text: "Engage with your audience by increasing your visibility and reach across media platforms"}].forEach(e => { %>
     <li class="list__itm">
       <div class="itm__wrapper">
-        <i class="<%= e.icon %>"></i>
         <h3><%= e.title %></h3>
         <p><%= e.text %></p>
       </div>

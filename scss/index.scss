@@ -22,7 +22,7 @@ section.hero {
 }
 section {
   max-width: 1000px;
-  margin: 2rem auto;
+  margin: 2.5rem auto;
 }
 
 .navbar {
@@ -87,28 +87,23 @@ section {
 .hero {
   background-color: $accent;
   color: black;
-  height: 300px;
+  height: 330px;
   display: flex;
 
   &__sub {
     align-self: flex-end;
     margin-bottom: 1rem;
     margin-left: 1rem;
-    font-size: 2rem;
+    font-size: 2.2rem;
     max-width: 25ch;
   }
 
-  @media screen and (min-width: 500px) {
-    &__sub {
-      font-size: 2.2rem;
-    }
-  }
 }
 
 
 
 .features {
-  width: 95%;
+  width: 90%;
 
   &__title {
     margin-block: .5rem;
@@ -119,32 +114,27 @@ section {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    justify-content: center;
+    justify-content: space-between;
   }
 
   .list__itm {
-    background: $accent;
-    height: 200px;
+    border: 2px dotted $accent;
+    background: #e7a991;
     border-radius: 3px;
+    padding: 2rem 1rem;
     display: flex;
-    align-items: center;
-    padding-inline: .8rem;
+    justify-content: space-between;
+    flex-direction: column;
   }
 
   p {
     max-width: 40ch;
+    margin-top: .5rem;
   }
 
   .list__itm i {
-    font-size: 1.5rem;
+    font-size: 2.2rem;
   }
-
-  .itm__wrapper {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
 
   @media screen and (min-width: 500px) {
 
