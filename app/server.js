@@ -6,6 +6,7 @@ const querystring = require("querystring");
 const fetch = require("node-fetch-commonjs");
 const cookie = require("cookie");
 const { v4: uuid} = require("uuid");
+const crypto = require("crypto");
 
 const {
   MIME,
@@ -18,11 +19,6 @@ const {
 const { User, UserModel } = require("../models/UserModel.js");
 
 const USER_DB = new UserModel();
-
-const generatePassword = (length) =>
-  Math.random()
-    .toString(36)
-    .slice(2, length + 2);
 
 function handleRouteFilepath(req, res) {
   const filename = req.url;
@@ -115,11 +111,12 @@ async function handleRouteAuthMSCallback(req, res) {
   const user = new User(
     userData.display_name,
     userData.email,
-    generatePassword(8)
+    crypto.randomBytes(16).toString("hex")
   );
 
   const userExists = await USER_DB.userExists(user);
   res.writeHead(200, { "Content-type": MIME.html });
+
   if (userExists) {
     res.write(`<h1>Welcome back ${user.email}</h1>`);
   } else {
@@ -130,12 +127,14 @@ async function handleRouteAuthMSCallback(req, res) {
   res.end();
 }
 
-function handleRouteLogin(req, res) {
+async function handleRouteLogin(req, res) {
   let parsedCookie = cookie.parse(req.headers.cookie);
+  await USER_DB.init();
+  const user = await USER_DB.getUserFromSessionID(parsedCookie.sessionid);
 
   if (req.method === "GET") {
-    if (parsedCookie.sessionid) {
-      res.writeHead(301, {"Location": "/dashboard"});
+    if (parsedCookie.sessionid && user) {
+      res.writeHead(302, {"Location": "/dashboard"});
       res.end();
       return;
     }
@@ -148,9 +147,9 @@ function handleRouteLogin(req, res) {
 
       if (![formData.email, formData.name, formData.password].every((e) => e)) {
         sendJsonErr(res, ERR.badInput);
+        return;
       }
 
-      await USER_DB.init();
       const newUserID = uuid();
       const newSessionID = uuid();
       const user = new User(newUserID, formData.name, formData.email, formData.password);
@@ -189,7 +188,7 @@ module.exports = http.createServer(async (req, res) => {
   if (URI === "/") {
     renderView(res, "index.ejs", 200);
   } else if (URI.startsWith("/login")) {
-    handleRouteLogin(req, res);
+    await handleRouteLogin(req, res);
   } else if (URI.startsWith("/dashboard")) {
     handleRouteDashboard(req, res);
   } else if (URI.startsWith("/auth/microsoft/callback")) {

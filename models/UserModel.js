@@ -45,7 +45,7 @@ class UserModel {
   }
 
   async getSessionIDFromUser(user) {
-    const foundUser = await this.users.findOne({ email: user.email })
+    const foundUser = await this.users.findOne({ email: user.email, password: user.password })
     if (!foundUser) return null;
     const userByID = await this.sessions.findOne({ userID: foundUser._id })
     if (!userByID) return null;
@@ -70,7 +70,7 @@ class UserModel {
   }
 
   async userExists(user) {
-   if (await this.users.findOne({ email: user.email })) {
+   if (await this.users.findOne({ email: user.email, password: user.password})) {
      return true;
    }
     return false;
