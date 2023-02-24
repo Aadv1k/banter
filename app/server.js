@@ -5,7 +5,7 @@ const path = require("path");
 const querystring = require("querystring");
 const fetch = require("node-fetch-commonjs");
 const cookie = require("cookie");
-const { v4: uuid} = require("uuid");
+const { v4: uuid } = require("uuid");
 const crypto = require("crypto");
 
 const {
@@ -78,7 +78,14 @@ async function handleRouteAuthMSCallback(req, res) {
   await USER_DB.init();
 
   const authToken = req.url.split("=").pop();
-  if (!authToken) redirect(res, "/");
+
+  if (authToken.startsWith("/")) {
+    res.writeHead(302, {"Location": "/"});
+    res.end();
+    return;
+  };
+
+
   const formData = querystring.stringify({
     grant_type: "authorization_code",
     client_id: MS_CLIENT_ID,
@@ -98,14 +105,10 @@ async function handleRouteAuthMSCallback(req, res) {
       body: formData,
     }
   );
+
   const accessData = await accessRes.json();
   const accessToken = accessData.access_token;
-  const userRes = await fetch("https://graph.microsoft.com/oidc/userinfo", {
-    method: "GET",
-    headers: {
-      Authorization: "Bearer " + accessToken,
-    },
-  });
+  const userRes = await fetch("https://graph.microsoft.com/oidc/userinfo", { method: "GET", headers: { Authorization: "Bearer " + accessToken, }, });
   const userData = await userRes.json();
   const uid = uuid();
 
@@ -117,27 +120,37 @@ async function handleRouteAuthMSCallback(req, res) {
   );
 
   const userExists = await USER_DB.userExists(user);
+
   if (userExists) {
     const sid = await USER_DB.getSessionIDFromUser(user);
-    res.writeHead(302, { 
-      "Location": "/dashboard",   
-      "Set-Cookie": `sessionid=${sid}`
+    res.writeHead(302, {
+      Location: "/dashboard",
+      "Set-Cookie": `sessionid=${sid}; path=/`,
     });
-
     res.end();
     return;
-  } 
+  }
+
+
+  if (!user.email) {
+    console.log("something went wrong");
+    res.writeHead(302, {
+      Location: "/",
+    });
+    res.end();
+    return;
+  }
+
 
   await USER_DB.pushUser(user);
   const newSid = uuid();
-  await USER_DB.pushSessionID(uid, newSid);
-
-  res.writeHead(302, { 
-    "Location": "/dashboard",   
-    "Set-Cookie": `sessionid=${newSid}`
+  await USER_DB.pushSessionID(newSid, uid);
+  res.writeHead(302, {
+    Location: "/dashboard",
+    "Set-Cookie": `sessionid=${newSid}`,
   });
-  res.end();
 
+  res.end();
 }
 
 async function handleRouteLogin(req, res) {
@@ -147,7 +160,7 @@ async function handleRouteLogin(req, res) {
 
   if (req.method === "GET") {
     if (parsedCookie.sessionid && user) {
-      res.writeHead(302, {"Location": "/dashboard"});
+      res.writeHead(302, { Location: "/dashboard" });
       res.end();
       return;
     }
@@ -165,36 +178,58 @@ async function handleRouteLogin(req, res) {
 
       const newUserID = uuid();
       const newSessionID = uuid();
-      const user = new User(newUserID, formData.name, formData.email, formData.password);
+      const user = new User(
+        newUserID,
+        formData.name,
+        formData.email,
+        formData.password
+      );
       const userExists = await USER_DB.userExists(user);
 
       if (userExists) {
         const sessionID = await USER_DB.getSessionIDFromUser(user);
-        res.writeHead(302, { "Location": "/dashboard", "Set-Cookie": `sessionid=${sessionID}`});
+        res.writeHead(302, {
+          Location: "/dashboard",
+          "Set-Cookie": `sessionid=${sessionID}`,
+        });
         res.end();
         return;
       }
 
       await USER_DB.pushUser(user);
       await USER_DB.pushSessionID(newSessionID, newUserID);
-      res.writeHead(302, { "Location": "/dashboard", "Set-Cookie": `sessionid=${newSessionID}` })
+      res.writeHead(302, {
+        Location: "/dashboard",
+        "Set-Cookie": `sessionid=${newSessionID}`,
+      });
       res.end();
     });
   }
 }
 
 async function handleRouteDashboard(req, res) {
+  console.log(req.headers.cookie);
   let parsedCookie = cookie.parse(req.headers.cookie ?? "");
   if (!parsedCookie.sessionid) {
-    renderView(res, "login.ejs", 200);
+    res.writeHead(302, { "Location": "/login" });
+    res.end();
     return;
   }
-  res.writeHead(200, {"Content-type": MIME.html});
-
+  res.writeHead(200, { "Content-type": MIME.html });
   if (parsedCookie.sessionid) {
     await USER_DB.init();
     const user = await USER_DB.getUserFromSessionID(parsedCookie.sessionid);
     res.write(`welcome ${user.email}!`);
+  }
+  res.end();
+}
+
+function handleRouteLogout(req, res) {
+  const ck = cookie.parse(req.headers.cookie ?? "");
+  if (ck.sessionid) {
+    res.writeHead(302, { Location: "/", "Set-Cookie": "sessionid=" });
+  } else {
+    res.writeHead(302, { Location: "/" });
   }
   res.end();
 }
@@ -207,6 +242,8 @@ module.exports = http.createServer(async (req, res) => {
     renderView(res, "index.ejs", 200);
   } else if (URI.startsWith("/login")) {
     await handleRouteLogin(req, res);
+  } else if (URI.startsWith("/logout")) {
+    handleRouteLogout(req, res);
   } else if (URI.startsWith("/dashboard")) {
     handleRouteDashboard(req, res);
   } else if (URI.startsWith("/auth/microsoft/callback")) {
@@ -215,5 +252,5 @@ module.exports = http.createServer(async (req, res) => {
     handleRouteAuthMS(req, res);
   } else if (ext) {
     handleRouteFilepath(req, res);
-  } 
+  }
 });
