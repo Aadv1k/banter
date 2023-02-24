@@ -8,6 +8,7 @@ const cookie = require("cookie");
 const { v4: uuid } = require("uuid");
 const crypto = require("crypto");
 
+
 const {
   MIME,
   ERR,
@@ -17,8 +18,10 @@ const {
 } = require("./constants");
 
 const { User, UserModel } = require("../models/UserModel.js");
+const MemoryStore = require("../models/MemoryStore.js");
 
 const USER_DB = new UserModel();
+const MEM = new MemoryStore();
 
 function handleRouteFilepath(req, res) {
   const filename = req.url;
@@ -61,6 +64,8 @@ function sendJsonErr(res, err) {
   res.write(JSON.stringify(err));
   res.end();
 }
+
+/*
 
 function handleRouteAuthMS(req, res) {
   const query = querystring.stringify({
@@ -152,11 +157,12 @@ async function handleRouteAuthMSCallback(req, res) {
 
   res.end();
 }
+*/
 
 async function handleRouteLogin(req, res) {
   let parsedCookie = cookie.parse(req.headers.cookie ?? "");
   await USER_DB.init();
-  const user = await USER_DB.getUserFromSessionID(parsedCookie.sessionid);
+  const user = await USER_DB.userExists({_id: parsedCookie.sessionid});
 
   if (req.method === "GET") {
     if (parsedCookie.sessionid && user) {
@@ -176,31 +182,23 @@ async function handleRouteLogin(req, res) {
         return;
       }
 
-      const newUserID = uuid();
-      const newSessionID = uuid();
+      const uid = uuid();
+      const sid = uuid();
       const user = new User(
-        newUserID,
+        uid,
         formData.name,
         formData.email,
         formData.password
       );
-      const userExists = await USER_DB.userExists(user);
 
-      if (userExists) {
-        const sessionID = await USER_DB.getSessionIDFromUser(user);
-        res.writeHead(302, {
-          Location: "/dashboard",
-          "Set-Cookie": `sessionid=${sessionID}`,
-        });
-        res.end();
-        return;
-      }
+      MEM.store(sid, { uid });
 
-      await USER_DB.pushUser(user);
-      await USER_DB.pushSessionID(newSessionID, newUserID);
+      const userExists = await USER_DB.userExists({email: formData.email});
+      if (!userExists) await USER_DB.pushUser(user);
+
       res.writeHead(302, {
         Location: "/dashboard",
-        "Set-Cookie": `sessionid=${newSessionID}`,
+        "Set-Cookie": `sessionid=${sid}`,
       });
       res.end();
     });
@@ -208,17 +206,18 @@ async function handleRouteLogin(req, res) {
 }
 
 async function handleRouteDashboard(req, res) {
-  console.log(req.headers.cookie);
-  let parsedCookie = cookie.parse(req.headers.cookie ?? "");
+  const parsedCookie = cookie.parse(req.headers.cookie ?? "");
+
   if (!parsedCookie.sessionid) {
     res.writeHead(302, { "Location": "/login" });
     res.end();
     return;
   }
+
   res.writeHead(200, { "Content-type": MIME.html });
   if (parsedCookie.sessionid) {
-    await USER_DB.init();
-    const user = await USER_DB.getUserFromSessionID(parsedCookie.sessionid);
+    const uid = MEM.get(parsedCookie.sessionid).uid;
+    const user = await USER_DB.getUser({_id: uid});
     res.write(`welcome ${user.email}!`);
   }
   res.end();
@@ -227,6 +226,7 @@ async function handleRouteDashboard(req, res) {
 function handleRouteLogout(req, res) {
   const ck = cookie.parse(req.headers.cookie ?? "");
   if (ck.sessionid) {
+    MEM.rm(ck.sessionid);
     res.writeHead(302, { Location: "/", "Set-Cookie": "sessionid=" });
   } else {
     res.writeHead(302, { Location: "/" });
@@ -247,9 +247,9 @@ module.exports = http.createServer(async (req, res) => {
   } else if (URI.startsWith("/dashboard")) {
     handleRouteDashboard(req, res);
   } else if (URI.startsWith("/auth/microsoft/callback")) {
-    await handleRouteAuthMSCallback(req, res);
+    //await handleRouteAuthMSCallback(req, res);
   } else if (URI.startsWith("/auth/microsoft")) {
-    handleRouteAuthMS(req, res);
+    //handleRouteAuthMS(req, res);
   } else if (ext) {
     handleRouteFilepath(req, res);
   }
