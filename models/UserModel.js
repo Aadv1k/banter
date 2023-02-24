@@ -36,7 +36,8 @@ class UserModel {
 
 
   async getUser(query) {
-    return await this.users.findOne(query) ?? null;
+    const user = await this.users.findOne(query);
+    return user ?? null;
   }
 
   async userExists(query) {
