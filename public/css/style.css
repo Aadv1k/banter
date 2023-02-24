@@ -71,13 +71,13 @@ section {
 .navbar .nav__links {
   display: flex;
   gap: 0.3rem;
-  width: 40%;
   align-items: center;
+  width: 30%;
 }
-.navbar .nav__links button:nth-child(2) {
+.navbar .nav__links a:nth-child(2) {
   display: none;
 }
-.navbar .nav__links button {
+.navbar .nav__links a {
   padding-block: 0.6rem;
   width: 100%;
   text-align: center;
@@ -96,14 +96,14 @@ section {
   .navbar .nav__title {
     font-size: 3rem;
   }
-  .navbar .nav__links button:nth-child(2) {
+  .navbar .nav__links a:nth-child(2) {
     display: block;
   }
   .navbar .nav__links {
-    width: fit-content;
     gap: 0.4rem;
+    width: auto;
   }
-  .navbar .nav__links button {
+  .navbar .nav__links a {
     width: 120px;
   }
 }
@@ -137,7 +137,6 @@ section {
 }
 .features .list__itm {
   border: 2px dotted #f15b3e;
-  background: #e7a991;
   border-radius: 3px;
   padding: 2rem 1rem;
   display: flex;
@@ -158,7 +157,7 @@ section {
 }
 
 .faq {
-  width: 95%;
+  width: 90%;
 }
 .faq__title {
   margin-block: 0.5rem;
@@ -170,7 +169,7 @@ section {
   gap: 0.5rem;
 }
 .faq__list li {
-  border: 2px solid #f15b3e;
+  border: 2px dotted #f15b3e;
   border-radius: 2px;
   display: flex;
   align-items: center;
@@ -180,4 +179,24 @@ section {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+}
+
+.sold-yet {
+  width: 90%;
+  border-radius: 3px;
+  background: #f15b3e;
+  padding: 1.8rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  align-items: flex-start;
+}
+.sold-yet h2 {
+  margin: 0;
+  max-width: 30ch;
+  font-size: 2rem;
+}
+.sold-yet .btn {
+  margin-top: 1rem;
+  padding: 0.8rem 1rem;
 }
