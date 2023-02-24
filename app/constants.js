@@ -29,6 +29,12 @@ module.exports = {
       error: "user-not-found",
       message: "the given user is not registered",
       code: 404,
+    },
+
+    badCookie: {
+      error: "bad-cookie",
+      message: ""
+
     }
   }
 };

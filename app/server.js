@@ -141,7 +141,7 @@ async function handleRouteAuthMSCallback(req, res) {
 }
 
 async function handleRouteLogin(req, res) {
-  let parsedCookie = cookie.parse(req.headers.cookie);
+  let parsedCookie = cookie.parse(req.headers.cookie ?? "");
   await USER_DB.init();
   const user = await USER_DB.getUserFromSessionID(parsedCookie.sessionid);
 
@@ -184,8 +184,11 @@ async function handleRouteLogin(req, res) {
 }
 
 async function handleRouteDashboard(req, res) {
-  let parsedCookie = cookie.parse(req.headers.cookie);
-  console.log(req.headers);
+  let parsedCookie = cookie.parse(req.headers.cookie ?? "");
+  if (!parsedCookie.sessionid) {
+    renderView(res, "login.ejs", 200);
+    return;
+  }
   res.writeHead(200, {"Content-type": MIME.html});
 
   if (parsedCookie.sessionid) {
