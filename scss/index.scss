@@ -30,8 +30,9 @@ section {
   justify-content: space-between;
   align-items: center;
   background: inherit;
+  top: 0;
   gap: 0.5rem;
-  padding: 0.5rem;
+  padding: 0.8rem;
 
   .nav__title {
     font-size: 2.3rem;
@@ -199,14 +200,14 @@ section {
 }
 
 .login-form {
-  position: absolute;
-  width: 100%;
   max-width: 500px;
-  top: 45%;
-  left: 50%;
-  transform: translate(-50%, -50%);
 
   @media screen and (min-width: 500px) {
-    top: 50%;
+    margin-top: 8rem;
+    .form {
+      padding-block: 2rem;
+    }
   }
+
 }
+

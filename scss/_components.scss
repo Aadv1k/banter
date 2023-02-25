@@ -47,16 +47,15 @@ p {
 .form {
   display: flex;
   flex-direction: column;
-  padding-block: 2.5rem;
   align-items: center;
-  gap: 1.5rem;
+  gap: 1.8rem;
   border-radius: 3px;
 
   .form__itm {
     width: 80%;
     display: flex;
     flex-direction: column;
-    gap: .2rem;
+    gap: .4rem;
   }
 
   label,.form__info {
