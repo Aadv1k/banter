@@ -4,6 +4,9 @@ const {
 
 const { Store } = require("../models/MemoryStore.js");
 
+
+const cookie = require("cookie");
+
 function sendJsonErr(res, err) {
   res.writeHead(err.code, { "Content-type": MIME.json });
   res.write(JSON.stringify(err));
