@@ -31,6 +31,75 @@ p {
   color: black;
   border-radius: 1000px;
 }
+.btn--submit {
+  border: 1px solid #f15b3e;
+  border-radius: 2px;
+  text-align: center;
+  transition: all 500ms ease;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  padding-block: 2.5rem;
+  align-items: center;
+  gap: 1.5rem;
+  border-radius: 3px;
+}
+.form .form__itm {
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+.form label, .form .form__info {
+  color: #404040;
+}
+.form input::placeholder {
+  color: #737373;
+}
+.form input {
+  all: unset;
+  border-bottom: 1px solid #f15b3e;
+  padding: 0.2rem 0.5rem 0.2rem 0;
+}
+.form .form__hr {
+  width: 80%;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #f15b3e;
+}
+.form .form__hr span, .form .form__hr span {
+  width: 100%;
+  height: 1px;
+  background: #f15b3e;
+}
+.form .form__title {
+  margin-bottom: 1rem;
+}
+.form .form__auth {
+  display: flex;
+}
+.form .form__auth a {
+  background: #f15b3e;
+  padding: 0.5rem;
+  border-radius: 3px;
+}
+.form .form__auth svg {
+  fill: white;
+  display: block;
+  width: 25px;
+}
+.form .btn--submit {
+  width: 80%;
+  padding-block: 0.5rem;
+}
+@media screen and (min-width: 500px) {
+  .form {
+    border: 1px solid #f15b3e;
+  }
+}
 
 * {
   margin: 0;
@@ -67,6 +136,7 @@ section {
 .navbar .nav__title {
   font-size: 2.3rem;
   text-decoration: none;
+  font-weight: bold;
 }
 .navbar .nav__links {
   display: flex;
@@ -199,4 +269,18 @@ section {
 .sold-yet .btn {
   margin-top: 1rem;
   padding: 0.8rem 1rem;
+}
+
+.login-form {
+  position: absolute;
+  width: 100%;
+  max-width: 500px;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+@media screen and (min-width: 500px) {
+  .login-form {
+    top: 50%;
+  }
 }

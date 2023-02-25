@@ -36,6 +36,7 @@ section {
   .nav__title {
     font-size: 2.3rem;
     text-decoration: none;
+    font-weight: bold;
   }
 
   .nav__links {
@@ -195,6 +196,17 @@ section {
     margin-top: 1rem;
     padding: .8rem 1rem;
   }
+}
 
+.login-form {
+  position: absolute;
+  width: 100%;
+  max-width: 500px;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 
+  @media screen and (min-width: 500px) {
+    top: 50%;
+  }
 }

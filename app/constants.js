@@ -40,7 +40,7 @@ module.exports = {
     internalErr: {
       error: "internal-error",
       message: "something went wrong on the server",
-      code: 500
+      code: 500,
     },
 
     invalidPassword: {
