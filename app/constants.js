@@ -25,10 +25,30 @@ module.exports = {
       code: 400
     },
 
+    userExists: {
+      error: "user-exists",
+      message: "the user is already registered",
+      code: 400
+    },
+
     userNotFound: {
       error: "user-not-found",
       message: "the given user is not registered",
       code: 404,
+    },
+
+    internalErr: {
+      error: "internal-error",
+      message: "something went wrong on the server",
+      code: 500,
+    },
+
+    invalidPassword: {
+      error: "invalid-password",
+      message: "the password given for the user is invalid",
+      code: 401
     }
+
+
   }
 };

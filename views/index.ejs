@@ -10,8 +10,8 @@
 <nav class="navbar">
   <a class="title nav__title" href="/">banter.</a>
   <div class="nav__links">
-    <button href="#" class="btn btn--primary">Sign Up</button>
-    <button href="#" class="btn btn--secondary">login</button>
+    <a href="/signup" class="btn btn--primary">Sign Up</a>
+    <a href="/login" class="btn btn--secondary">login</a>
   </div>
 </nav>
 
@@ -24,11 +24,9 @@
 <section class="features">
   <h2 class="features__title">Features</h2>
   <ul class="features__list">
-
-    <% [{icon: "bi bi-signpost-split-fill", title: "Crosspost", text: "Expand your reach by sharing your content across multiple social media platforms at once with crossposting"}, {icon: "bi bi-stars", title: "Brand", text: "Stand out from the crowd by creating a unique brand that represents your podcast and personality"}, {icon: "bi bi-people-fill", title: "Connect", text: "Engage with your audience by increasing your visibility and reach across media platforms"}].forEach(e => { %>
+    <% [{icon: "bi bi-shuffle", title: "Crosspost", text: "Expand your reach by sharing your content across multiple social media platforms at once with crossposting"}, {icon: "bi bi-stars", title: "Brand", text: "Stand out from the crowd by creating a unique brand that represents your podcast and personality"}, {icon: "bi bi-people-fill", title: "Connect", text: "Engage with your audience by increasing your visibility and reach across media platforms"}].forEach(e => { %>
     <li class="list__itm">
       <div class="itm__wrapper">
-        <i class="<%= e.icon %>"></i>
         <h3><%= e.title %></h3>
         <p><%= e.text %></p>
       </div>
@@ -37,38 +35,31 @@
   </ul>
 </section>
 
-<!--
-
 <section class="faq">
-  <h2 class="faq__title">FAQ</h2>
+  <h2 class="faq__title">About</h2>
 
   <ul class="faq__list">
-
     <li>
       <div>
         <h3>Why?</h3>
-        <p>This is NOT meant to be a full on competetier to much well developed services such as <a href="https://anchor.fm">anchor.fm</a>, but simply an another option to consider</p>
+        <p>Banter allows you to create quality content without technical know-how or expensive equipment. Easily upload and publish to major podcast directories.</p>
       </div>
     </li>
 
     <li>
       <div>
-        <h3>Is it secure?</h3>
-        <p>The project uses <a href="https://www.mongodb.com/atlas">Atlas</a>, and is hosted on <a href="https://railway.app">railway.app</a>, this makes it largely secure, however I am no security expert and will be trying to the best of my abilities to secure this app further</p>
-      </div>
-    </li>
-
-
-    <li>
-      <div>
-        <h3>The site is buggy</h3>
-        <p>You can mail me at <a href="mailto:aadv1k@outlook.com">aadv1k@outlook.com</a> if you encounter any bug, or if you are familiar with <a href="https://github.com/aadv1k/banter">GitHub</a> you may raise a issue there.</p>
+        <h3>Pricing?</h3>
+        <p>Banter offers a free and accessible way for creators to share their audio content with the world, without the need for any upfront investment or subscription fees.</p>
       </div>
     </li>
 
   </ul>
-
 </section>
--->
+
+<section class="sold-yet">
+  <h2 >Create an account and start your podcasting journey now.</h2>
+  <a href="/signup" class="btn btn--primary">Get started</a>
+</section>
+
 </html>
 

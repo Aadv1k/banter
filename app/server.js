@@ -5,7 +5,8 @@ const path = require("path");
 const querystring = require("querystring");
 const fetch = require("node-fetch-commonjs");
 const cookie = require("cookie");
-const { v4: uuid} = require("uuid");
+const { v4: uuid } = require("uuid");
+const crypto = require("crypto");
 
 const {
   MIME,
@@ -16,13 +17,16 @@ const {
 } = require("./constants");
 
 const { User, UserModel } = require("../models/UserModel.js");
+const MemoryStore = require("../models/MemoryStore.js");
+
+
+function isCookieAndSessionValid(req) {
+  const ck = cookie.parse(req.headers.cookie ?? "");
+  return Object.keys(ck).length !== 0 && MEM.get(ck.sessionid)?.uid !== undefined;
+}
 
 const USER_DB = new UserModel();
-
-const generatePassword = (length) =>
-  Math.random()
-    .toString(36)
-    .slice(2, length + 2);
+const MEM = new MemoryStore();
 
 function handleRouteFilepath(req, res) {
   const filename = req.url;
@@ -82,7 +86,15 @@ async function handleRouteAuthMSCallback(req, res) {
   await USER_DB.init();
 
   const authToken = req.url.split("=").pop();
-  if (!authToken) redirect(res, "/");
+
+  // No auth token
+  if (authToken.startsWith("/")) {
+    res.writeHead(302, {"Location": "/"});
+    res.end();
+    return;
+  };
+
+
   const formData = querystring.stringify({
     grant_type: "authorization_code",
     client_id: MS_CLIENT_ID,
@@ -102,40 +114,104 @@ async function handleRouteAuthMSCallback(req, res) {
       body: formData,
     }
   );
+
   const accessData = await accessRes.json();
   const accessToken = accessData.access_token;
-  const userRes = await fetch("https://graph.microsoft.com/oidc/userinfo", {
-    method: "GET",
-    headers: {
-      Authorization: "Bearer " + accessToken,
-    },
-  });
+  const userRes = await fetch("https://graph.microsoft.com/oidc/userinfo", { method: "GET", headers: { Authorization: "Bearer " + accessToken, }, });
   const userData = await userRes.json();
+  const dbUser = await USER_DB.getUser({email: userData.email});
+  const sid = uuid();
 
-  const user = new User(
-    userData.display_name,
-    userData.email,
-    generatePassword(8)
-  );
-
-  const userExists = await USER_DB.userExists(user);
-  res.writeHead(200, { "Content-type": MIME.html });
-  if (userExists) {
-    res.write(`<h1>Welcome back ${user.email}</h1>`);
-  } else {
-    await USER_DB.pushUser(user);
-    res.write(`<h1>Registered ${user.email}</h1>`);
+  if (dbUser) {
+    MEM.store(sid, {uid: dbUser._id})
+    res.writeHead(302, {
+      Location: "/dashboard",
+      "Set-Cookie": `sessionid=${sid}; path=/`,
+    });
+    res.end();
+    return;
   }
+
+  if (!userData.email) {
+    sendJsonErr(res, ERR.internalErr);
+    res.end();
+    return;
+  }
+
+  const uid = uuid();
+  await USER_DB.pushUser(new User(
+    uid,
+    `${userData.givenname} ${userData.familyname}`,
+    userData.email,
+    crypto.randomBytes(16).toString("hex")
+  ));
+
+  MEM.store(sid, {uid})
+
+  res.writeHead(302, {
+    Location: "/dashboard",
+    "Set-Cookie": `sessionid=${sid}`,
+  });
 
   res.end();
 }
 
-function handleRouteLogin(req, res) {
-  let parsedCookie = cookie.parse(req.headers.cookie);
+async function handleRouteSignup(req, res) {
+  await USER_DB.init();
 
   if (req.method === "GET") {
-    if (parsedCookie.sessionid) {
-      res.writeHead(301, {"Location": "/dashboard"});
+    if (isCookieAndSessionValid(req)) {
+      res.writeHead(302, { Location: "/dashboard" });
+      res.end();
+      return;
+    }
+    renderView(res, "signup.ejs", 200);
+  } else if (req.method === "POST") {
+    let body = "";
+    req.on("data", (chunk) => (body += chunk.toString()));
+    req.on("end", async () => {
+      const formData = querystring.parse(body);
+
+      if (![formData.name, formData.email, formData.password].every((e) => e)) {
+        sendJsonErr(res, ERR.badInput);
+        return;
+      }
+
+      const uid = uuid();
+      const sid = uuid();
+
+      const hashedPassword = crypto
+        .createHash("md5")
+        .update(formData.password)
+        .digest("hex");
+
+      const user = await USER_DB.getUser({ email: formData.email });
+      if (user) {
+        sendJsonErr(res, ERR.userExists);
+        return;
+      }
+
+      await USER_DB.pushUser(
+        new User(uid, formData.name, formData.email, hashedPassword)
+      );
+
+      MEM.store(sid, { uid });
+
+      res.writeHead(302, {
+        Location: "/dashboard",
+        "Set-Cookie": `sessionid=${sid}`,
+      });
+      res.end();
+    });
+  }
+}
+
+async function handleRouteLogin(req, res) {
+  await USER_DB.init();
+
+  if (req.method === "GET") {
+    if (isCookieAndSessionValid(req)) {
+      res.writeHead(302, { Location: "/dashboard" });
       res.end();
       return;
     }
@@ -146,38 +222,63 @@ function handleRouteLogin(req, res) {
     req.on("end", async () => {
       const formData = querystring.parse(body);
 
-      if (![formData.email, formData.name, formData.password].every((e) => e)) {
+      if (![formData.email, formData.password].every((e) => e)) {
         sendJsonErr(res, ERR.badInput);
+        return;
       }
 
-      await USER_DB.init();
-      const newUserID = uuid();
-      const newSessionID = uuid();
-      const user = new User(newUserID, formData.name, formData.email, formData.password);
-      const userExists = await USER_DB.userExists(user);
+      const sid = uuid();
 
-      if (userExists) {
-        const sessionID = await USER_DB.getSessionIDFromUser(user);
-        res.writeHead(301, { "Location": "/dashboard", "Set-Cookie": `sessionid=${sessionID}`});
-        res.end();
+      const hashedPassword = crypto
+        .createHash("md5")
+        .update(formData.password)
+        .digest("hex");
+
+      const dbUser = await USER_DB.getUser({ email: formData.email });
+
+      if (!dbUser) {
+        sendJsonErr(res, ERR.userNotFound);
+      } else if (dbUser.password != hashedPassword) {
+        sendJsonErr(res, ERR.invalidPassword);
+        return;
       }
 
-      await USER_DB.pushUser(user);
-      await USER_DB.pushSessionID(newSessionID, newUserID);
-      res.writeHead(301, { "Location": "/dashboard", "Set-Cookie": `sessionid=${newSessionID}` })
+      MEM.store(sid, { uid: dbUser._id });
+
+      res.writeHead(302, {
+        Location: "/dashboard",
+        "Set-Cookie": `sessionid=${sid}`,
+      });
       res.end();
     });
   }
 }
 
 async function handleRouteDashboard(req, res) {
-  let parsedCookie = cookie.parse(req.headers.cookie);
-  res.writeHead(200, {"Content-type": MIME.html});
+  await USER_DB.init();
 
-  if (parsedCookie.sessionid) {
-    await USER_DB.init();
-    const user = await USER_DB.getUserFromSessionID(parsedCookie.sessionid);
-    res.write(`welcome ${user.email}!`);
+  if (!isCookieAndSessionValid(req)) {
+    res.writeHead(302, { Location: "/login" });
+    res.end();
+    return;
+  }
+
+  const uid = MEM.get(cookie.parse(req.headers.cookie).sessionid).uid;
+  res.writeHead(200, { "Content-type": MIME.html });
+  console.log(uid, await USER_DB.getUser({}))
+  const user = await USER_DB.getUser({ _id: uid });
+
+  res.write(`welcome ${user.email}`);
+  res.end();
+}
+
+function handleRouteLogout(req, res) {
+  const ck = cookie.parse(req.headers.cookie ?? "");
+  if (ck.sessionid) {
+    MEM.rm(ck.sessionid);
+    res.writeHead(302, { Location: "/", "Set-Cookie": "sessionid=" });
+  } else {
+    res.writeHead(302, { Location: "/" });
   }
   res.end();
 }
@@ -189,7 +290,11 @@ module.exports = http.createServer(async (req, res) => {
   if (URI === "/") {
     renderView(res, "index.ejs", 200);
   } else if (URI.startsWith("/login")) {
-    handleRouteLogin(req, res);
+    await handleRouteLogin(req, res);
+  } else if (URI.startsWith("/signup")) {
+    await handleRouteSignup(req, res);
+  } else if (URI.startsWith("/logout")) {
+    handleRouteLogout(req, res);
   } else if (URI.startsWith("/dashboard")) {
     handleRouteDashboard(req, res);
   } else if (URI.startsWith("/auth/microsoft/callback")) {
@@ -198,5 +303,5 @@ module.exports = http.createServer(async (req, res) => {
     handleRouteAuthMS(req, res);
   } else if (ext) {
     handleRouteFilepath(req, res);
-  } 
+  }
 });

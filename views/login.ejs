@@ -1,15 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta charset="UTF-8">
-  <title>shup</title>
+  <title>Banter: Login</title>
+  <link rel="stylesheet" href="css/style.css" media="all">
 </head>
 <body>
-  <form method="POST">
-    <input type="email" name="email" placeholder="email" required>
-    <input type="password" name="password" placeholder="password" required>
-    <input type="text" name="name" placeholder="name" required>
-    <button type="submit">Submit bitch</button>
+  <nav class="navbar">
+    <a class="nav__title" href="/">Banter.</a>
+  </nav>
+
+  <section class="login-form">
+  <form method="POST" class="form form--login">
+    <h2 class="form__title">Login</h2>
+
+    <div class="form__itm">
+      <label for="email">Email</label>
+      <input type="email" name="email" placeholder="Eg example@foo.com" required>
+    </div>
+
+    <div class="form__itm">
+      <label for="password">Password</label>
+      <input type="password" name="password" placeholder="Eg john123" required>
+    </div>
+
+    <button class="btn btn--submit" type="submit">Submit</button>
+
+    <div class="form__hr">
+      <span></span>
+      or
+      <span></span>
+    </div>
+
+    <div class="form__auth">
+      <a href="/auth/microsoft" class="auth-microsoft">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-microsoft" viewBox="0 0 16 16">
+  <path d="M7.462 0H0v7.19h7.462V0zM16 0H8.538v7.19H16V0zM7.462 8.211H0V16h7.462V8.211zm8.538 0H8.538V16H16V8.211z"/>
+</svg>
+      </a>
+    </div>
+
+    <div class="form__info">
+      Need a new account? <a href="/signup">Sign up</a>
+    </div>
+
   </form>
+  </section>
 </body>
 </html>

@@ -22,7 +22,7 @@ section.hero {
 }
 section {
   max-width: 1000px;
-  margin: 2rem auto;
+  margin: 2.5rem auto;
 }
 
 .navbar {
@@ -36,20 +36,21 @@ section {
   .nav__title {
     font-size: 2.3rem;
     text-decoration: none;
+    font-weight: bold;
   }
 
   .nav__links {
     display: flex;
     gap: 0.3rem;
-    width: 40%;
     align-items: center;
+    width: 30%;
   }
 
-  .nav__links button:nth-child(2) {
+  .nav__links a:nth-child(2) {
     display: none;
   }
 
-  .nav__links button {
+  .nav__links a {
     padding-block: .6rem;
     width: 100%;
     text-align: center;
@@ -69,16 +70,16 @@ section {
       font-size: 3rem;
     }
 
-    .nav__links button:nth-child(2) {
+    .nav__links a:nth-child(2) {
       display: block;
     }
 
     .nav__links {
-      width: fit-content;
       gap: 0.4rem;
+      width: auto;
     }
 
-    .nav__links button {
+    .nav__links a {
       width: 120px;
     }
   }
@@ -87,28 +88,23 @@ section {
 .hero {
   background-color: $accent;
   color: black;
-  height: 300px;
+  height: 330px;
   display: flex;
 
   &__sub {
     align-self: flex-end;
     margin-bottom: 1rem;
     margin-left: 1rem;
-    font-size: 2rem;
+    font-size: 2.2rem;
     max-width: 25ch;
   }
 
-  @media screen and (min-width: 500px) {
-    &__sub {
-      font-size: 2.2rem;
-    }
-  }
 }
 
 
 
 .features {
-  width: 95%;
+  width: 90%;
 
   &__title {
     margin-block: .5rem;
@@ -119,32 +115,27 @@ section {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    justify-content: center;
+    justify-content: space-between;
   }
 
   .list__itm {
-    background: $accent;
-    height: 200px;
+    border: 2px dotted $accent;
+    //background: #e7a991;
     border-radius: 3px;
+    padding: 2rem 1rem;
     display: flex;
-    align-items: center;
-    padding-inline: .8rem;
+    justify-content: space-between;
+    flex-direction: column;
   }
 
   p {
     max-width: 40ch;
+    margin-top: .5rem;
   }
 
   .list__itm i {
-    font-size: 1.5rem;
+    font-size: 2.2rem;
   }
-
-  .itm__wrapper {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
 
   @media screen and (min-width: 500px) {
 
@@ -157,7 +148,7 @@ section {
 }
 
 .faq {
-  width: 95%;
+  width: 90%;
 
   &__title {
     margin-block: .5rem;
@@ -171,7 +162,7 @@ section {
   }
 
   &__list li {
-    border: 2px solid $accent;
+    border: 2px dotted $accent;
     border-radius: 2px;
     display: flex;
     align-items: center;
@@ -182,5 +173,40 @@ section {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+  }
+}
+
+.sold-yet {
+  width: 90%;
+  border-radius: 3px;
+  background: $accent;
+  padding: 1.8rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: .2rem;
+  align-items: flex-start;
+
+  h2 {
+    margin: 0;
+    max-width: 30ch;
+    font-size: 2rem;
+  }
+
+  .btn {
+    margin-top: 1rem;
+    padding: .8rem 1rem;
+  }
+}
+
+.login-form {
+  position: absolute;
+  width: 100%;
+  max-width: 500px;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  @media screen and (min-width: 500px) {
+    top: 50%;
   }
 }
