@@ -35,9 +35,10 @@ module.exports = {
       code: 400
     },
 
+
     unauthorized: {
       error: "unauthorized",
-      message: "missing credentials to access the resource",
+      message: "you don't have the credentials to access this resource",
       code: 401
     },
 
@@ -64,7 +65,5 @@ module.exports = {
       message: "the password given for the user is invalid",
       code: 401
     }
-
-
   }
 };

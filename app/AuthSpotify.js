@@ -1,6 +1,7 @@
 const crypto = require("crypto");
 const fetch = require("node-fetch-commonjs");
 const cookie = require("cookie");
+const querystring = require("querystring");
 const { 
   ERR,
   SPOTIFY_CLIENT_ID,
@@ -12,13 +13,13 @@ const { Store } = require("../models/MemoryStore");
 const { sendJsonErr } = require("./common");
 
 async function handleRouteAuthSpotify(req, res) {
-  const spotifyState = crypto.randomBytes(16).toString("hex");
+  const spotifyState = crypto.randomBytes(16).toString("hex")
   const scope = "user-read-private user-read-email";
-  const spotifyUrl = `https://accounts.spotify.com/authorize?response_type=code&client_id=${SPOTIFY_CLIENT_ID}&scope=${encodeURIComponent(scope)}&redirect_uri=${encodeURIComponent(SPOTIFY_REDIRECT)}&state=${state}`;
+  const spotifyUrl = `https://accounts.spotify.com/authorize?response_type=code&client_id=${SPOTIFY_CLIENT_ID}&scope=${encodeURIComponent(scope)}&redirect_uri=${encodeURIComponent(SPOTIFY_REDIRECT)}&state=${spotifyState}`;
 
-  const ck = cookie.parse(req.headers.cookie);
+  const ck = cookie.parse(req.headers.cookie ?? "");
   if (!ck?.sessionid) {
-    sendJsonErr(ERR.unableToFindUser);
+    sendJsonErr(res, ERR.unauthorized);
     return;
   }
 
@@ -43,30 +44,22 @@ async function handleRouteAuthSpotify(req, res) {
   } catch {
     res.writeHead(302, {
       Location: spotifyUrl,
-      "Set-cookie": cookie.stringify({STATE_KEY: spotifyState})
     })
     res.end();
   }
 }
 
 async function handleRouteAuthSpotifyCallback(req, res) {
-  const { accessCode, state } = querystring.parse(res.url);
-  const storedState = req.headers.cookies ? cookie.parse(req.cookies).STATE_KEY : null;
-
-  if (state === null || state !== storedState) {
-    sendJsonErr(ERR.internalErr);
-    return;
-  }
-
+  const parsedUrl = querystring.parse(req.url.split('?').pop());
   const formData = querystring.stringify({
     grant_type: 'authorization_code',
-    code: accessCode,
+    code: parsedUrl.code,
     redirect_uri: SPOTIFY_REDIRECT,
     client_id: SPOTIFY_CLIENT_ID,
     client_secret: SPOTIFY_CLIENT_SECRET
   })
 
-  const res = await fetch(
+  const accessRes = await fetch(
     'https://accounts.spotify.com/api/token', 
     { 
       method: "POST", 
@@ -80,18 +73,17 @@ async function handleRouteAuthSpotifyCallback(req, res) {
 
   const ck = cookie.parse(req.headers.cookie);
   if (!ck?.sessionid) {
-    sendJsonErr(ERR.unableToFindUser);
+    sendJsonErr(res, ERR.unableToFindUser);
     return;
   }
 
-  const data = await res.json();
+  const data = await accessRes.json();
   const access_token = data.access_token;
   const refresh_token = data.refresh_token;
 
   Store.update(ck.sessionid, {spotifyAccessToken: access_token, spotifyRefreshToken: refresh_token});
 
   res.writeHead(302, {
-    "Set-cookie": "STATE_KEY=",
     Location: "/dashboard",
   });
   res.end();

@@ -1,5 +1,6 @@
 const {
   MIME,
+  ERR
 } = require("./constants");
 
 const { Store } = require("../models/MemoryStore.js");
