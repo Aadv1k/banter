@@ -9,6 +9,10 @@ module.exports = {
   MS_CLIENT_SECRET: process.env.MS_CLIENT_SECRET,  
   MS_REDIRECT: process.env.MS_REDIRECT,
 
+  SPOTIFY_CLIENT_ID: process.env.SPOTIFY_CLIENT_ID,
+  SPOTIFY_CLIENT_SECRET: process.env.SPOTIFY_CLIENT_SECRET,  
+  SPOTIFY_REDIRECT: process.env.SPOTIFY_REDIRECT,
+
   MIME: {
     json: "application/json",
     html: "text/html",
@@ -23,6 +27,18 @@ module.exports = {
       error: 'bad-input',
       message: 'the provided input was invalid',
       code: 400
+    },
+
+    unableToFindUser: {
+      error: "unable-to-find-user",
+      message: "was unable to find the provided sessionID or user",
+      code: 400
+    },
+
+    unauthorized: {
+      error: "unauthorized",
+      message: "missing credentials to access the resource",
+      code: 401
     },
 
     userExists: {
