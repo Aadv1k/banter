@@ -21,6 +21,7 @@ p {
   all: unset;
   cursor: pointer;
 
+
   &--primary {
     background-color: black;
     color: white;
@@ -35,28 +36,39 @@ p {
   }
 
   &--submit {
+    background-color: $main-bg;
     border: 1px solid $accent;
     border-radius: 2px;
-    //box-shadow: $btn-shadow;
     text-align: center;
-    transition: all 500ms ease;
+    transition: background-color 200ms ease-in-out;
   }
+
+
+  &--submit:active {
+    outline: 2px solid lighten($accent, 5%);
+  }
+
+  @media (hover: hover) {
+    &--submit:hover {
+      background-color: $accent;
+    }
+  }
+
 }
 
 
 .form {
   display: flex;
   flex-direction: column;
-  padding-block: 2.5rem;
   align-items: center;
-  gap: 1.5rem;
+  gap: 1.8rem;
   border-radius: 3px;
 
   .form__itm {
     width: 80%;
     display: flex;
     flex-direction: column;
-    gap: .2rem;
+    gap: .4rem;
   }
 
   label,.form__info {
@@ -95,10 +107,18 @@ p {
     display: flex;
   }
 
+
   .form__auth a {
     background: $accent;
     padding: .5rem;
     border-radius: 3px;
+    border: 1px solid $accent;
+    transition: background-color 200ms ease;
+  }
+
+  .form__auth:active {
+    border-radius: 3px;
+    outline: 2px solid lighten($accent, 5%);
   }
 
   .form__auth svg {
@@ -114,6 +134,12 @@ p {
 
   @media screen and (min-width: 500px) {
     border: 1px solid $accent;
+  }
+
+  @media (hover: hover) {
+    .form__auth a:hover {
+      background-color: $main-bg;
+    }
   }
 
 }

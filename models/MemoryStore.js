@@ -10,7 +10,13 @@ class MemoryStore {
 
   // Retrieve session data from the store
   get(sessionId) {
-    return this.sessions[sessionId];
+    return this.sessions?.[sessionId];
+  }
+
+  update(sessionId, newData) {
+    const data = this.sessions[sessionId];
+    if (!data) return undefined;
+    this.store(sessionId, {...data, ...newData});
   }
 
   dump() {
@@ -23,4 +29,5 @@ class MemoryStore {
   }
 }
 
-module.exports = MemoryStore;
+const Store = new MemoryStore();
+module.exports = {MemoryStore, Store};
