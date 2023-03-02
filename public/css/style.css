@@ -88,6 +88,7 @@ p {
 }
 .form .form__auth {
   display: flex;
+  gap: 0.5rem;
 }
 .form .form__auth a {
   background: #f15b3e;
@@ -96,7 +97,7 @@ p {
   border: 1px solid #f15b3e;
   transition: background-color 200ms ease;
 }
-.form .form__auth:active {
+.form .form__auth a:active {
   border-radius: 3px;
   outline: 2px solid #f36f56;
 }

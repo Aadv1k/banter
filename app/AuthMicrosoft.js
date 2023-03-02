@@ -1,4 +1,4 @@
-const { sendJsonErr, isCookieAndSessionValid} = require("./common");
+const { sendJsonErr, isCookieAndSessionValid, generatePassword} = require("./common");
 const {
   ERR,
   MS_CLIENT_ID,
@@ -9,7 +9,6 @@ const {
 const { v4: uuid } = require("uuid");
 const fetch = require("node-fetch-commonjs");
 const querystring = require("querystring");
-const crypto = require("crypto");
 const { Store } = require("../models/MemoryStore.js");
 const { User, UserModel } = require("../models/UserModel.js");
 const USER_DB = new UserModel();
@@ -88,7 +87,7 @@ async function handleRouteAuthMSCallback(req, res) {
     uid,
     `${userData.givenname} ${userData.familyname}`,
     userData.email,
-    crypto.randomBytes(16).toString("hex")
+    generatePassword(16)
   ));
 
   Store.store(sid, {uid})

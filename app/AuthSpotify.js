@@ -1,8 +1,10 @@
 const crypto = require("crypto");
 const fetch = require("node-fetch-commonjs");
 const cookie = require("cookie");
+const { v4: uuid} = require("uuid");
 const querystring = require("querystring");
 const { 
+  MIME,
   ERR,
   SPOTIFY_CLIENT_ID,
   SPOTIFY_CLIENT_SECRET,
@@ -10,46 +12,31 @@ const {
 } = require("./constants");
 
 const { Store } = require("../models/MemoryStore");
+const { User, UserModel } = require("../models/UserModel");
 const { sendJsonErr } = require("./common");
 
+const USER_DB = new UserModel();
+
 async function handleRouteAuthSpotify(req, res) {
-  const spotifyState = crypto.randomBytes(16).toString("hex")
   const scope = "user-read-private user-read-email";
-  const spotifyUrl = `https://accounts.spotify.com/authorize?response_type=code&client_id=${SPOTIFY_CLIENT_ID}&scope=${encodeURIComponent(scope)}&redirect_uri=${encodeURIComponent(SPOTIFY_REDIRECT)}&state=${spotifyState}`;
 
-  const ck = cookie.parse(req.headers.cookie ?? "");
-  if (!ck?.sessionid) {
-    sendJsonErr(res, ERR.unauthorized);
-    return;
-  }
+  const spotifyQuery = querystring.stringify({
+    response_type: "code",
+    client_id: SPOTIFY_CLIENT_ID,
+    redirect_uri: SPOTIFY_REDIRECT,
+    scope: scope,
+  })
 
-  const sessionData = Store.get(ck.sessionid);
+  const spotifyUrl = `https://accounts.spotify.com/authorize?${spotifyQuery}`;
 
-  try {
-    const res = await fetch('https://accounts.spotify.com/api/token', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Authorization': 'Basic ' + Buffer.from(SPOTIFY_CLIENT_ID + ':' + SPOTIFY_CLIENT_SECRET).toString('base64')
-      },
-      body: 'grant_type=refresh_token&refresh_token=' + sessionData.spotifyRefreshToken
-    })
-
-    const data = res.json()
-    Store.update(ck.sessionid, {spotifyAccessToken: data.access_token});
-    res.writeHead(302, {
-      Location: "/dashboard",
-    })
-    res.end();
-  } catch {
-    res.writeHead(302, {
-      Location: spotifyUrl,
-    })
-    res.end();
-  }
+  res.writeHead(302, {
+    Location: spotifyUrl,
+  })
+  res.end();
 }
 
 async function handleRouteAuthSpotifyCallback(req, res) {
+  await USER_DB.init();
   const parsedUrl = querystring.parse(req.url.split('?').pop());
   const formData = querystring.stringify({
     grant_type: 'authorization_code',
@@ -71,21 +58,41 @@ async function handleRouteAuthSpotifyCallback(req, res) {
     },
   )
 
-  const ck = cookie.parse(req.headers.cookie);
-  if (!ck?.sessionid) {
-    sendJsonErr(res, ERR.unableToFindUser);
+  const tokenData = await accessRes.json();
+  const access_token = tokenData.access_token;
+  const refresh_token = tokenData.refresh_token;
+
+  const userRes = await fetch("https://api.spotify.com/v1/me", {
+    method: "GET",
+    headers: {
+      "Content-type": MIME.json,
+      "Authorization": `Bearer ${access_token}`
+    },
+  })
+
+  const userData = await userRes.json();
+  const spotifyUserId = uuid();
+  const spotifySessionId = uuid();
+
+  const existingUser = await USER_DB.getUser({email: userData.email});
+
+  if (existingUser) {
+    Store.store(spotifySessionId, {uid: existingUser._id})
+    res.writeHead(302, {
+      Location: "/dashboard",
+      "Set-Cookie": `sessionid=${spotifySessionId}; path=/`
+    })
+    res.end();
     return;
   }
 
-  const data = await accessRes.json();
-  const access_token = data.access_token;
-  const refresh_token = data.refresh_token;
-
-  Store.update(ck.sessionid, {spotifyAccessToken: access_token, spotifyRefreshToken: refresh_token});
+  USER_DB.pushUser(new User(spotifyUserId, userData.email, userData.display_name, generatePassword(16)));
+  Store.store(spotifySessionId, {uid: spotifyUserId})
 
   res.writeHead(302, {
     Location: "/dashboard",
-  });
+    "Set-Cookie": `sessionid=${spotifySessionId}`
+  })
   res.end();
 }
 

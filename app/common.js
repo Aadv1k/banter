@@ -3,9 +3,8 @@ const {
   ERR
 } = require("./constants");
 
-const { Store } = require("../models/MemoryStore.js");
-
-
+const crypto = require("crypto");
+const { Store } = require("../models/MemoryStore");
 const cookie = require("cookie");
 
 function sendJsonErr(res, err) {
@@ -19,4 +18,7 @@ function isCookieAndSessionValid(req) {
   return Object.keys(ck).length !== 0 && Store.get(ck.sessionid)?.uid !== undefined;
 }
 
-module.exports = { sendJsonErr, isCookieAndSessionValid};
+function generatePassword(length) {
+  return crypto.randomBytes(length).toString("hex")
+}
+module.exports = { sendJsonErr, isCookieAndSessionValid, generatePassword};

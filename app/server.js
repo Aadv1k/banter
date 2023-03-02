@@ -1,5 +1,5 @@
 const { handleRouteAuthMSCallback, handleRouteAuthMS } = require("./AuthMicrosoft");
-const { handleRouteAuthSpotify, handleRouteAuthSpotifyCallback } = require("./AuthSpotify");
+const { handleRouteAuthSpotify, handleRouteAuthSpotifyCallback } = require("./AuthSpotify");;
 
 const {
 	MIME,

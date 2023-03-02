@@ -43,7 +43,6 @@ p {
     transition: background-color 200ms ease-in-out;
   }
 
-
   &--submit:active {
     outline: 2px solid lighten($accent, 5%);
   }
@@ -105,8 +104,8 @@ p {
 
   .form__auth {
     display: flex;
+    gap: .5rem;
   }
-
 
   .form__auth a {
     background: $accent;
@@ -116,7 +115,7 @@ p {
     transition: background-color 200ms ease;
   }
 
-  .form__auth:active {
+  .form__auth a:active {
     border-radius: 3px;
     outline: 2px solid lighten($accent, 5%);
   }
