@@ -5,7 +5,6 @@ class MemoryStore {
 
   // Save session data to the store
   store(sessionId, sessionData) {
-    this.sessions = {};
     this.sessions[sessionId] = sessionData;
   }
 

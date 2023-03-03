@@ -13,7 +13,7 @@ const {
 
 const { Store } = require("../models/MemoryStore");
 const { User, UserModel } = require("../models/UserModel");
-const { sendJsonErr } = require("./common");
+const { sendJsonErr, generatePassword} = require("./common");
 
 const USER_DB = new UserModel();
 
@@ -69,15 +69,32 @@ async function handleRouteAuthSpotifyCallback(req, res) {
       "Authorization": `Bearer ${access_token}`
     },
   })
-
+  
   const userData = await userRes.json();
   const spotifyUserId = uuid();
   const spotifySessionId = uuid();
 
+  // if cookie exists, then simply update the store with the refresh_token
+  if (req.headers.cookie && cookie.parse(req.headers.cookie).sessionid) {
+    const sid = cookie.parse(req.headers.cookie).sessionid;
+    const stored = Store.get(sid);
+    if (!stored) {
+      sendJsonErr(res, ERR.userNotFound);
+      return;
+    }
+    Store.store(sid, {uid: stored.uid, spotifyRefreshToken: refresh_token})
+
+    res.writeHead(302, {
+      Location: "/dashboard",
+    })
+    res.end();
+    return;
+  }
+
   const existingUser = await USER_DB.getUser({email: userData.email});
 
   if (existingUser) {
-    Store.store(spotifySessionId, {uid: existingUser._id})
+    Store.store(spotifySessionId, {uid: existingUser._id, spotifyRefreshToken: refresh_token})
     res.writeHead(302, {
       Location: "/dashboard",
       "Set-Cookie": `sessionid=${spotifySessionId}; path=/`
@@ -87,7 +104,7 @@ async function handleRouteAuthSpotifyCallback(req, res) {
   }
 
   USER_DB.pushUser(new User(spotifyUserId, userData.email, userData.display_name, generatePassword(16)));
-  Store.store(spotifySessionId, {uid: spotifyUserId})
+  Store.store(spotifySessionId, {uid: spotifyUserId, spotifyRefreshToken: refresh_token});
 
   res.writeHead(302, {
     Location: "/dashboard",
