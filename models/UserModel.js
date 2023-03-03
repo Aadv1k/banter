@@ -4,11 +4,12 @@ const { ATLAS_PWD } = require("../app/constants.js");
 const ATLAS_URL = `mongodb+srv://user-1:${ATLAS_PWD}@banter-dev.acxedwo.mongodb.net`;
 
 class User {
-  constructor(id, name, email, password) {
+  constructor(id, name, email, password, profileImage) {
     this._id = id;
     this.name = name;
     this.email = email;
     this.password = password;
+    this.profileImage = profileImage ?? "";
   }
 }
 
@@ -31,6 +32,7 @@ class UserModel {
       name: user.name,
       email: user.email,
       password: user.password,
+      profileImage: user.profileImage,
     });
   }
 

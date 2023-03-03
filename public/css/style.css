@@ -175,6 +175,28 @@ section {
   text-transform: capitalize;
   border-radius: 100px;
 }
+.navbar .nav__profile {
+  display: flex;
+  border: 1px solid #f15b3e;
+  border-radius: 100px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+  align-items: center;
+}
+.navbar .nav__profile span {
+  border-radius: 100px;
+  max-width: 50px;
+  height: 100%;
+}
+.navbar .nav__profile span img {
+  vertical-align: bottom;
+  width: 100%;
+  border-radius: 100px;
+}
+.navbar .nav__profile strong {
+  display: none;
+  text-transform: capitalize;
+}
 @media screen and (min-width: 500px) {
   .navbar {
     flex-direction: row;
@@ -183,6 +205,15 @@ section {
     width: 100%;
     align-items: center;
     padding: 0.8rem 1.3rem;
+  }
+  .navbar .nav__profile span {
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+  }
+  .navbar .nav__profile {
+    padding-right: 1rem;
+  }
+  .navbar .nav__profile strong {
+    display: block;
   }
   .navbar .nav__title {
     font-size: 3rem;

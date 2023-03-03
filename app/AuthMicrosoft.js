@@ -87,7 +87,8 @@ async function handleRouteAuthMSCallback(req, res) {
     uid,
     `${userData.givenname} ${userData.familyname}`,
     userData.email,
-    generatePassword(16)
+    generatePassword(16),
+    userData.
   ));
 
   Store.store(sid, {uid})

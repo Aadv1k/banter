@@ -59,7 +59,46 @@ section {
     border-radius: 100px;
   }
 
+  .nav__profile {
+    display: flex;
+    border: 1px solid $accent;
+    border-radius: 100px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: .5rem;
+    align-items: center;
+  }
+
+  .nav__profile span {
+    border-radius: 100px;
+    max-width: 50px;
+    height: 100%;
+  }
+
+  .nav__profile span img {
+    vertical-align: bottom;
+    width: 100%;
+    border-radius: 100px;
+  }
+
+    .nav__profile strong {
+      display: none;
+      text-transform: capitalize;
+    }
+
+
   @media screen and (min-width: 500px) {
+    .nav__profile span {
+      box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+    }
+
+    .nav__profile {
+      padding-right: 1rem;
+    }
+
+    .nav__profile strong {
+      display: block;
+    }
+
     flex-direction: row;
     position: fixed;
     box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.14) , 0px 1px 10px 0px rgba(0,0,0,0.12) , 0px 2px 4px -1px rgba(0,0,0,0.2);

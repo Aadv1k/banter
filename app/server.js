@@ -43,17 +43,18 @@ function handleRouteFilepath(req, res) {
 	res.end();
 }
 
-function renderView(res, file, code, data) {
+function renderView(res, file, httpStatusCode, data) {
 	const viewPath = path.join(__dirname, "../views", file);
 	if (existsSync(viewPath)) {
 		ejs.renderFile(viewPath, data ?? {}, (err, data) => {
 			if (err) {
 				console.error(err);
 			}
-			res.writeHead(code, { "Content-type": MIME.html });
+			res.writeHead(httpStatusCode ?? 200, { "Content-type": MIME.html });
 			res.write(data);
 		});
 	} else {
+    renderView(res, "404.ejs", 404);
 	}
 	res.end();
 }
@@ -165,15 +166,16 @@ async function handleRouteDashboard(req, res) {
 	}
 
 	const uid = Store.get(cookie.parse(req.headers.cookie).sessionid).uid;
+	const spotifyRefreshToken = Store.get(cookie.parse(req.headers.cookie).sessionid)?.spotifyRefreshToken;
 	res.writeHead(200, { "Content-type": MIME.html });
 	const user = await USER_DB.getUser({ _id: uid });
 
 	if (!user) {
 		sendJsonErr(ERR.unableToFindUser);
+    return;
 	}
 
-	res.write(`welcome ${user.email}`);
-	res.end();
+  renderView(res, "dashboard.ejs", 200, {spotifyLoggedIn: Boolean(spotifyRefreshToken), user, });
 }
 
 function handleRouteLogout(req, res) {
