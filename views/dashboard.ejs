@@ -3,22 +3,52 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-  
   <title>Banter: dashboard</title>
-  <link rel="stylesheet" href="css/style.css" media="all">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css" integrity="sha384-b6lVK+yci+bfDmaY1u0zE8YYJt0TZxLEAFyYSLHId4xoVvsrQu3INevFKo+Xir8e" crossorigin="anonymous">
+  <script type="module" defer src="script-dashboard.js"></script>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<nav class="navbar">
-  <a class="title nav__title" href="/">banter.</a>
-  <div class="nav__profile">
-    <span>
-      <img src="https://fastly.picsum.photos/id/25/200/200.jpg?hmac=G4ZRBi0qdWfQJQs_yxNQr_LJJlf0V1_Pdj8Tp41xsJU" alt="profile">
-    </span>
-    <strong><%= user.name %></strong>
-  </div>
-</nav>
+    <div class="vnav">
+      <div class="vnav__profile">
+        <% if (user.profile) {%>
+          <img class="profile__img" src="<%= user.profile %>" alt="<%=user.name %>"/>
+        <%} else {%>
+<i class="bi bi-person-fill"></i>
+        <%}%>
+      </div>
 
-   
+    <ul class="vnav__list">
+      <li>
+        <a href="/dashboard/create" class="vnav__link">
+          <i class="bi bi-plus-square"></i>
+        </a></li>
+
+      <li>
+        <a href="/dashboard/create" class="vnav__link">
+          <i class="bi bi-gear"></i>
+        </a></li>
+      <li>
+        <a href="/dashboard/create" class="vnav__link">
+          <i class="bi bi-upload"></i>
+        </a></li>
+        <!--
+      <li>
+
+      <a href="/dashboard/manage" class="vnav__link">
+
+      <p> manage</p>
+      </a></li>
+      <li><a href="/dashboard/post" class="vnav__link">
+      <p>post</p>
+      </a></li>
+        -->
+    </ul>
+      <a class="vnav__logout" href="/logout" title="logout">
+        <i aria-hidden class="bi bi-box-arrow-in-left"></i>
+      </a>
+    </div>
+
+    <div id="page"></div>
 </body>
 </html>

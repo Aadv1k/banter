@@ -334,3 +334,75 @@ section {
     padding-block: 2rem;
   }
 }
+
+.vnav {
+  position: fixed;
+  height: 100vh;
+  width: fit-content;
+  background-color: #e6e2e0;
+  box-shadow: rgba(0, 0, 0, 0.15) 2.4px 2.4px 3.2px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1rem;
+}
+.vnav__profile {
+  width: 40px;
+  height: 40px;
+  border-radius: 100px;
+  border: 1px solid #f15b3e;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.vnav__profile i {
+  font-size: 2rem;
+  color: #7d6c64;
+}
+.vnav .profile__img {
+  width: 100%;
+  vertical-align: bottom;
+  border-radius: 100px;
+}
+.vnav li {
+  transition: background-color 200ms ease;
+  border-radius: 2px;
+  aspect-ratio: 1/1;
+  margin-block: 1rem;
+}
+.vnav__link {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+.vnav__link i, .vnav__logout i {
+  font-size: 1.3rem;
+  color: #f15b3e;
+  transition: color 200ms ease;
+  padding: 0.5rem;
+}
+.vnav__logout i {
+  font-size: 1.5rem;
+}
+.vnav__title {
+  font-size: 2rem;
+  text-decoration: none;
+  font-weight: bold;
+}
+.vnav__list {
+  list-style: none;
+}
+.vnav li:active {
+  outline: 2px solid #f4836e;
+}
+@media (hover: hover) {
+  .vnav li:hover {
+    background-color: #f15b3e;
+  }
+  .vnav li:hover i {
+    color: white;
+  }
+}

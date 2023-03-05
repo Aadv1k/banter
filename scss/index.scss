@@ -34,11 +34,13 @@ section {
   gap: 0.5rem;
   padding: 0.8rem;
 
-  .nav__title {
-    font-size: 2.3rem;
-    text-decoration: none;
-    font-weight: bold;
-  }
+
+.nav__title {
+  font-size: 2.3rem;
+  text-decoration: none;
+  font-weight: bold;
+}
+
 
   .nav__links {
     display: flex;
@@ -250,3 +252,88 @@ section {
 
 }
 
+.vnav {
+  position: fixed;
+  height: 100vh;
+  width: fit-content;
+  background-color: lighten($main-bg, 5%);
+  box-shadow: rgba(0, 0, 0, 0.15) 2.4px 2.4px 3.2px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1rem;
+
+  &__profile {
+    width: 40px;
+    height: 40px;
+    border-radius: 100px;
+    border: 1px solid $accent;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__profile i {
+    font-size: 2rem;
+    color: $text-clr-2;
+  }
+
+  .profile__img {
+    width: 100%;
+    vertical-align: bottom;
+    border-radius: 100px;
+  }
+
+  li {
+    transition: background-color 200ms ease;
+    border-radius: 2px;
+    aspect-ratio: 1 / 1;
+    margin-block: 1rem;
+  }
+
+  &__link {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+  }
+  
+   &__link i, &__logout i {
+    font-size: 1.3rem;
+    color: $accent;
+    transition: color 200ms ease;
+    padding: .5rem;
+  }
+
+  &__logout i {
+    font-size: 1.5rem;
+  }
+
+  &__title {
+    font-size: 2rem;
+    text-decoration: none;
+    font-weight: bold;
+  }
+
+  &__list {
+    list-style: none;
+  }
+
+  li:active {
+    outline: 2px solid lighten($accent, 10%);
+  }
+
+  @media (hover: hover) {
+    li:hover {
+      background-color: $accent;
+    }
+
+    li:hover i {
+      color: white;
+    }
+  }
+}
