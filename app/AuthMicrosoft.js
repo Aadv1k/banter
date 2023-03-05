@@ -1,4 +1,4 @@
-const { sendJsonErr, isCookieAndSessionValid, generatePassword} = require("./common");
+const { sendJsonErr, isCookieAndSessionValid, generatePassword, setSessionIdAndRedirect, redirect} = require("./common");
 const {
   ERR,
   MS_CLIENT_ID,
@@ -14,11 +14,17 @@ const { User, UserModel } = require("../models/UserModel.js");
 const USER_DB = new UserModel();
 
 function handleRouteAuthMS(req, res) {
+
+  if (isCookieAndSessionValid(req)) {
+    redirect(res, "/dashboard");
+    return;
+  }
+
   const query = querystring.stringify({
     response_type: "code",
     client_id: MS_CLIENT_ID,
     redirect_uri: MS_REDIRECT,
-    scope: "openid profile email",
+    scope: "https://graph.microsoft.com/.default",
   });
   const MSUrl = `https://login.microsoftonline.com/common/oauth2/v2.0/authorize?${query}`;
   res.writeHead(302, { Location: MSUrl });
@@ -36,7 +42,6 @@ async function handleRouteAuthMSCallback(req, res) {
     res.end();
     return;
   };
-
 
   const formData = querystring.stringify({
     grant_type: "authorization_code",
@@ -60,7 +65,7 @@ async function handleRouteAuthMSCallback(req, res) {
 
   const accessData = await accessRes.json();
   const accessToken = accessData.access_token;
-  const userRes = await fetch("https://graph.microsoft.com/oidc/userinfo", { method: "GET", headers: { Authorization: "Bearer " + accessToken, }, });
+  const userRes = await fetch("https://graph.microsoft.com/v1.0/me", { method: "GET", headers: { Authorization: "Bearer " + accessToken, }, });
   const userData = await userRes.json();
   const dbUser = await USER_DB.getUser({email: userData.email});
   const sid = uuid();
@@ -75,7 +80,7 @@ async function handleRouteAuthMSCallback(req, res) {
     return;
   }
 
-  if (!userData.email) {
+  if (userData.error) {
     sendJsonErr(res, ERR.internalErr);
     res.end();
     return;
@@ -85,20 +90,14 @@ async function handleRouteAuthMSCallback(req, res) {
 
   await USER_DB.pushUser(new User(
     uid,
-    `${userData.givenname} ${userData.familyname}`,
-    userData.email,
+    userData.displayName,
+    userData.userPrincipalName,
     generatePassword(16),
-    userData.
   ));
 
   Store.store(sid, {uid})
 
-  res.writeHead(302, {
-    Location: "/dashboard",
-    "Set-Cookie": `sessionid=${sid}`,
-  });
-
-  res.end();
+  setSessionIdAndRedirect(res, sid);
 }
 
 module.exports = { handleRouteAuthMS, handleRouteAuthMSCallback }

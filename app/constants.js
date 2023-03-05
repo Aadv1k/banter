@@ -12,6 +12,8 @@ module.exports = {
   SPOTIFY_CLIENT_ID: process.env.SPOTIFY_CLIENT_ID,
   SPOTIFY_CLIENT_SECRET: process.env.SPOTIFY_CLIENT_SECRET,  
   SPOTIFY_REDIRECT: process.env.SPOTIFY_REDIRECT,
+  
+  DBX_ACCESS_TOKEN: process.env.DBX_ACCESS_TOKEN,
 
   MIME: {
     json: "application/json",

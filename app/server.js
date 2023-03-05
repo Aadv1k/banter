@@ -23,7 +23,7 @@ const crypto = require("crypto");
 const USER_DB = new UserModel();
 
 function handleRouteFilepath(req, res) {
-	const filename = req.url;
+	const filename = req.url.split('/').pop();
 	const ext = filename.split(".").pop();
 
 	if (!MIME[ext]) {
@@ -141,6 +141,7 @@ async function handleRouteLogin(req, res) {
 
 			if (!dbUser) {
 				sendJsonErr(res, ERR.userNotFound);
+        return;
 			} else if (dbUser.password != hashedPassword) {
 				sendJsonErr(res, ERR.invalidPassword);
 				return;
@@ -171,7 +172,7 @@ async function handleRouteDashboard(req, res) {
 	const user = await USER_DB.getUser({ _id: uid });
 
 	if (!user) {
-		sendJsonErr(ERR.unableToFindUser);
+		sendJsonErr(res, ERR.unableToFindUser);
     return;
 	}
 
@@ -195,13 +196,15 @@ module.exports = http.createServer(async (req, res) => {
 
 	if (URI === "/") {
 		renderView(res, "index.ejs", 200);
+	} else if (ext.length <= 3) {
+		handleRouteFilepath(req, res);
 	} else if (URI.startsWith("/login")) {
 		await handleRouteLogin(req, res);
 	} else if (URI.startsWith("/signup")) {
 		await handleRouteSignup(req, res);
 	} else if (URI.startsWith("/logout")) {
 		handleRouteLogout(req, res);
-	} else if (URI.startsWith("/dashboard")) {
+	} else if (URI.match("/dashboard")) {
 		await handleRouteDashboard(req, res);
 	} else if (URI.startsWith("/auth/microsoft/callback")) {
 		await handleRouteAuthMSCallback(req, res);
@@ -211,7 +214,4 @@ module.exports = http.createServer(async (req, res) => {
 		await handleRouteAuthSpotifyCallback(req, res);
 	} else if (URI.startsWith("/auth/spotify")) {
 		handleRouteAuthSpotify(req, res);
-	} else if (ext) {
-		handleRouteFilepath(req, res);
-	}
-});
+	} });

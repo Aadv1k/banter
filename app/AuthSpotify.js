@@ -13,7 +13,7 @@ const {
 
 const { Store } = require("../models/MemoryStore");
 const { User, UserModel } = require("../models/UserModel");
-const { sendJsonErr, generatePassword} = require("./common");
+const { sendJsonErr, generatePassword, setSessionIdAndRedirect, redirect} = require("./common");
 
 const USER_DB = new UserModel();
 
@@ -84,10 +84,7 @@ async function handleRouteAuthSpotifyCallback(req, res) {
     }
     Store.store(sid, {uid: stored.uid, spotifyRefreshToken: refresh_token})
 
-    res.writeHead(302, {
-      Location: "/dashboard",
-    })
-    res.end();
+    redirect(res, "/dashboard");
     return;
   }
 
@@ -95,22 +92,12 @@ async function handleRouteAuthSpotifyCallback(req, res) {
 
   if (existingUser) {
     Store.store(spotifySessionId, {uid: existingUser._id, spotifyRefreshToken: refresh_token})
-    res.writeHead(302, {
-      Location: "/dashboard",
-      "Set-Cookie": `sessionid=${spotifySessionId}; path=/`
-    })
-    res.end();
-    return;
+  } else {
+    USER_DB.pushUser(new User(spotifyUserId, userData.email, userData.display_name, generatePassword(16)));
+    Store.store(spotifySessionId, {uid: spotifyUserId, spotifyRefreshToken: refresh_token});
   }
 
-  USER_DB.pushUser(new User(spotifyUserId, userData.email, userData.display_name, generatePassword(16)));
-  Store.store(spotifySessionId, {uid: spotifyUserId, spotifyRefreshToken: refresh_token});
-
-  res.writeHead(302, {
-    Location: "/dashboard",
-    "Set-Cookie": `sessionid=${spotifySessionId}`
-  })
-  res.end();
+  setSessionIdAndRedirect(res, spotifySessionId);
 }
 
 module.exports = {handleRouteAuthSpotify, handleRouteAuthSpotifyCallback}
