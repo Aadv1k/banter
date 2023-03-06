@@ -5,7 +5,7 @@ import { Router } from 'https://unpkg.com/preact-router@3.0.0?module';
 const html = htm.bind(h);
 
 function PageCreate(_) {
-  return html`this is page create lemao`
+  return html``
 }
 
 function PageManage(_) {

@@ -14,8 +14,7 @@ const {
 
 const { 
   isCookieAndSessionValid, 
-  sendJsonErr,
-  generatePodcastFileName
+  sendJsonErr
 } = require("./common");
 const { User, UserModel } = require("../models/UserModel.js");
 const { Store } = require("../models/MemoryStore");
