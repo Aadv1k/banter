@@ -1,12 +1,22 @@
 const { handleRouteAuthMSCallback, handleRouteAuthMS } = require("./AuthMicrosoft");
 const { handleRouteAuthSpotify, handleRouteAuthSpotifyCallback } = require("./AuthSpotify");;
 
+const formidable = require('formidable');
+const { Readable } = require('stream');
+
+const { BucketStore } = require("../models/BucketStore.js");
+
 const {
 	MIME,
 	ERR,
+  MAX_EPISODE_SIZE_IN_MB
 } = require("./constants");
 
-const { isCookieAndSessionValid, sendJsonErr } = require("./common");
+const { 
+  isCookieAndSessionValid, 
+  sendJsonErr,
+  generatePodcastFileName
+} = require("./common");
 const { User, UserModel } = require("../models/UserModel.js");
 const { Store } = require("../models/MemoryStore");
 
@@ -18,7 +28,6 @@ const querystring = require("querystring");
 const cookie = require("cookie");
 const { v4: uuid } = require("uuid");
 const crypto = require("crypto");
-
 
 const USER_DB = new UserModel();
 
@@ -45,6 +54,7 @@ function handleRouteFilepath(req, res) {
 
 function renderView(res, file, httpStatusCode, data) {
 	const viewPath = path.join(__dirname, "../views", file);
+
 	if (existsSync(viewPath)) {
 		ejs.renderFile(viewPath, data ?? {}, (err, data) => {
 			if (err) {
@@ -60,53 +70,54 @@ function renderView(res, file, httpStatusCode, data) {
 }
 
 async function handleRouteSignup(req, res) {
-	await USER_DB.init();
+  await USER_DB.init();
 
-	if (req.method === "GET") {
-		if (isCookieAndSessionValid(req)) {
-			res.writeHead(302, { Location: "/dashboard" });
-			res.end();
-			return;
-		}
-		renderView(res, "signup.ejs", 200);
-	} else if (req.method === "POST") {
-		let body = "";
-		req.on("data", (chunk) => (body += chunk.toString()));
-		req.on("end", async () => {
-			const formData = querystring.parse(body);
+  if (req.method === "GET") {
+    if (isCookieAndSessionValid(req)) {
+      res.writeHead(302, { Location: "/dashboard" });
+      res.end();
+      return;
+    }
+    renderView(res, "signup.ejs", 200);
+  } else if (req.method === "POST") {
+    let body = "";
+    req.on("data", (chunk) => (body += chunk.toString()));
+    req.on("end", async () => {
+      const formData = querystring.parse(body);
 
-			if (![formData.name, formData.email, formData.password].every((e) => e)) {
-				sendJsonErr(res, ERR.badInput);
-				return;
-			}
+      if (![formData.name, formData.email, formData.password].every((e) => e)) {
+        sendJsonErr(res, ERR.badInput);
+        return;
+      }
 
-			const uid = uuid();
-			const sid = uuid();
+      const uid = uuid();
+      const sid = uuid();
 
-			const hashedPassword = crypto
-				.createHash("md5")
-				.update(formData.password)
-				.digest("hex");
+      const hashedPassword = crypto
+        .createHash("md5")
+        .update(formData.password)
+        .digest("hex");
 
-			const user = await USER_DB.getUser({ email: formData.email });
-			if (user) {
-				sendJsonErr(res, ERR.userExists);
-				return;
-			}
+      const user = await USER_DB.getUser({ email: formData.email });
 
-			await USER_DB.pushUser(
-				new User(uid, formData.name, formData.email, hashedPassword)
-			);
+      if (user) {
+        sendJsonErr(res, ERR.userExists);
+        return;
+      }
 
-			Store.store(sid, { uid });
+      await USER_DB.pushUser(
+        new User(uid, formData.name, formData.email, hashedPassword)
+      );
 
-			res.writeHead(302, {
-				Location: "/dashboard",
-				"Set-Cookie": `sessionid=${sid}`,
-			});
-			res.end();
-		});
-	}
+      Store.store(sid, { uid });
+
+      res.writeHead(302, {
+        Location: "/dashboard",
+        "Set-Cookie": `sessionid=${sid}`,
+      });
+      res.end();
+    });
+  }
 }
 
 async function handleRouteLogin(req, res) {
@@ -169,6 +180,7 @@ async function handleRouteDashboard(req, res) {
 	const uid = Store.get(cookie.parse(req.headers.cookie).sessionid).uid;
 	const spotifyRefreshToken = Store.get(cookie.parse(req.headers.cookie).sessionid)?.spotifyRefreshToken;
 	res.writeHead(200, { "Content-type": MIME.html });
+
 	const user = await USER_DB.getUser({ _id: uid });
 
 	if (!user) {
@@ -190,21 +202,93 @@ function handleRouteLogout(req, res) {
 	res.end();
 }
 
+
+async function handleRouteUploadEpisode(req, res) {
+  const BUCKET = new BucketStore();
+  await USER_DB.init();
+
+  /*
+  if (!isCookieAndSessionValid(req)) {
+    sendJsonErr(res, ERR.unauthorized);
+    return;
+  }
+  */
+
+  if (req.method !== "POST") {
+    sendJsonErr(res, ERR.invalidMethod);
+    return;
+  }
+
+  const audioForm = formidable({multiples: false});
+
+  audioForm.parse(req, async (err, fields, files) => {
+    if (![files.epAudio, fields.epName, fields.epNumber, fields.epExplicit, files.epCover].every(e => e)) {
+      sendJsonErr(res, ERR.badInput);
+      return;
+    }
+
+    const audioExt = files.epAudio.originalFileName.split('.').pop();
+    const imageExt = files.epCover.originalFileName.split('.').pop();
+
+    if (!["aac"].includes(audioExt) || ["jpeg", "png", "jpg"].incudes(imageExt)) {
+      sendJsonErr(res, ERR.invalidAudioFileFormat);
+      return;
+    }
+
+    const audioSizeInMB = parseInt(files.epAudio.size / 8e+6);
+    // TODO: impl this as well
+    // const imageSizeInMB = parseInt(files.epImage.size / 8e+6);
+    
+    if (audioSizeInMB > MAX_EPISODE_SIZE_IN_MB) {
+      sendJsonErr(res, ERR.exceedsAudioSizeLimit);
+      return;
+    }
+
+    const readStream = new Readable();
+    readStream.push(files.epAudio.data);
+    readStream.push(null);
+
+    const epId = uuid();
+    const audioFileName = `${epId}.aac`;
+
+    await BUCKET.pushBinary(readStream, audioFileName)
+    const permalink = await BUCKET.getBinaryPermalink(audioFileName);
+
+    const pdEpisodeEntry = {
+      epId,
+      epTitle: fields.name,
+      epNumber: fields.number,
+      epPermalink: permalink,
+      epExplicit: fields.epExplicit === "true" ? true: false,
+    }
+
+    /*
+    const userid = Store.get(cookie.parse(req.headers.cookie).sessionid);
+    const user = await USER_DB.getUser({_id: userid});
+    if (!user) {
+      sendJsonErr(res, ERR.userNotFound);
+      return;
+    }
+    */
+  })
+
+}
+
 module.exports = http.createServer(async (req, res) => {
 	const URI = req.url;
 	const ext = req.url.split(".").pop();
 
 	if (URI === "/") {
 		renderView(res, "index.ejs", 200);
-	} else if (ext.length <= 3) {
-		handleRouteFilepath(req, res);
-	} else if (URI.startsWith("/login")) {
+	} else if (MIME[ext]) {
+    handleRouteFilepath(req, res);
+  } else if (URI.startsWith("/login")) {
 		await handleRouteLogin(req, res);
 	} else if (URI.startsWith("/signup")) {
 		await handleRouteSignup(req, res);
 	} else if (URI.startsWith("/logout")) {
 		handleRouteLogout(req, res);
-	} else if (URI.match("/dashboard")) {
+	} else if (URI.startsWith("/dashboard")) {
 		await handleRouteDashboard(req, res);
 	} else if (URI.startsWith("/auth/microsoft/callback")) {
 		await handleRouteAuthMSCallback(req, res);
@@ -214,4 +298,7 @@ module.exports = http.createServer(async (req, res) => {
 		await handleRouteAuthSpotifyCallback(req, res);
 	} else if (URI.startsWith("/auth/spotify")) {
 		handleRouteAuthSpotify(req, res);
-	} });
+	} else if (URI.startsWith("/upload-episode")) {
+    handleRouteUploadEpisode(req, res);
+  }
+});

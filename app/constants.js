@@ -5,6 +5,8 @@ module.exports = {
   MODE: process.env.NODE_ENV || "development",
   ATLAS_PWD: process.env.ATLAS_PWD,
 
+  MAX_EPISODE_SIZE_IN_MB: 100,
+
   MS_CLIENT_ID: process.env.MS_CLIENT_ID,
   MS_CLIENT_SECRET: process.env.MS_CLIENT_SECRET,  
   MS_REDIRECT: process.env.MS_REDIRECT,
@@ -29,6 +31,12 @@ module.exports = {
       error: 'bad-input',
       message: 'the provided input was invalid',
       code: 400
+    },
+
+    invalidMethod: {
+      error: "invalid-method",
+      message: "method invalid for requested resource",
+      code: 405
     },
 
     unableToFindUser: {
@@ -61,6 +69,18 @@ module.exports = {
       message: "something went wrong on the server",
       code: 500,
     },
+
+    invalidAudioFileFormat: {
+      error: "invalid-audio-file-format",
+      message: "the provided file format for episode was invalid; only AAC is accepted",
+      code: 400,
+    },
+
+    exceedsAudioSizeLimit: {
+      error: "exceeds-audio-size-limit",
+      message: "the provided data exeeds the audio size limit of a 100 Megabytes",
+      code: 400,
+    }
 
     invalidPassword: {
       error: "invalid-password",

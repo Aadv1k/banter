@@ -36,7 +36,6 @@ class UserModel {
     });
   }
 
-
   async getUser(query) {
     const user = await this.users.findOne(query);
     return user ?? null;
@@ -47,6 +46,10 @@ class UserModel {
      return true;
    }
     return false;
+  }
+
+  async updateUser(source, target) {
+    await this.users.updateOne(source, { $set: target});
   }
 
   async close() {

@@ -1,31 +1,18 @@
-const { MongoClient } = require("mongodb");
-const fetch = require("node-fetch-commonjs");
+const {  DBX_ACCESS_TOKEN } = require("../app/constants.js");
+const { Dropbox } = require("dropbox");
 
-const { ATLAS_PWD, DBX_ACCESS_TOKEN} = require("../app/constants.js");
-const ATLAS_URL = `mongodb+srv://user-1:${ATLAS_PWD}@banter-dev.acxedwo.mongodb.net`;
-const {Dropbox} = require("dropbox");
-
-const fs = require("fs");
-
-class Audio {
-  constructor(binaryData, fileName) {
-    this.binaryData = binaryData;
-    this.fileName = fileName;
-  }
-}
-
-class AudioModel {
+class BucketStore {
   constructor() {
-    this.db = new Dropbox({ accessToken: DBX_ACCESS_TOKEN });
+    this.bucket = new Dropbox({ accessToken: DBX_ACCESS_TOKEN });
   }
 
-  async pushAudio(Audio) {
-    const { result } = await this.db.filesUpload({ path: '/' + Audio.fileName, contents: Audio.binaryData });
+  async pushBinary(data, name) {
+    const {result} = await this.bucket.filesUpload({path: `/${name}`, contents: data});
     if (!result ) return null; 
     return {id: result.id, path: result.path_display};
   }
 
-  async getPermaLink(Audio) {
+  async getBinaryPermalink(name) {
     const dbxUrl = 'https://api.dropboxapi.com/2/sharing/create_shared_link_with_settings';
     const res = await fetch(dbxUrl, {
       method: 'POST',
@@ -34,7 +21,7 @@ class AudioModel {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        path: '/' + Audio.fileName,
+        path: `/${name}`,
         "settings": {
           "access": "viewer",
           "allow_download": true,
@@ -65,4 +52,4 @@ class AudioModel {
   }
 }
 
-module.exports = {Audio, AudioModel};
+module.exports = {BucketStore};

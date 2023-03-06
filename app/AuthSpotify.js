@@ -1,7 +1,7 @@
 const crypto = require("crypto");
 const fetch = require("node-fetch-commonjs");
 const cookie = require("cookie");
-const { v4: uuid} = require("uuid");
+const { v4: uuid } = require("uuid");
 const querystring = require("querystring");
 const { 
   MIME,
@@ -100,4 +100,28 @@ async function handleRouteAuthSpotifyCallback(req, res) {
   setSessionIdAndRedirect(res, spotifySessionId);
 }
 
-module.exports = {handleRouteAuthSpotify, handleRouteAuthSpotifyCallback}
+async function getSpotifyAccessTokenFromRefreshToken(refreshToken) {
+  const query = querystring.transpose({
+    "grant_type": "refresh_token",
+    "refresh_token": refreshToken,
+    "client_id": SPOTIFY_CLIENT_ID,
+    "client_secret": SPOTIFY_CLIENT_SECRET
+  })
+
+  const tokenRes = await fetch("https://accounts.spotify.com/api/token", {
+    method: "POST",
+    body: query,
+    headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+  })
+
+  const data = await tokenRes.json();
+  return data?.access_token;
+}
+
+module.exports = {
+  handleRouteAuthSpotify, 
+  handleRouteAuthSpotifyCallback,
+  getSpotifyAccessTokenFromRefreshToken
+}
