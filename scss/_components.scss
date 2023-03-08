@@ -35,6 +35,13 @@ p {
     border-radius: 1000px;
   }
 
+  &--disabled {
+    background-color: black;
+    border: 1px solid black;
+    color: white;
+    border-radius: 1000px;
+  }
+
   &--submit {
     background-color: $main-bg;
     border: 1px solid $accent;
@@ -125,6 +132,8 @@ p {
     display: block;
     width: 25px;
   }
+
+
 
   .btn--submit {
     width: 80%;

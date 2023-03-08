@@ -42,6 +42,4 @@ module.exports = {
   generatePassword, 
   setSessionIdAndRedirect, 
   redirect,
-  parsePodcastFileName,
-  generatePodcastFileName
 };

@@ -80,7 +80,7 @@ module.exports = {
       error: "exceeds-audio-size-limit",
       message: "the provided data exeeds the audio size limit of a 100 Megabytes",
       code: 400,
-    }
+    },
 
     invalidPassword: {
       error: "invalid-password",

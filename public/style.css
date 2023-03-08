@@ -31,6 +31,12 @@ p {
   color: black;
   border-radius: 1000px;
 }
+.btn--disabled {
+  background-color: black;
+  border: 1px solid black;
+  color: white;
+  border-radius: 1000px;
+}
 .btn--submit {
   background-color: #dbd5d2;
   border: 1px solid #f15b3e;
@@ -148,6 +154,7 @@ section {
 .navbar {
   display: flex;
   justify-content: space-between;
+  z-index: 999;
   align-items: center;
   background: inherit;
   top: 0;
@@ -268,6 +275,7 @@ section {
 .features p {
   max-width: 40ch;
   margin-top: 0.5rem;
+  color: #443b37;
 }
 .features .list__itm i {
   font-size: 2.2rem;
@@ -297,30 +305,113 @@ section {
   align-items: center;
   padding: 1rem 0.5rem;
 }
+.faq p {
+  color: #443b37;
+}
 .faq__list div {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
 
-.sold-yet {
+.pricing {
   width: 90%;
-  border-radius: 3px;
+}
+.pricing .pricing__prices {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin-block: 1rem;
+}
+.pricing .pricing__prices .highlight {
   background: #f15b3e;
-  padding: 1.8rem 1.5rem;
+}
+.pricing .pricing__prices .highlight p {
+  color: black;
+}
+.pricing .pricing__prices .disabled {
+  opacity: 0.5;
+  user-select: none;
+  cursor: not-allowed;
+}
+.pricing .pricing__prices .disabled .btn {
+  pointer-events: none;
+}
+.pricing .pricing__prices > div {
+  display: flex;
+  background: #dbd5d2;
+  position: relative;
+  flex-direction: column;
+  gap: 1.5rem;
+  border-radius: 3px;
+  padding: 0.8rem 0.8rem 3rem 0.8rem;
+  transition: box-shadow 500ms ease-in-out;
+  border: 1px solid #f15b3e;
+}
+.pricing .pricing__prices > div h3 {
+  font-size: 1.75rem;
+}
+.pricing p {
+  color: #443b37;
+}
+.pricing .btn {
+  width: calc(100% - 1.6rem);
+  display: block;
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 4px;
+  text-align: center;
+  letter-spacing: 1px;
+  font-size: 0.8rem;
+  padding-block: 0.5rem;
+  text-transform: uppercase;
+}
+.pricing .pricing__features {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+.pricing .pricing__features li {
+  display: flex;
+  flex-direction: column;
+}
+.pricing .pricing__features li span:nth-child(1) {
+  font-weight: bold;
+}
+@media screen and (min-width: 500px) {
+  .pricing .pricing__prices {
+    flex-direction: row;
+  }
+  .pricing .pricing__prices > div {
+    max-width: 33%;
+  }
+}
+
+.sold-yet {
+  width: 100%;
+  max-width: 100%;
+  background: linear-gradient(180deg, #f2674c, #ef4726);
+  padding: 2rem 1.5rem;
+}
+.sold-yet > div {
   display: flex;
   flex-direction: column;
   gap: 0.2rem;
   align-items: flex-start;
+  max-width: 1000px;
+  margin: 0 auto;
 }
 .sold-yet h2 {
   margin: 0;
   max-width: 30ch;
-  font-size: 2rem;
+  font-size: 1.8rem;
 }
 .sold-yet .btn {
   margin-top: 1rem;
-  padding: 0.8rem 1rem;
+  padding: 0.5rem 1rem;
 }
 
 .login-form {

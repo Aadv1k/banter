@@ -28,6 +28,7 @@ section {
 .navbar {
   display: flex;
   justify-content: space-between;
+  z-index: 999;
   align-items: center;
   background: inherit;
   top: 0;
@@ -173,6 +174,7 @@ section {
   p {
     max-width: 40ch;
     margin-top: .5rem;
+    color: $text-clr-3;
   }
 
   .list__itm i {
@@ -211,6 +213,10 @@ section {
     padding: 1rem .5rem;
   }
 
+  p {
+    color: $text-clr-3;
+  }
+ 
   &__list div {
     display: flex;
     flex-direction: column;
@@ -218,25 +224,124 @@ section {
   }
 }
 
-.sold-yet {
+.pricing {
   width: 90%;
-  border-radius: 3px;
-  background: $accent;
-  padding: 1.8rem 1.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: .2rem;
-  align-items: flex-start;
+
+  .pricing__prices {
+    display: flex;
+    flex-direction: column;
+    gap: .8rem;
+    margin-block: 1rem;
+  }
+
+  .pricing__prices .highlight {
+    background: $accent;
+
+    p {
+      color: black;
+    }
+  }
+
+
+  .pricing__prices .disabled {
+    opacity: .5;
+    user-select: none;
+    cursor: not-allowed;
+
+    .btn {
+      pointer-events: none;
+    }
+  }
+
+  .pricing__prices > div {
+    display: flex;
+    background: $main-bg;
+    position: relative;
+    flex-direction: column;
+    gap: 1.5rem;
+    border-radius: 3px;
+    padding: .8rem .8rem 3rem .8rem;
+    transition: box-shadow 500ms ease-in-out;
+    border: 1px solid $accent;
+    h3 {
+      font-size: 1.75rem;
+    }
+  }
+
+  p {
+    color: $text-clr-3;
+  }
+
+  .btn {
+    width: calc(100% - 2*.8rem);
+    display: block;
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 4px;
+    text-align: center;
+    letter-spacing: 1px;
+    font-size: .8rem;
+    padding-block: .5rem;
+    text-transform: uppercase;
+  }
+
+
+  .pricing__features {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: .8rem;
+  }
+
+  .pricing__features li {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .pricing__features li span:nth-child(1) {
+    font-weight: bold;
+  }
+  
+  @media screen and (min-width: 500px) {
+
+    .pricing__prices {
+      flex-direction: row;
+    }
+
+
+    .pricing__prices > div {
+      max-width: 33%;
+    }
+  }
+
+}
+
+.sold-yet {
+  width: 100%;
+  max-width: 100%;
+  background: linear-gradient(180deg, lighten($accent, 3%), darken($accent, 5%));
+  padding: 2rem 1.5rem;
+
+  > div {
+    display: flex;
+    flex-direction: column;
+    gap: .2rem;
+    align-items: flex-start;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
 
   h2 {
     margin: 0;
     max-width: 30ch;
-    font-size: 2rem;
+    font-size: 1.8rem;
   }
 
   .btn {
     margin-top: 1rem;
-    padding: .8rem 1rem;
+    padding: .5rem 1rem;
   }
 }
 
