@@ -22,6 +22,7 @@ module.exports = async (req, res) => {
     return;
   }
 
+  const sessionid = cookie.parse(req.headers.cookie).sessionid;
   const uid = Store.get(cookie.parse(req.headers.cookie).sessionid).uid;
   const spotifyRefreshToken = Store.get(
     cookie.parse(req.headers.cookie).sessionid
@@ -29,7 +30,6 @@ module.exports = async (req, res) => {
   res.writeHead(200, { "Content-type": MIME.html });
 
   const user = await USER_DB.getUser({ _id: uid });
-
   if (!user) {
     Store.rm(sessionid);
     redirect(res, "/login");

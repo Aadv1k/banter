@@ -13,6 +13,7 @@ const routeDashboard = require("../routes/Dashboard");
 const routeLogin = require("../routes/Login");
 const routeLogout = require("../routes/Logout");
 const routeSignup = require("../routes/Signup");
+const routeGetUserInfo = require("../routes/UserInfo");
 
 const http = require("http");
 const { renderView } = require("./common");
@@ -44,6 +45,8 @@ module.exports = http.createServer(async (req, res) => {
     handleRouteAuthSpotify(req, res);
   } else if (URI.startsWith("/upload-episode")) {
     routeUploadEpisode(req, res);
+  } else if (URI.startsWith("/userinfo")) {
+    routeGetUserInfo(req, res);
   } else {
     renderView(res, "404.ejs");
   }

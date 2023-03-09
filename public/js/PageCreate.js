@@ -5,32 +5,55 @@ import {
 import htm from "https://unpkg.com/htm@latest?module";
 
 import ModalForm from "/js/ModalForm.js";
+import Toast from "/js/Toast.js";
 
 const html = htm.bind(h);
 
 export default class PageCreate extends Component {
   constructor(props) {
     super(props);
-    this.state = { modalOpen: true };
-    this.setModal = this.setModal.bind(this);
+    this.state = { modalOpen: false, hasPodcasts: false, toastOpen: false};
+    this.handleClick = this.handleClick.bind(this);
   }
 
-  setModal() {
-    if (this.state.modalOpen) {
-      this.setState({ modalOpen: false });
+  componentDidMount() {
+    fetch("/userinfo")
+      .then(res => res.json())
+      .then(data => {
+        if (data.error) {
+          this.setState({hasPodcasts: false});
+          return;
+        }
+        this.setState({hasPodcasts: true});
+      })
+
+  }
+
+  handleClick() {
+    if (this.state.hasPodcasts) {
+      this.setState({ modalOpen: !this.state.modalOpen });
       return;
     }
-    this.setState({ modalOpen: true });
+
+    if (!this.state.toastOpen) {
+      this.setState({toastOpen: true});
+    } else {
+      this.setState({toastOpen: false});
+    }
   }
 
   render() {
     return html`
+      ${this.state.toastOpen
+        ? html`<${Toast} varient="danger" text="No podcasts found!" icon="bi bi-exclamation-triangle"/>`
+        : html``}
+
       ${this.state.modalOpen
-        ? html`<${ModalForm} setModal=${this.setModal} title="new episode" />`
+        ? html`<${ModalForm} setModal=${this.handleClick} title="new episode" />`
         : html``}
 
       <section class="create">
-        <button class="btn btn--primary" onClick=${this.setModal}>
+        <button class="btn btn--primary" onClick=${this.handleClick}>
           <i class="bi bi-plus-lg"></i>
           <p>new episode</p>
         </button>

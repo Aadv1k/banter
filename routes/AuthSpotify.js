@@ -16,7 +16,6 @@ const {
   isCookieAndSessionValid,
 } = require("../app/common");
 
-const crypto = require("crypto");
 const fetch = require("node-fetch-commonjs");
 const cookie = require("cookie");
 const { v4: uuid } = require("uuid");
@@ -49,7 +48,7 @@ async function handleRouteAuthSpotifyCallback(req, res) {
 
   const formData = querystring.stringify({
     grant_type: "authorization_code",
-    authToken,
+    code: authToken,
     redirect_uri: SPOTIFY_REDIRECT,
     client_id: SPOTIFY_CLIENT_ID,
     client_secret: SPOTIFY_CLIENT_SECRET,
