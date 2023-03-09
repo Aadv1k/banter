@@ -3,23 +3,24 @@ const {
   generatePassword, 
   setSessionIdAndRedirect, 
   redirect,
-} = require("./common");
+} = require("../app/common");
 
 const {
   ERR,
   MS_CLIENT_ID,
   MS_CLIENT_SECRET,
   MS_REDIRECT,
-} = require("./constants");
+} = require("../app/constants");
 
-const { v4: uuid } = require("uuid");
-const fetch = require("node-fetch-commonjs");
-const querystring = require("querystring");
 const { Store } = require("../models/MemoryStore.js");
 const { User, UserModel } = require("../models/UserModel.js");
 const USER_DB = new UserModel();
 
-const MS_SCOPES = "offline_access user.read";
+const { v4: uuid } = require("uuid");
+const fetch = require("node-fetch-commonjs");
+const querystring = require("querystring");
+
+const MS_SCOPES = "user.read";
 
 function handleRouteAuthMS(req, res) {
   const query = querystring.stringify({
@@ -72,15 +73,15 @@ async function handleRouteAuthMSCallback(req, res) {
   });
 
   const userData = await userRes.json();
-
+  const newSid = uuid();
   const dbUser = await USER_DB.getUser({email: userData.userPrincipalName});
-  const sid = uuid();
 
   if (dbUser) {
-    Store.store(sid, {uid: dbUser._id})
-    setSessionIdAndRedirect(res, sid)
+    Store.store(newSid, {uid: dbUser._id})
+    setSessionIdAndRedirect(res, newSid)
     return;
   }
+
   if (userData.error) {
     sendJsonErr(res, ERR.internalErr);
     return;
@@ -94,8 +95,8 @@ async function handleRouteAuthMSCallback(req, res) {
     generatePassword(16),
   ));
 
-  Store.store(sid, {uid: newUid})
-  setSessionIdAndRedirect(res, sid);
+  Store.store(newSid, {uid: newUid})
+  setSessionIdAndRedirect(res, newSid);
 }
 
 module.exports = { handleRouteAuthMS, handleRouteAuthMSCallback }

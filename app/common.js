@@ -2,6 +2,10 @@ const {
   MIME,
 } = require("./constants");
 
+const { existsSync, readFileSync } = require("fs");
+const ejs = require("ejs");
+const path = require("path");
+
 const crypto = require("crypto");
 const { Store } = require("../models/MemoryStore");
 const cookie = require("cookie");
@@ -39,6 +43,23 @@ function setSessionIdAndRedirect(res, sid) {
   res.end();
 }
 
+function renderView(res, file, httpStatusCode, data) {
+	const viewPath = path.join(__dirname, "../views", file);
+
+	if (existsSync(viewPath)) {
+		ejs.renderFile(viewPath, data ?? {}, (err, data) => {
+			if (err) {
+				console.error(err);
+			}
+			res.writeHead(httpStatusCode ?? 200, { "Content-type": MIME.html });
+			res.write(data);
+		});
+	} else {
+    renderView(res, "404.ejs", 404);
+	}
+	res.end();
+}
+
 function generatePassword(length) {
   return crypto.randomBytes(length).toString("hex")
 }
@@ -49,4 +70,5 @@ module.exports = {
   setSessionIdAndRedirect, 
   redirect,
   md5,
+  renderView,
 };

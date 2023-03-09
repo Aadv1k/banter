@@ -85,7 +85,7 @@ p {
     color: $text-clr-2;
   }
 
-  input {
+  input:not(input[type="checkbox"]) {
     all: unset;
     border-bottom: 1px solid $accent;
     padding: .2rem .5rem .2rem 0;
@@ -151,3 +151,130 @@ p {
   }
 }
 
+
+.toast {
+  height: 60px;
+  border-radius: 3px;
+  position: absolute;
+  top: 10px;
+  right: 0;
+  max-width: 250px;
+  padding: .8rem 1rem;
+  align-items: center;
+  display: flex;
+  transform: translateX(100%);
+  gap: .5rem;
+  background-color: $accent;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+
+  &--open {
+    animation: toast-reveal 200ms ease-out;
+    animation-fill-mode: forwards;
+  }
+
+  &--close {
+    animation: toast-hide 200ms ease-out;
+    animation-fill-mode: forwards;
+  }
+
+  p {
+    color: $toast-fill;
+    font-size: .9rem;
+    max-width: 20ch;
+  }
+
+  &__icon {
+    color: $toast-fill;
+    font-size: 1.3rem;
+    margin-top: 3px;
+  }
+
+  &__btn {
+    position: absolute;
+    right: 10px;
+    top: 5px;
+
+    i {
+      color: $toast-fill;
+      font-size: 1.2rem;
+    }
+  }
+
+}
+
+@keyframes toast-reveal {
+  0% {
+    transform: translateX(100%)
+  }
+
+  50% {
+    transform: translateX(-30%)
+  }
+
+  75% {
+    transform: translateX(-20%)
+  }
+
+  100% {
+    transform: translateX(-5%)
+  }
+}
+
+
+
+@keyframes toast-hide {
+  100% {
+    transform: translateX(100%)
+  }
+
+  75% {
+    transform: translateX(-30%)
+  }
+
+  50% {
+    transform: translateX(-20%)
+  }
+
+  0% {
+    transform: translateX(-5%)
+  }
+}
+
+.modal {
+  height: 100vh;
+  max-width: calc(100% - 80px);
+  width: 100%;
+  background-color: $main-bg;
+  padding: 1rem;
+  position: absolute;
+  z-index: 999;
+
+  .form {
+    align-items: flex-start;
+    margin-top: 1rem;
+  }
+
+  .form__itm {
+    width: 100%;
+  }
+
+  &__close {
+    position: absolute;
+    top: 10px;
+    right: 1rem;
+  }
+
+  &__title {
+    font-size: 1.8rem;
+    text-transform: capitalize;
+  }
+
+  &__close i {
+    font-size: 1.3rem;
+    color: $text-clr-2;
+  }
+
+  &__content {
+    margin-top: 1rem;
+  }
+}

@@ -1,21 +1,21 @@
-const crypto = require("crypto");
-const fetch = require("node-fetch-commonjs");
-const cookie = require("cookie");
-const { v4: uuid } = require("uuid");
-const querystring = require("querystring");
-
-
 const { 
   MIME,
   ERR,
   SPOTIFY_CLIENT_ID,
   SPOTIFY_CLIENT_SECRET,
   SPOTIFY_REDIRECT
-} = require("./constants");
+} = require("../app/constants");
 
 const { Store } = require("../models/MemoryStore");
 const { User, UserModel } = require("../models/UserModel");
-const { sendJsonErr, generatePassword, setSessionIdAndRedirect, redirect, isCookieAndSessionValid} = require("./common");
+const { sendJsonErr, generatePassword, setSessionIdAndRedirect, redirect, isCookieAndSessionValid} = require("../app/common");
+
+const crypto = require("crypto");
+const fetch = require("node-fetch-commonjs");
+const cookie = require("cookie");
+const { v4: uuid } = require("uuid");
+const querystring = require("querystring");
+
 
 const USER_DB = new UserModel();
 
@@ -44,7 +44,7 @@ async function handleRouteAuthSpotifyCallback(req, res) {
 
   const formData = querystring.stringify({
     grant_type: 'authorization_code',
-    code,
+    authToken,
     redirect_uri: SPOTIFY_REDIRECT,
     client_id: SPOTIFY_CLIENT_ID,
     client_secret: SPOTIFY_CLIENT_SECRET

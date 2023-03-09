@@ -442,3 +442,69 @@ section {
     }
   }
 }
+
+.dashboard-page {
+  margin-left: 80px;
+  width: calc(100% - 80px);
+
+  section {
+    margin-block: 0;
+    height: 100vh;
+  }
+
+}
+
+
+section.create {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 1rem;
+
+  .btn {
+    border-radius: 3px;
+    height: 150px;
+    aspect-ratio: 1;
+    text-align: center;
+    position: relative;
+  }
+
+  .btn p {
+    position: absolute;
+    bottom: 4px;
+    text-transform: capitalize;
+    font-size: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+  }
+
+  .btn i {
+    font-size: 3rem;
+  }
+
+  .btn--primary {
+    background: linear-gradient(180deg, lighten($accent, 5%), darken($accent, 5%));
+  }
+
+  .btn--secondary {
+    border: 2px dotted $accent;
+    background-color: transparent;
+    color: $text-clr-3;
+    transition: all 200ms ease-in-out;
+  }
+
+  @media screen and (min-width: 500px) {
+    flex-direction: row;
+    gap: 1rem;
+
+    .btn {
+      height: 190px;
+    }
+
+    .btn i {
+      font-size: 3.5rem;
+    }
+  }
+}

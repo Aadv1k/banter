@@ -72,7 +72,7 @@ p {
 .form input::placeholder {
   color: #7d6c64;
 }
-.form input {
+.form input:not(input[type=checkbox]) {
   all: unset;
   border-bottom: 1px solid #f15b3e;
   padding: 0.2rem 0.5rem 0.2rem 0;
@@ -125,6 +125,110 @@ p {
   .form .form__auth a:hover {
     background-color: #dbd5d2;
   }
+}
+
+.toast {
+  height: 60px;
+  border-radius: 3px;
+  position: absolute;
+  top: 10px;
+  right: 0;
+  max-width: 250px;
+  padding: 0.8rem 1rem;
+  align-items: center;
+  display: flex;
+  transform: translateX(100%);
+  gap: 0.5rem;
+  background-color: #f15b3e;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+.toast--open {
+  animation: toast-reveal 200ms ease-out;
+  animation-fill-mode: forwards;
+}
+.toast--close {
+  animation: toast-hide 200ms ease-out;
+  animation-fill-mode: forwards;
+}
+.toast p {
+  color: white;
+  font-size: 0.9rem;
+  max-width: 20ch;
+}
+.toast__icon {
+  color: white;
+  font-size: 1.3rem;
+  margin-top: 3px;
+}
+.toast__btn {
+  position: absolute;
+  right: 10px;
+  top: 5px;
+}
+.toast__btn i {
+  color: white;
+  font-size: 1.2rem;
+}
+
+@keyframes toast-reveal {
+  0% {
+    transform: translateX(100%);
+  }
+  50% {
+    transform: translateX(-30%);
+  }
+  75% {
+    transform: translateX(-20%);
+  }
+  100% {
+    transform: translateX(-5%);
+  }
+}
+@keyframes toast-hide {
+  100% {
+    transform: translateX(100%);
+  }
+  75% {
+    transform: translateX(-30%);
+  }
+  50% {
+    transform: translateX(-20%);
+  }
+  0% {
+    transform: translateX(-5%);
+  }
+}
+.modal {
+  height: 100vh;
+  max-width: calc(100% - 80px);
+  width: 100%;
+  background-color: #dbd5d2;
+  padding: 1rem;
+  position: absolute;
+  z-index: 999;
+}
+.modal .form {
+  align-items: flex-start;
+  margin-top: 1rem;
+}
+.modal .form__itm {
+  width: 100%;
+}
+.modal__close {
+  position: absolute;
+  top: 10px;
+  right: 1rem;
+}
+.modal__title {
+  font-size: 1.8rem;
+  text-transform: capitalize;
+}
+.modal__close i {
+  font-size: 1.3rem;
+  color: #7d6c64;
+}
+.modal__content {
+  margin-top: 1rem;
 }
 
 * {
@@ -495,5 +599,62 @@ section {
   }
   .vnav li:hover i {
     color: white;
+  }
+}
+
+.dashboard-page {
+  margin-left: 80px;
+  width: calc(100% - 80px);
+}
+.dashboard-page section {
+  margin-block: 0;
+  height: 100vh;
+}
+
+section.create {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 1rem;
+}
+section.create .btn {
+  border-radius: 3px;
+  height: 150px;
+  aspect-ratio: 1;
+  text-align: center;
+  position: relative;
+}
+section.create .btn p {
+  position: absolute;
+  bottom: 4px;
+  text-transform: capitalize;
+  font-size: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+}
+section.create .btn i {
+  font-size: 3rem;
+}
+section.create .btn--primary {
+  background: linear-gradient(180deg, #f36f56, #ef4726);
+}
+section.create .btn--secondary {
+  border: 2px dotted #f15b3e;
+  background-color: transparent;
+  color: #443b37;
+  transition: all 200ms ease-in-out;
+}
+@media screen and (min-width: 500px) {
+  section.create {
+    flex-direction: row;
+    gap: 1rem;
+  }
+  section.create .btn {
+    height: 190px;
+  }
+  section.create .btn i {
+    font-size: 3.5rem;
   }
 }
