@@ -13,7 +13,6 @@ function sendJsonErr(res, err) {
 }
 
 function isCookieAndSessionValid(req) {
-  console.log(req.headers.cookie);
   const ck = cookie.parse(req.headers.cookie ?? "");
   return Object.keys(ck).length !== 0 && Store.get(ck.sessionid)?.uid !== undefined;
 }
@@ -23,6 +22,13 @@ function redirect(res, path) {
     "Location": path
   })
   res.end();
+}
+
+function md5(str) {
+  return crypto
+    .createHash("md5")
+    .update(str)
+    .digest("hex");
 }
 
 function setSessionIdAndRedirect(res, sid) {
@@ -42,4 +48,5 @@ module.exports = {
   generatePassword, 
   setSessionIdAndRedirect, 
   redirect,
+  md5,
 };

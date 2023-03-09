@@ -1,6 +1,5 @@
 const { handleRouteAuthMSCallback, handleRouteAuthMS } = require("./AuthMicrosoft");
 const { handleRouteAuthSpotify, handleRouteAuthSpotifyCallback } = require("./AuthSpotify");;
-
 const formidable = require('formidable');
 const { Readable } = require('stream');
 
@@ -14,7 +13,9 @@ const {
 
 const { 
   isCookieAndSessionValid, 
-  sendJsonErr
+  sendJsonErr,
+  md5,
+  redirect,
 } = require("./common");
 const { User, UserModel } = require("../models/UserModel.js");
 const { Store } = require("../models/MemoryStore");
@@ -124,8 +125,7 @@ async function handleRouteLogin(req, res) {
 
 	if (req.method === "GET") {
 		if (isCookieAndSessionValid(req)) {
-			res.writeHead(302, { Location: "/dashboard" });
-			res.end();
+      redirect(res, "/dashboard");
 			return;
 		}
 		renderView(res, "login.ejs", 200);
@@ -134,19 +134,12 @@ async function handleRouteLogin(req, res) {
 		req.on("data", (chunk) => (body += chunk.toString()));
 		req.on("end", async () => {
 			const formData = querystring.parse(body);
-
 			if (![formData.email, formData.password].every((e) => e)) {
 				sendJsonErr(res, ERR.badInput);
 				return;
 			}
-
 			const sid = uuid();
-
-			const hashedPassword = crypto
-				.createHash("md5")
-				.update(formData.password)
-				.digest("hex");
-
+			const hashedPassword = md5(formData.password);
 			const dbUser = await USER_DB.getUser({ email: formData.email });
 
 			if (!dbUser) {
@@ -172,7 +165,7 @@ async function handleRouteDashboard(req, res) {
 	await USER_DB.init();
 
 	if (!isCookieAndSessionValid(req)) {
-		sendJsonErr(res, ERR.unauthorized);
+		redirect(res, "/login");
 		return;
 	}
 
@@ -183,7 +176,8 @@ async function handleRouteDashboard(req, res) {
 	const user = await USER_DB.getUser({ _id: uid });
 
 	if (!user) {
-		sendJsonErr(res, ERR.unableToFindUser);
+    Store.rm(sessionid);
+		redirect(res, "/login");
     return;
 	}
 

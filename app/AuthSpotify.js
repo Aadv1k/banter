@@ -3,6 +3,8 @@ const fetch = require("node-fetch-commonjs");
 const cookie = require("cookie");
 const { v4: uuid } = require("uuid");
 const querystring = require("querystring");
+
+
 const { 
   MIME,
   ERR,
@@ -13,7 +15,7 @@ const {
 
 const { Store } = require("../models/MemoryStore");
 const { User, UserModel } = require("../models/UserModel");
-const { sendJsonErr, generatePassword, setSessionIdAndRedirect, redirect} = require("./common");
+const { sendJsonErr, generatePassword, setSessionIdAndRedirect, redirect, isCookieAndSessionValid} = require("./common");
 
 const USER_DB = new UserModel();
 
@@ -28,19 +30,21 @@ async function handleRouteAuthSpotify(req, res) {
   })
 
   const spotifyUrl = `https://accounts.spotify.com/authorize?${spotifyQuery}`;
-
-  res.writeHead(302, {
-    Location: spotifyUrl,
-  })
-  res.end();
+  redirect(res, spotifyUrl);
 }
 
 async function handleRouteAuthSpotifyCallback(req, res) {
   await USER_DB.init();
-  const parsedUrl = querystring.parse(req.url.split('?').pop());
+  const { code: authToken } = querystring.parse(req.url.split('?').pop());
+
+  if (!authToken) {
+    sendJsonErr(res, ERR.badInput);
+    return;
+  };
+
   const formData = querystring.stringify({
     grant_type: 'authorization_code',
-    code: parsedUrl.code,
+    code,
     redirect_uri: SPOTIFY_REDIRECT,
     client_id: SPOTIFY_CLIENT_ID,
     client_secret: SPOTIFY_CLIENT_SECRET
@@ -75,15 +79,16 @@ async function handleRouteAuthSpotifyCallback(req, res) {
   const spotifySessionId = uuid();
 
   // if cookie exists, then simply update the store with the refresh_token
-  if (req.headers.cookie && cookie.parse(req.headers.cookie).sessionid) {
+  if (isCookieAndSessionValid(req)) {
     const sid = cookie.parse(req.headers.cookie).sessionid;
     const stored = Store.get(sid);
+
     if (!stored) {
       sendJsonErr(res, ERR.userNotFound);
       return;
     }
-    Store.store(sid, {uid: stored.uid, spotifyRefreshToken: refresh_token})
 
+    Store.store(sid, {uid: stored.uid, spotifyRefreshToken: refresh_token})
     redirect(res, "/dashboard");
     return;
   }
@@ -93,7 +98,13 @@ async function handleRouteAuthSpotifyCallback(req, res) {
   if (existingUser) {
     Store.store(spotifySessionId, {uid: existingUser._id, spotifyRefreshToken: refresh_token})
   } else {
-    USER_DB.pushUser(new User(spotifyUserId, userData.email, userData.display_name, generatePassword(16)));
+    USER_DB.pushUser(
+    new User(
+      spotifyUserId, 
+      userData.display_name,
+      userData.email,
+      generatePassword(16)
+    ));
     Store.store(spotifySessionId, {uid: spotifyUserId, spotifyRefreshToken: refresh_token});
   }
 

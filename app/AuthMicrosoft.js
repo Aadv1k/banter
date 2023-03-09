@@ -1,4 +1,10 @@
-const { sendJsonErr, isCookieAndSessionValid, generatePassword, setSessionIdAndRedirect, redirect} = require("./common");
+const { 
+  sendJsonErr, 
+  generatePassword, 
+  setSessionIdAndRedirect, 
+  redirect,
+} = require("./common");
+
 const {
   ERR,
   MS_CLIENT_ID,
@@ -13,37 +19,29 @@ const { Store } = require("../models/MemoryStore.js");
 const { User, UserModel } = require("../models/UserModel.js");
 const USER_DB = new UserModel();
 
+const MS_SCOPES = "offline_access user.read";
+
 function handleRouteAuthMS(req, res) {
-
-  if (isCookieAndSessionValid(req)) {
-    redirect(res, "/dashboard");
-    return;
-  }
-
   const query = querystring.stringify({
     response_type: "code",
     client_id: MS_CLIENT_ID,
     redirect_uri: MS_REDIRECT,
-    scope: "https://graph.microsoft.com/.default",
+    scope: MS_SCOPES,
   });
   const MSUrl = `https://login.microsoftonline.com/common/oauth2/v2.0/authorize?${query}`;
-  res.writeHead(302, { Location: MSUrl });
-  res.end();
+  redirect(res, MSUrl);
 }
 
 async function handleRouteAuthMSCallback(req, res) {
   await USER_DB.init();
+  const { code: authToken } = querystring.parse(req.url.split('?').pop());
 
-  const authToken = req.url.split("=").pop();
-
-  // No auth token
-  if (authToken.startsWith("/")) {
-    res.writeHead(302, {"Location": "/"});
-    res.end();
+  if (!authToken) {
+    sendJsonErr(res, ERR.badInput);
     return;
   };
 
-  const formData = querystring.stringify({
+  const accessTokenformData = querystring.stringify({
     grant_type: "authorization_code",
     client_id: MS_CLIENT_ID,
     client_secret: MS_CLIENT_SECRET,
@@ -57,46 +55,46 @@ async function handleRouteAuthMSCallback(req, res) {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
-        "Content-Length": formData.length,
+        "Content-Length": accessTokenformData.length,
       },
-      body: formData,
+      body: accessTokenformData,
     }
   );
 
   const accessData = await accessRes.json();
   const accessToken = accessData.access_token;
-  const userRes = await fetch("https://graph.microsoft.com/v1.0/me", { method: "GET", headers: { Authorization: "Bearer " + accessToken, }, });
+  const userRes = await fetch("https://graph.microsoft.com/v1.0/me", 
+    { 
+      method: "GET", 
+      headers: { 
+        Authorization: "Bearer " + accessToken,
+      } 
+  });
+
   const userData = await userRes.json();
-  const dbUser = await USER_DB.getUser({email: userData.email});
+
+  const dbUser = await USER_DB.getUser({email: userData.userPrincipalName});
   const sid = uuid();
 
   if (dbUser) {
     Store.store(sid, {uid: dbUser._id})
-    res.writeHead(302, {
-      Location: "/dashboard",
-      "Set-Cookie": `sessionid=${sid}; path=/`,
-    });
-    res.end();
+    setSessionIdAndRedirect(res, sid)
     return;
   }
-
   if (userData.error) {
     sendJsonErr(res, ERR.internalErr);
-    res.end();
     return;
   }
 
-  const uid = uuid();
-
+  const newUid = uuid();
   await USER_DB.pushUser(new User(
-    uid,
+    newUid,
     userData.displayName,
     userData.userPrincipalName,
     generatePassword(16),
   ));
 
-  Store.store(sid, {uid})
-
+  Store.store(sid, {uid: newUid})
   setSessionIdAndRedirect(res, sid);
 }
 
