@@ -1,4 +1,7 @@
-import { createElement as h, Component, } from "https://unpkg.com/preact@latest?module";
+import {
+  createElement as h,
+  Component,
+} from "https://unpkg.com/preact@latest?module";
 import htm from "https://unpkg.com/htm@latest?module";
 
 import ModalForm from "/js/ModalForm.js";
@@ -18,12 +21,12 @@ export default class PageCreate extends Component {
       return;
     }
     this.setState({ modalOpen: true });
-  };
+  }
 
   render() {
     return html`
       ${this.state.modalOpen
-        ? html`<${ModalForm} setModal=${this.setModal} title="new episode"/>`
+        ? html`<${ModalForm} setModal=${this.setModal} title="new episode" />`
         : html``}
 
       <section class="create">

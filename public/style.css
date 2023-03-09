@@ -66,13 +66,14 @@ p {
   flex-direction: column;
   gap: 0.4rem;
 }
-.form label, .form .form__info {
+.form label,
+.form .form__info {
   color: #443b37;
 }
 .form input::placeholder {
   color: #7d6c64;
 }
-.form input:not(input[type=checkbox]) {
+.form input:not(input[type="checkbox"]) {
   all: unset;
   border-bottom: 1px solid #f15b3e;
   padding: 0.2rem 0.5rem 0.2rem 0;
@@ -84,7 +85,8 @@ p {
   gap: 0.5rem;
   color: #f15b3e;
 }
-.form .form__hr span, .form .form__hr span {
+.form .form__hr span,
+.form .form__hr span {
   width: 100%;
   height: 1px;
   background: #f15b3e;
@@ -312,7 +314,8 @@ section {
   .navbar {
     flex-direction: row;
     position: fixed;
-    box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12), 0px 2px 4px -1px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.14),
+      0px 1px 10px 0px rgba(0, 0, 0, 0.12), 0px 2px 4px -1px rgba(0, 0, 0, 0.2);
     width: 100%;
     align-items: center;
     padding: 0.8rem 1.3rem;
@@ -573,7 +576,8 @@ section {
   justify-content: center;
   align-items: center;
 }
-.vnav__link i, .vnav__logout i {
+.vnav__link i,
+.vnav__logout i {
   font-size: 1.3rem;
   color: #f15b3e;
   transition: color 200ms ease;

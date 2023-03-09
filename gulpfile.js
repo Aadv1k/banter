@@ -35,13 +35,10 @@ function runServer() {
     script: serverPath,
     ext: "js",
     ignore: ["./public/*"],
-  })
-    .on("restart", () => {
-      setTimeout(browserSync.reload, 1000);
-    });
+  }).on("restart", () => {
+    setTimeout(browserSync.reload, 1000);
+  });
 }
-
-
 
 function watchFiles() {
   gulp.watch(stylesSrcPath, gulp.series(buildStyles, reloadBrowserSync));

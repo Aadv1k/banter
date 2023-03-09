@@ -1,4 +1,7 @@
-import { createElement as h, Component, } from "https://unpkg.com/preact@latest?module";
+import {
+  createElement as h,
+  Component,
+} from "https://unpkg.com/preact@latest?module";
 import htm from "https://unpkg.com/htm@latest?module";
 
 const html = htm.bind(h);

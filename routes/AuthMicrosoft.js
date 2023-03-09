@@ -1,7 +1,7 @@
-const { 
-  sendJsonErr, 
-  generatePassword, 
-  setSessionIdAndRedirect, 
+const {
+  sendJsonErr,
+  generatePassword,
+  setSessionIdAndRedirect,
   redirect,
 } = require("../app/common");
 
@@ -35,12 +35,12 @@ function handleRouteAuthMS(req, res) {
 
 async function handleRouteAuthMSCallback(req, res) {
   await USER_DB.init();
-  const { code: authToken } = querystring.parse(req.url.split('?').pop());
+  const { code: authToken } = querystring.parse(req.url.split("?").pop());
 
   if (!authToken) {
     sendJsonErr(res, ERR.badInput);
     return;
-  };
+  }
 
   const accessTokenformData = querystring.stringify({
     grant_type: "authorization_code",
@@ -64,21 +64,20 @@ async function handleRouteAuthMSCallback(req, res) {
 
   const accessData = await accessRes.json();
   const accessToken = accessData.access_token;
-  const userRes = await fetch("https://graph.microsoft.com/v1.0/me", 
-    { 
-      method: "GET", 
-      headers: { 
-        Authorization: "Bearer " + accessToken,
-      } 
+  const userRes = await fetch("https://graph.microsoft.com/v1.0/me", {
+    method: "GET",
+    headers: {
+      Authorization: "Bearer " + accessToken,
+    },
   });
 
   const userData = await userRes.json();
   const newSid = uuid();
-  const dbUser = await USER_DB.getUser({email: userData.userPrincipalName});
+  const dbUser = await USER_DB.getUser({ email: userData.userPrincipalName });
 
   if (dbUser) {
-    Store.store(newSid, {uid: dbUser._id})
-    setSessionIdAndRedirect(res, newSid)
+    Store.store(newSid, { uid: dbUser._id });
+    setSessionIdAndRedirect(res, newSid);
     return;
   }
 
@@ -88,15 +87,17 @@ async function handleRouteAuthMSCallback(req, res) {
   }
 
   const newUid = uuid();
-  await USER_DB.pushUser(new User(
-    newUid,
-    userData.displayName,
-    userData.userPrincipalName,
-    generatePassword(16),
-  ));
+  await USER_DB.pushUser(
+    new User(
+      newUid,
+      userData.displayName,
+      userData.userPrincipalName,
+      generatePassword(16)
+    )
+  );
 
-  Store.store(newSid, {uid: newUid})
+  Store.store(newSid, { uid: newUid });
   setSessionIdAndRedirect(res, newSid);
 }
 
-module.exports = { handleRouteAuthMS, handleRouteAuthMSCallback }
+module.exports = { handleRouteAuthMS, handleRouteAuthMSCallback };

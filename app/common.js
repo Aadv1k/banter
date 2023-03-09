@@ -1,6 +1,4 @@
-const {
-  MIME,
-} = require("./constants");
+const { MIME } = require("./constants");
 
 const { existsSync, readFileSync } = require("fs");
 const ejs = require("ejs");
@@ -18,21 +16,20 @@ function sendJsonErr(res, err) {
 
 function isCookieAndSessionValid(req) {
   const ck = cookie.parse(req.headers.cookie ?? "");
-  return Object.keys(ck).length !== 0 && Store.get(ck.sessionid)?.uid !== undefined;
+  return (
+    Object.keys(ck).length !== 0 && Store.get(ck.sessionid)?.uid !== undefined
+  );
 }
 
 function redirect(res, path) {
   res.writeHead(302, {
-    "Location": path
-  })
+    Location: path,
+  });
   res.end();
 }
 
 function md5(str) {
-  return crypto
-    .createHash("md5")
-    .update(str)
-    .digest("hex");
+  return crypto.createHash("md5").update(str).digest("hex");
 }
 
 function setSessionIdAndRedirect(res, sid) {
@@ -44,30 +41,30 @@ function setSessionIdAndRedirect(res, sid) {
 }
 
 function renderView(res, file, httpStatusCode, data) {
-	const viewPath = path.join(__dirname, "../views", file);
+  const viewPath = path.join(__dirname, "../views", file);
 
-	if (existsSync(viewPath)) {
-		ejs.renderFile(viewPath, data ?? {}, (err, data) => {
-			if (err) {
-				console.error(err);
-			}
-			res.writeHead(httpStatusCode ?? 200, { "Content-type": MIME.html });
-			res.write(data);
-		});
-	} else {
+  if (existsSync(viewPath)) {
+    ejs.renderFile(viewPath, data ?? {}, (err, data) => {
+      if (err) {
+        console.error(err);
+      }
+      res.writeHead(httpStatusCode ?? 200, { "Content-type": MIME.html });
+      res.write(data);
+    });
+  } else {
     renderView(res, "404.ejs", 404);
-	}
-	res.end();
+  }
+  res.end();
 }
 
 function generatePassword(length) {
-  return crypto.randomBytes(length).toString("hex")
+  return crypto.randomBytes(length).toString("hex");
 }
-module.exports = { 
-  sendJsonErr, 
-  isCookieAndSessionValid, 
-  generatePassword, 
-  setSessionIdAndRedirect, 
+module.exports = {
+  sendJsonErr,
+  isCookieAndSessionValid,
+  generatePassword,
+  setSessionIdAndRedirect,
   redirect,
   md5,
   renderView,

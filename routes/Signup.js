@@ -1,6 +1,10 @@
 const { Store } = require("../models/MemoryStore");
-const { ERR, } = require("../app/constants");
-const { isCookieAndSessionValid, sendJsonErr, renderView } = require("../app/common");
+const { ERR } = require("../app/constants");
+const {
+  isCookieAndSessionValid,
+  sendJsonErr,
+  renderView,
+} = require("../app/common");
 
 const { UserModel, User } = require("../models/UserModel");
 const USER_DB = new UserModel();
@@ -58,4 +62,4 @@ module.exports = async (req, res) => {
       res.end();
     });
   }
-}
+};

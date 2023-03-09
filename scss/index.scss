@@ -1,6 +1,6 @@
 @use "_variables" as *;
 @use "_components" as *;
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap");
 
 * {
   margin: 0;
@@ -15,7 +15,7 @@ body {
 
 a {
   color: inherit;
-} 
+}
 
 section.hero {
   margin: 0 auto;
@@ -35,13 +35,11 @@ section {
   gap: 0.5rem;
   padding: 0.8rem;
 
-
-.nav__title {
-  font-size: 2.3rem;
-  text-decoration: none;
-  font-weight: bold;
-}
-
+  .nav__title {
+    font-size: 2.3rem;
+    text-decoration: none;
+    font-weight: bold;
+  }
 
   .nav__links {
     display: flex;
@@ -55,7 +53,7 @@ section {
   }
 
   .nav__links a {
-    padding-block: .6rem;
+    padding-block: 0.6rem;
     width: 100%;
     text-align: center;
     text-transform: capitalize;
@@ -67,7 +65,7 @@ section {
     border: 1px solid $accent;
     border-radius: 100px;
     grid-template-columns: repeat(2, 1fr);
-    gap: .5rem;
+    gap: 0.5rem;
     align-items: center;
   }
 
@@ -83,11 +81,10 @@ section {
     border-radius: 100px;
   }
 
-    .nav__profile strong {
-      display: none;
-      text-transform: capitalize;
-    }
-
+  .nav__profile strong {
+    display: none;
+    text-transform: capitalize;
+  }
 
   @media screen and (min-width: 500px) {
     .nav__profile span {
@@ -104,7 +101,8 @@ section {
 
     flex-direction: row;
     position: fixed;
-    box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.14) , 0px 1px 10px 0px rgba(0,0,0,0.12) , 0px 2px 4px -1px rgba(0,0,0,0.2);
+    box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.14),
+      0px 1px 10px 0px rgba(0, 0, 0, 0.12), 0px 2px 4px -1px rgba(0, 0, 0, 0.2);
     width: 100%;
     align-items: center;
     padding: 0.8rem 1.3rem;
@@ -141,16 +139,13 @@ section {
     font-size: 2.2rem;
     max-width: 25ch;
   }
-
 }
-
-
 
 .features {
   width: 90%;
 
   &__title {
-    margin-block: .5rem;
+    margin-block: 0.5rem;
   }
 
   &__list {
@@ -173,7 +168,7 @@ section {
 
   p {
     max-width: 40ch;
-    margin-top: .5rem;
+    margin-top: 0.5rem;
     color: $text-clr-3;
   }
 
@@ -182,20 +177,17 @@ section {
   }
 
   @media screen and (min-width: 500px) {
-
     .features__list {
       flex-direction: row;
     }
-
   }
-
 }
 
 .faq {
   width: 90%;
 
   &__title {
-    margin-block: .5rem;
+    margin-block: 0.5rem;
   }
 
   &__list {
@@ -210,13 +202,13 @@ section {
     border-radius: 2px;
     display: flex;
     align-items: center;
-    padding: 1rem .5rem;
+    padding: 1rem 0.5rem;
   }
 
   p {
     color: $text-clr-3;
   }
- 
+
   &__list div {
     display: flex;
     flex-direction: column;
@@ -230,7 +222,7 @@ section {
   .pricing__prices {
     display: flex;
     flex-direction: column;
-    gap: .8rem;
+    gap: 0.8rem;
     margin-block: 1rem;
   }
 
@@ -242,9 +234,8 @@ section {
     }
   }
 
-
   .pricing__prices .disabled {
-    opacity: .5;
+    opacity: 0.5;
     user-select: none;
     cursor: not-allowed;
 
@@ -260,7 +251,7 @@ section {
     flex-direction: column;
     gap: 1.5rem;
     border-radius: 3px;
-    padding: .8rem .8rem 3rem .8rem;
+    padding: 0.8rem 0.8rem 3rem 0.8rem;
     transition: box-shadow 500ms ease-in-out;
     border: 1px solid $accent;
     h3 {
@@ -273,7 +264,7 @@ section {
   }
 
   .btn {
-    width: calc(100% - 2*.8rem);
+    width: calc(100% - 2 * 0.8rem);
     display: block;
     position: absolute;
     bottom: 10px;
@@ -282,17 +273,16 @@ section {
     border-radius: 4px;
     text-align: center;
     letter-spacing: 1px;
-    font-size: .8rem;
-    padding-block: .5rem;
+    font-size: 0.8rem;
+    padding-block: 0.5rem;
     text-transform: uppercase;
   }
-
 
   .pricing__features {
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: .8rem;
+    gap: 0.8rem;
   }
 
   .pricing__features li {
@@ -303,31 +293,32 @@ section {
   .pricing__features li span:nth-child(1) {
     font-weight: bold;
   }
-  
-  @media screen and (min-width: 500px) {
 
+  @media screen and (min-width: 500px) {
     .pricing__prices {
       flex-direction: row;
     }
-
 
     .pricing__prices > div {
       max-width: 33%;
     }
   }
-
 }
 
 .sold-yet {
   width: 100%;
   max-width: 100%;
-  background: linear-gradient(180deg, lighten($accent, 3%), darken($accent, 5%));
+  background: linear-gradient(
+    180deg,
+    lighten($accent, 3%),
+    darken($accent, 5%)
+  );
   padding: 2rem 1.5rem;
 
   > div {
     display: flex;
     flex-direction: column;
-    gap: .2rem;
+    gap: 0.2rem;
     align-items: flex-start;
     max-width: 1000px;
     margin: 0 auto;
@@ -341,7 +332,7 @@ section {
 
   .btn {
     margin-top: 1rem;
-    padding: .5rem 1rem;
+    padding: 0.5rem 1rem;
   }
 }
 
@@ -354,7 +345,6 @@ section {
       padding-block: 2rem;
     }
   }
-
 }
 
 .vnav {
@@ -406,12 +396,13 @@ section {
     justify-content: center;
     align-items: center;
   }
-  
-   &__link i, &__logout i {
+
+  &__link i,
+  &__logout i {
     font-size: 1.3rem;
     color: $accent;
     transition: color 200ms ease;
-    padding: .5rem;
+    padding: 0.5rem;
   }
 
   &__logout i {
@@ -451,9 +442,7 @@ section {
     margin-block: 0;
     height: 100vh;
   }
-
 }
-
 
 section.create {
   display: flex;
@@ -485,7 +474,11 @@ section.create {
   }
 
   .btn--primary {
-    background: linear-gradient(180deg, lighten($accent, 5%), darken($accent, 5%));
+    background: linear-gradient(
+      180deg,
+      lighten($accent, 5%),
+      darken($accent, 5%)
+    );
   }
 
   .btn--secondary {

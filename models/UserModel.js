@@ -42,14 +42,14 @@ class UserModel {
   }
 
   async userExists(query) {
-   if (await this.users.findOne(query)) {
-     return true;
-   }
+    if (await this.users.findOne(query)) {
+      return true;
+    }
     return false;
   }
 
   async updateUser(source, target) {
-    await this.users.updateOne(source, { $set: target});
+    await this.users.updateOne(source, { $set: target });
   }
 
   async close() {
