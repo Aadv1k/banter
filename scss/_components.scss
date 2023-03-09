@@ -149,7 +149,7 @@ p {
 }
 
 .toast {
-  height: 60px;
+  height: 65px;
   border-radius: 3px;
   position: absolute;
   top: 10px;
@@ -160,8 +160,23 @@ p {
   display: flex;
   transform: translateX(100%);
   gap: 0.5rem;
-  background-color: $accent;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+
+  &--success {
+    background-color: $toast-success;
+  }
+
+  &--danger {
+    background-color: $toast-danger;
+  }
+
+  &--info {
+    background-color: $toast-info;
+  }
+
+  &--warn {
+    background-color: $toast-warn;
+  }
 
   &--open {
     animation: toast-reveal 200ms ease-out;
@@ -187,8 +202,8 @@ p {
 
   &__btn {
     position: absolute;
-    right: 10px;
-    top: 5px;
+    right: 5px;
+    top: 3px;
 
     i {
       color: $toast-fill;
@@ -237,10 +252,11 @@ p {
   height: 100vh;
   max-width: calc(100% - 80px);
   width: 100%;
-  background-color: $main-bg;
   padding: 1rem;
   position: absolute;
   z-index: 999;
+  background-color: $main-bg;
+
 
   .form {
     align-items: flex-start;

@@ -437,6 +437,7 @@ section {
 .dashboard-page {
   margin-left: 80px;
   width: calc(100% - 80px);
+  overflow-x: hidden;
 
   section {
     margin-block: 0;

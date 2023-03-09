@@ -73,7 +73,7 @@ p {
 .form input::placeholder {
   color: #7d6c64;
 }
-.form input:not(input[type="checkbox"]) {
+.form input:not(input[type=checkbox]) {
   all: unset;
   border-bottom: 1px solid #f15b3e;
   padding: 0.2rem 0.5rem 0.2rem 0;
@@ -130,7 +130,7 @@ p {
 }
 
 .toast {
-  height: 60px;
+  height: 65px;
   border-radius: 3px;
   position: absolute;
   top: 10px;
@@ -141,8 +141,19 @@ p {
   display: flex;
   transform: translateX(100%);
   gap: 0.5rem;
-  background-color: #f15b3e;
   box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+.toast--success {
+  background-color: #28A745;
+}
+.toast--danger {
+  background-color: #DC3545;
+}
+.toast--info {
+  background-color: #17A2B8;
+}
+.toast--warn {
+  background-color: #FFC107;
 }
 .toast--open {
   animation: toast-reveal 200ms ease-out;
@@ -164,8 +175,8 @@ p {
 }
 .toast__btn {
   position: absolute;
-  right: 10px;
-  top: 5px;
+  right: 5px;
+  top: 3px;
 }
 .toast__btn i {
   color: white;
@@ -204,10 +215,10 @@ p {
   height: 100vh;
   max-width: calc(100% - 80px);
   width: 100%;
-  background-color: #dbd5d2;
   padding: 1rem;
   position: absolute;
   z-index: 999;
+  background-color: #dbd5d2;
 }
 .modal .form {
   align-items: flex-start;
@@ -314,8 +325,7 @@ section {
   .navbar {
     flex-direction: row;
     position: fixed;
-    box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.14),
-      0px 1px 10px 0px rgba(0, 0, 0, 0.12), 0px 2px 4px -1px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12), 0px 2px 4px -1px rgba(0, 0, 0, 0.2);
     width: 100%;
     align-items: center;
     padding: 0.8rem 1.3rem;
@@ -576,8 +586,7 @@ section {
   justify-content: center;
   align-items: center;
 }
-.vnav__link i,
-.vnav__logout i {
+.vnav__link i, .vnav__logout i {
   font-size: 1.3rem;
   color: #f15b3e;
   transition: color 200ms ease;
@@ -609,6 +618,7 @@ section {
 .dashboard-page {
   margin-left: 80px;
   width: calc(100% - 80px);
+  overflow-x: hidden;
 }
 .dashboard-page section {
   margin-block: 0;

@@ -23,12 +23,11 @@ export default class Toast extends Component {
 
   render() {
     return html`
-      <div
-        class="toast ${this.state.toastOpen ? "toast--open" : "toast--close"}"
-      >
+      <div class="toast ${this.props.varient ? "toast--" + this.props.varient : "toast--info"} ${this.state.toastOpen ? "toast--open" : "toast--close"}" >
         <button class="btn toast__btn" onClick=${this.toggleToast}>
           <i class="bi bi-x"></i>
         </button>
+
         ${this.props.icon
           ? html`
               <div class="toast__icon">
@@ -36,7 +35,7 @@ export default class Toast extends Component {
               </div>
             `
           : ``}
-        <p class="toast__content">${this.props.content}</p>
+        <p class="toast__content">${this.props.text}</p>
       </div>
     `;
   }
