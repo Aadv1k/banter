@@ -6,7 +6,7 @@ import htm from "https://unpkg.com/htm@latest?module";
 
 const html = htm.bind(h);
 
-export function toast(text, varient, interval) {
+export function toast(text, varient, icon, interval) {
   document.getElementById("toastElem")?.remove();
   interval = interval ?? 3000;
 
@@ -22,6 +22,12 @@ export function toast(text, varient, interval) {
   btn.innerHTML = '<i class="bi bi-x"></i>';
 
   t.appendChild(btn);
+
+  const toastIcon = document.createElement("div");
+  toastIcon.classList.add("toast__icon");
+  toastIcon.innerHTML = `<i class="${icon ?? ""}"></i>`;
+
+  t.appendChild(toastIcon);
   
   const toastContent = document.createElement("p");
   toastContent.innerText = text;
@@ -35,7 +41,7 @@ export function toast(text, varient, interval) {
 
 
   btn.addEventListener("click", () => {
-    t.classList.add("toast--close")
+    document.getElementById("toastElem")?.classList.add("toast--hide")
   })
 
   document.body.insertAdjacentElement("afterbegin", t);

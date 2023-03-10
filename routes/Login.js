@@ -8,6 +8,8 @@ const {
   renderView,
 } = require("../app/common");
 
+const {v4: uuid} = require("uuid");
+
 const { Store } = require("../models/MemoryStore");
 const { UserModel } = require("../models/UserModel");
 

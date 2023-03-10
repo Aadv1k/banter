@@ -12,34 +12,50 @@ const html = htm.bind(h);
 export default class PageCreate extends Component {
   constructor(props) {
     super(props);
-    this.state = { modalOpen: false, hasPodcasts: false, toastOpen: false};
-    this.handleClick = this.handleClick.bind(this);
+    this.state = { 
+      modalOpen: true, 
+      hasPodcasts: false, 
+      podcasts: [],
+    };
+    this.setModal = this.setModal.bind(this);
   }
 
   componentDidMount() {
-    fetch("/userinfo")
-      .then(res => res.json())
-      .then(data => {
-        if (data.error) {
-          this.setState({hasPodcasts: false});
-          return;
-        }
-        this.setState({hasPodcasts: true});
-      })
+    const podcastData = {
+      "hqwhqhweqhoehqowieho": {
+        name: "my cool podcast",
+      },
+
+      "qwdjqwdhwohwiehowhqwohef": {
+        name: "my cooller podcast",
+      }
+    }
+
+    if (Object.keys(podcastData).length != 0) {
+      this.setState({hasPodcasts: true});
+      this.setState({podcasts: Object.keys(podcastData).map(e => [podcastData[e].name, e] )});
+      return;
+    }
   }
 
-  handleClick() {
-    toast("hello there little one!");
+  setModal() {
+    if (!this.state.hasPodcasts) {
+      toast("No podcasts found for the user", "danger", "bi bi-exclamation-circle");
+      return;
+    }
+    this.setState({modalOpen: !this.state.modalOpen});
   }
 
   render() {
     return html`
+
+
      ${this.state.modalOpen
-        ? html`<${ModalForm} setModal=${this.handleClick} title="new episode" />`
+        ? html`<${ModalForm} setModal=${this.setModal} podcasts=${this.state.podcasts} title="new episode" />`
         : html``}
 
       <section class="create">
-        <button class="btn btn--primary" onClick=${this.handleClick}>
+        <button class="btn btn--primary" onClick=${this.setModal}>
           <i class="bi bi-plus-lg"></i>
           <p>new episode</p>
         </button>
