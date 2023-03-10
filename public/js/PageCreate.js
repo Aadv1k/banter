@@ -26,29 +26,15 @@ export default class PageCreate extends Component {
         }
         this.setState({hasPodcasts: true});
       })
-
   }
 
   handleClick() {
-    if (this.state.hasPodcasts) {
-      this.setState({ modalOpen: !this.state.modalOpen });
-      return;
-    }
-
-    if (!this.state.toastOpen) {
-      this.setState({toastOpen: true});
-    } else {
-      this.setState({toastOpen: false});
-    }
+    toast("hello there little one!");
   }
 
   render() {
     return html`
-      ${this.state.toastOpen
-        ? html`<${Toast} varient="danger" text="No podcasts found!" icon="bi bi-exclamation-triangle"/>`
-        : html``}
-
-      ${this.state.modalOpen
+     ${this.state.modalOpen
         ? html`<${ModalForm} setModal=${this.handleClick} title="new episode" />`
         : html``}
 
