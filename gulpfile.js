@@ -6,7 +6,7 @@ const rename = require("gulp-rename");
 const { PORT } = require("./app/constants.js");
 
 const stylesSrcPath = "./scss/**/*.scss";
-const stylesDestPath = "./public/css";
+const stylesDestPath = "./public/";
 const serverPath = "./index.js";
 
 function buildStyles() {
@@ -35,13 +35,10 @@ function runServer() {
     script: serverPath,
     ext: "js",
     ignore: ["./public/*"],
-  })
-    .on("restart", () => {
-      setTimeout(browserSync.reload, 1000);
-    });
+  }).on("restart", () => {
+    setTimeout(browserSync.reload, 1000);
+  });
 }
-
-
 
 function watchFiles() {
   gulp.watch(stylesSrcPath, gulp.series(buildStyles, reloadBrowserSync));

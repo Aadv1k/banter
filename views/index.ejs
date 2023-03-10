@@ -4,8 +4,8 @@
   <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta charset="UTF-8">
   <title>Banter</title>
-  <link rel="stylesheet" href="css/style.css" media="all">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css" integrity="sha384-b6lVK+yci+bfDmaY1u0zE8YYJt0TZxLEAFyYSLHId4xoVvsrQu3INevFKo+Xir8e" crossorigin="anonymous">
+  <link rel="stylesheet" href="style.css" media="all">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css" integrity="sha384-b6lVK+yci+bfDmaY1u0zE8YYJt0TZxLEAFyYSLHId4xoVvsrQu3INevFKo+Xir8e" crossorigin="anonymous">
 </head>
 <nav class="navbar">
   <a class="title nav__title" href="/">banter.</a>
@@ -35,8 +35,101 @@
   </ul>
 </section>
 
+
+<section class="pricing">
+  <h2>Pricing</h2>
+  <div class="pricing__prices">
+    <div class="pricing__pro disabled">
+     <div>
+       <h3>Podcaster</h3>
+       <p>the paid tier plan for existing podcasters looking to make the switch</p>
+     </div>
+      <ul class="pricing__features ">
+        <li>
+          <span>1 GB</span> 
+          <p>Of upload space</p>
+        </li>
+
+        <li>
+          <span>Unlimited</span>
+          <p>episodes and podcasts</p>
+        </li>
+
+        <li>
+          <span>Connect</span>
+          <p>accounts and crosspost via RSS</p>
+        </li>
+
+        <li>
+          <span>Export</span>
+          <p>user data or import from other platform</p>
+        </li>
+      </ul>
+      <a href="/signup" class="btn btn--primary">coming soon</a>
+    </div>
+
+    <div class="pricing__free highlight">
+     <div>
+       <h3>Starter</h3>
+       <p>the standard plan for anyone looking to start their own podcast</p>
+     </div>
+      <ul class="pricing__features">
+        <li>
+          <span>500 MB</span> 
+          <p>Of upload space</p>
+        </li>
+        <li>
+          <span>100 and upto 5</span>
+          <p>episodes and podcasts</p>
+        </li>
+
+        <li>
+          <span>Connect</span>
+          <p>accounts and crosspost via RSS</p>
+        </li>
+
+        <li>
+          <span>Export </span>
+          <p>user data or import from other platform</p>
+        </li>
+      </ul>
+      <a href="/signup" class="btn btn--primary">Get started</a>
+    </div>
+
+    <div class="pricing__enterprise disabled">
+     <div>
+       <h3>Studio</h3>
+       <p>the plan for large scale studios and other large scale creators</p>
+     </div>
+      <ul class="pricing__features">
+        <li>
+          <span>5 GB</span> 
+          <p>Of upload space</p>
+        </li>
+        <li>
+          <span>Unlimited</span>
+          <p>episodes and podcasts</p>
+        </li>
+
+        <li>
+          <span>Connect</span>
+          <p>accounts and crosspost via RSS</p>
+        </li>
+
+        <li>
+          <span>Export </span>
+          <p>user data or import from other platform</p>
+        </li>
+      </ul>
+      <a href="/signup" class="btn btn--primary">coming soon</a>
+    </div>
+
+
+  </div>
+</section>
+
 <section class="faq">
-  <h2 class="faq__title">About</h2>
+  <h2 class="faq__title">FAQs</h2>
 
   <ul class="faq__list">
     <li>
@@ -52,13 +145,15 @@
         <p>Banter offers a free and accessible way for creators to share their audio content with the world, without the need for any upfront investment or subscription fees.</p>
       </div>
     </li>
-
   </ul>
 </section>
 
 <section class="sold-yet">
-  <h2 >Create an account and start your podcasting journey now.</h2>
-  <a href="/signup" class="btn btn--primary">Get started</a>
+  <div>
+    <h2>Start your podcasting journey now for free with banter, no hidden costs or lock-ins.</h2>
+    <a href="/signup" class="btn btn--primary">Get started</a>
+  </div>
+
 </section>
 
 </html>

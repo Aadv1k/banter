@@ -16,7 +16,7 @@ class MemoryStore {
   update(sessionId, newData) {
     const data = this.sessions[sessionId];
     if (!data) return undefined;
-    this.store(sessionId, {...data, ...newData});
+    this.store(sessionId, { ...data, ...newData });
   }
 
   dump() {
@@ -30,4 +30,4 @@ class MemoryStore {
 }
 
 const Store = new MemoryStore();
-module.exports = {MemoryStore, Store};
+module.exports = { MemoryStore, Store };

@@ -21,7 +21,6 @@ p {
   all: unset;
   cursor: pointer;
 
-
   &--primary {
     background-color: black;
     color: white;
@@ -35,6 +34,13 @@ p {
     border-radius: 1000px;
   }
 
+  &--disabled {
+    background-color: black;
+    border: 1px solid black;
+    color: white;
+    border-radius: 1000px;
+  }
+
   &--submit {
     background-color: $main-bg;
     border: 1px solid $accent;
@@ -42,7 +48,6 @@ p {
     text-align: center;
     transition: background-color 200ms ease-in-out;
   }
-
 
   &--submit:active {
     outline: 2px solid lighten($accent, 5%);
@@ -53,9 +58,7 @@ p {
       background-color: $accent;
     }
   }
-
 }
-
 
 .form {
   display: flex;
@@ -68,10 +71,11 @@ p {
     width: 80%;
     display: flex;
     flex-direction: column;
-    gap: .4rem;
+    gap: 0.4rem;
   }
 
-  label,.form__info {
+  label,
+  .form__info {
     color: $text-clr-3;
   }
 
@@ -79,21 +83,22 @@ p {
     color: $text-clr-2;
   }
 
-  input {
+  input:not(input[type="checkbox"]) {
     all: unset;
     border-bottom: 1px solid $accent;
-    padding: .2rem .5rem .2rem 0;
+    padding: 0.2rem 0.5rem 0.2rem 0;
   }
 
   .form__hr {
     width: 80%;
     display: flex;
     align-items: center;
-    gap: .5rem;
+    gap: 0.5rem;
     color: $accent;
   }
 
-  .form__hr span, .form__hr span {
+  .form__hr span,
+  .form__hr span {
     width: 100%;
     height: 1px;
     background: $accent;
@@ -105,18 +110,18 @@ p {
 
   .form__auth {
     display: flex;
+    gap: 0.5rem;
   }
-
 
   .form__auth a {
     background: $accent;
-    padding: .5rem;
+    padding: 0.5rem;
     border-radius: 3px;
     border: 1px solid $accent;
     transition: background-color 200ms ease;
   }
 
-  .form__auth:active {
+  .form__auth a:active {
     border-radius: 3px;
     outline: 2px solid lighten($accent, 5%);
   }
@@ -129,7 +134,7 @@ p {
 
   .btn--submit {
     width: 80%;
-    padding-block: .5rem;
+    padding-block: 0.5rem;
   }
 
   @media screen and (min-width: 500px) {
@@ -141,5 +146,144 @@ p {
       background-color: $main-bg;
     }
   }
+}
 
+.toast {
+  height: 65px;
+  border-radius: 3px;
+  position: absolute;
+  top: 10px;
+  right: 0;
+  max-width: 250px;
+  padding: 0.8rem 1rem;
+  align-items: center;
+  display: flex;
+  transform: translateX(100%);
+  gap: 0.5rem;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+
+  &--success {
+    background-color: $toast-success;
+  }
+
+  &--danger {
+    background-color: $toast-danger;
+  }
+
+  &--info {
+    background-color: $toast-info;
+  }
+
+  &--warn {
+    background-color: $toast-warn;
+  }
+
+  &--show {
+    animation: toast-reveal 200ms ease-out;
+    animation-fill-mode: forwards;
+  }
+
+  &--hide {
+    animation: toast-hide 200ms ease-out;
+    animation-fill-mode: forwards;
+  }
+
+  p {
+    color: $toast-fill;
+    font-size: 0.9rem;
+    max-width: 20ch;
+  }
+
+  &__icon {
+    color: $toast-fill;
+    font-size: 1.3rem;
+    margin-top: 3px;
+  }
+
+  &__btn {
+    position: absolute;
+    right: 5px;
+    top: 3px;
+
+    i {
+      color: $toast-fill;
+      font-size: 1.2rem;
+    }
+  }
+}
+
+@keyframes toast-reveal {
+  0% {
+    transform: translateX(100%);
+  }
+
+  50% {
+    transform: translateX(-30%);
+  }
+
+  75% {
+    transform: translateX(-20%);
+  }
+
+  100% {
+    transform: translateX(-5%);
+  }
+}
+
+@keyframes toast-hide {
+  100% {
+    transform: translateX(100%);
+  }
+
+  75% {
+    transform: translateX(-30%);
+  }
+
+  50% {
+    transform: translateX(-20%);
+  }
+
+  0% {
+    transform: translateX(-5%);
+  }
+}
+
+.modal {
+  height: 100vh;
+  max-width: calc(100% - 80px);
+  width: 100%;
+  padding: 1rem;
+  position: absolute;
+  z-index: 999;
+  background-color: $main-bg;
+
+
+  .form {
+    align-items: flex-start;
+    margin-top: 1rem;
+  }
+
+  .form__itm {
+    width: 100%;
+  }
+
+  &__close {
+    position: absolute;
+    top: 10px;
+    right: 1rem;
+  }
+
+  &__title {
+    font-size: 1.8rem;
+    text-transform: capitalize;
+  }
+
+  &__close i {
+    font-size: 1.3rem;
+    color: $text-clr-2;
+  }
+
+  &__content {
+    margin-top: 1rem;
+  }
 }
