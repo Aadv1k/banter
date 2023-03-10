@@ -155,11 +155,11 @@ p {
 .toast--warn {
   background-color: #FFC107;
 }
-.toast--open {
+.toast--show {
   animation: toast-reveal 200ms ease-out;
   animation-fill-mode: forwards;
 }
-.toast--close {
+.toast--hide {
   animation: toast-hide 200ms ease-out;
   animation-fill-mode: forwards;
 }

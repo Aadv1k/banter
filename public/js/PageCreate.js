@@ -5,7 +5,7 @@ import {
 import htm from "https://unpkg.com/htm@latest?module";
 
 import ModalForm from "/js/ModalForm.js";
-import Toast from "/js/Toast.js";
+import { toast } from "/js/Toast.js";
 
 const html = htm.bind(h);
 

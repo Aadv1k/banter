@@ -178,12 +178,12 @@ p {
     background-color: $toast-warn;
   }
 
-  &--open {
+  &--show {
     animation: toast-reveal 200ms ease-out;
     animation-fill-mode: forwards;
   }
 
-  &--close {
+  &--hide {
     animation: toast-hide 200ms ease-out;
     animation-fill-mode: forwards;
   }

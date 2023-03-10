@@ -6,6 +6,41 @@ import htm from "https://unpkg.com/htm@latest?module";
 
 const html = htm.bind(h);
 
+export function toast(text, varient, interval) {
+  document.getElementById("toastElem")?.remove();
+  interval = interval ?? 3000;
+
+  const t = document.createElement("div");
+  t.setAttribute("id", "toastElem");
+  t.classList.add("toast");
+  t.classList.add("toast--show")
+  t.classList.add(varient ? "toast--" + varient : "toast--info");
+
+  const btn = document.createElement("button");
+  btn.classList.add("btn");
+  btn.classList.add("toast__btn");
+  btn.innerHTML = '<i class="bi bi-x"></i>';
+
+  t.appendChild(btn);
+  
+  const toastContent = document.createElement("p");
+  toastContent.innerText = text;
+
+  t.appendChild(toastContent);
+
+  setTimeout(() => {
+    t?.classList.add("toast--hide")
+    setTimeout(() => { t?.remove(); }, 500)
+  }, interval)
+
+
+  btn.addEventListener("click", () => {
+    t.classList.add("toast--close")
+  })
+
+  document.body.insertAdjacentElement("afterbegin", t);
+}
+
 export default class Toast extends Component {
   constructor(props) {
     super(props);
@@ -25,7 +60,6 @@ export default class Toast extends Component {
     return html`
       <div class="toast ${this.props.varient ? "toast--" + this.props.varient : "toast--info"} ${this.state.toastOpen ? "toast--open" : "toast--close"}" >
         <button class="btn toast__btn" onClick=${this.toggleToast}>
-          <i class="bi bi-x"></i>
         </button>
 
         ${this.props.icon
