@@ -8,7 +8,7 @@ module.exports = (req, res) => {
 
   const ext = filename.split(".").pop();
   if (!MIME[ext]) {
-    renderView(res, "404.ejs", 404);
+    renderView(req, res, "404.ejs", 404, {}, true);
     return;
   }
 
@@ -19,7 +19,7 @@ module.exports = (req, res) => {
     res.writeHead(200, { "Content-type": MIME[ext] });
     res.write(file);
   } else {
-    renderView(res, "404.ejs", 404);
+    renderView(req, res, "404.ejs", 404, {}, true);
   }
   res.end();
 };

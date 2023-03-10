@@ -24,7 +24,7 @@ module.exports = http.createServer(async (req, res) => {
   const ext = req.url.split(".").pop();
 
   if (URI === "/") {
-    renderView(res, "index.ejs", 200);
+    renderView(req, res, "index.ejs", 200, {}, true);
   } else if (MIME[ext]) {
     routeFilepath(req, res);
   } else if (URI.startsWith("/login")) {
@@ -48,6 +48,6 @@ module.exports = http.createServer(async (req, res) => {
   } else if (URI.startsWith("/userinfo")) {
     routeGetUserInfo(req, res);
   } else {
-    renderView(res, "404.ejs");
+    renderView(req, res, "404.ejs", 404, {}, true);
   }
 });

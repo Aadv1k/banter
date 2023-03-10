@@ -36,7 +36,7 @@ module.exports = async (req, res) => {
     return;
   }
 
-  renderView(res, "dashboard.ejs", 200, {
+  renderView(req, res, "dashboard.ejs", 200, {
     spotifyLoggedIn: Boolean(spotifyRefreshToken),
     user,
   });

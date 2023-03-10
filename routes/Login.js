@@ -11,6 +11,8 @@ const {
 const { Store } = require("../models/MemoryStore");
 const { UserModel } = require("../models/UserModel");
 
+const querystring = require("querystring");
+
 const USER_DB = new UserModel();
 
 module.exports = async (req, res) => {
@@ -21,7 +23,7 @@ module.exports = async (req, res) => {
       redirect(res, "/dashboard");
       return;
     }
-    renderView(res, "login.ejs", 200);
+    renderView(req, res, "login.ejs", 200, {}, true);
   } else if (req.method === "POST") {
     let body = "";
     req.on("data", (chunk) => (body += chunk.toString()));
