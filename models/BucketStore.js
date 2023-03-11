@@ -38,7 +38,7 @@ class BucketStore {
     const data = await res.json();
     if (!data) return null;
 
-    if (data.error[".tag"] === "shared_link_already_exists") {
+    if (data.error?.[".tag"] === "shared_link_already_exists") {
       const res = await fetch(
         "https://api.dropboxapi.com/2/sharing/list_shared_links",
         {

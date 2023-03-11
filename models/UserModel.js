@@ -49,7 +49,7 @@ class UserModel {
   }
 
   async updateUser(source, target) {
-    await this.users.updateOne(source, { $set: target });
+    await this.users.updateOne(source, target);
   }
 
   async close() {
