@@ -41,6 +41,79 @@ class UserModel {
     return user ?? null;
   }
 
+  async deleteEpisodeForUser(userQuery, podcastID, episodeID) {
+    const user = await this.users.findOne(userQuery);
+    if (!user?.podcasts?.[podcastID]) {
+      return null;
+    }
+
+    const episodes = user.podcasts?.[podcastID]?.episodes;
+
+    if (!episodes || episodes.length === 0) {
+      return null;
+    }
+
+    const target = episodes.findIndex(e => { e.id === episodeID });
+    episodes.splice(target, 1);
+
+    let updateBlob = {};
+    updateBlob[podcastID] = episodes
+
+    if (!await this.users.updateOne(userQuery, { $set: {
+      podcasts: updateBlob
+    }})) {
+      return null;
+    }
+  }
+
+  async getPodcastsForUser(userQuery) {
+    const user = await this.users.findOne(userQuery);
+    if (!user) {
+      return null;
+    }
+    return user?.podcasts ?? {};
+  }
+
+  async insertEpisodeForUser(userQuery, podcastID, episode) {
+    const user = await this.users.findOne(userQuery);
+    if (!user?.podcasts?.[podcastID]) {
+      return null;
+    }
+
+    const episodes = user.podcasts?.[podcastID].episodes ?? [];
+    episodes.push(episode);
+
+    try {
+      this.users.updateUser(userQuery, {
+        $set: {
+          episodes,
+        }
+      })
+    } catch {
+      return null;
+    }
+  }
+
+  async insertPodcastForUser(userQuery, podcastObj) {
+    const user = await this.users.findOne(userQuery);
+    const podcasts = user?.podcasts ?? {};
+    podcasts[podcastObj.id] = {
+      title: podcastObj.title,
+      cover: podcastObj.cover,
+      crosspost: podcastObj.crosspost,
+    }
+
+    try {
+      await this.users.updateOne(userQuery, {
+        $set: {
+          podcasts: podcasts
+        }
+      })
+    } catch (err) {
+      return null;
+    }
+  }
+
   async userExists(query) {
     if (await this.users.findOne(query)) {
       return true;

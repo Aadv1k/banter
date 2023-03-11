@@ -33,6 +33,12 @@ module.exports = {
       code: 400,
     },
 
+    invalidPodcastID: {
+      error: "invalid-podcast-id",
+      message: "the podcast ID provided does not exist",
+      code: 404,
+    },
+
     invalidMethod: {
       error: "invalid-method",
       message: "method invalid for requested resource",
@@ -72,7 +78,7 @@ module.exports = {
     invalidAudioFileFormat: {
       error: "invalid-audio-file-format",
       message:
-        "the provided file format for episode was invalid; only AAC is accepted",
+        "the provided file format for episode was invalid",
       code: 400,
     },
 

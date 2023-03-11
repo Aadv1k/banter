@@ -15,12 +15,10 @@ const formidable = require("formidable");
 module.exports = async (req, res) => {
   const BUCKET = new BucketStore();
   await USER_DB.init();
-  /*
   if (!isCookieAndSessionValid(req)) {
     sendJsonErr(res, ERR.unauthorized);
     return;
   }
-  */
 
   if (req.method !== "POST") {
     sendJsonErr(res, ERR.invalidMethod);
@@ -45,6 +43,12 @@ module.exports = async (req, res) => {
     return;
   }
 
+  const podcasts = await USER_DB.getPodcastsForUser({_id: userid});
+  if (!podcasts?.[podcastID]) {
+    sendJsonErr(res, ERR.invalidPodcastID) 
+    return;
+  }
+
   const audioFile = files["audio"];
   const audioFileType = audioFile.mimetype;
   if (audioFileType != "audio/mpeg") {
@@ -59,60 +63,48 @@ module.exports = async (req, res) => {
   }
 
   const uncompressedAudioStream = fs.createReadStream(audioFile.filepath);
-  //const compressedAudioStream = new PassThrough();
-
   const { title, number, explicit, podcastID } = fields;
+  const epId = uuid();
+  const audioFileName = `${epId}.mp3`;
 
-    const epId = uuid();
-    const audioFileName = `${epId}.mp3`;
+  const userid = Store.get(cookie.parse(req.headers.cookie).sessionid).uid;
+  const user = await USER_DB.getUser({_id: userid});
+  if (!user) {
+    sendJsonErr(res, ERR.userNotFound);
+    return;
+  }
 
-    //const userid = Store.get(cookie.parse(req.headers.cookie).sessionid).uid;
-    const userid = "6f4286ef-8041-455b-95b4-8dfb3d5f4754";
-    const user = await USER_DB.getUser({_id: userid});
-    if (!user) {
-      sendJsonErr(res, ERR.userNotFound);
-      return;
-    }
+  const userPodcast = user?.podcasts?.[podcastID];
 
-    const userPodcast = user?.podcasts?.[podcastID];
+  if (!userPodcast) {
+    sendJsonErr(res, ERR.userNotFound);
+    return;
+  }
 
-    if (!userPodcast) {
-      sendJsonErr(res, ERR.userNotFound);
-      return;
-    }
+  let permalink;
 
-    let permalink;
+  try {
+    await BUCKET.pushBinary(uncompressedAudioStream, audioFileName);
+    permalink = await BUCKET.getBinaryPermalink(audioFileName);
+  } catch (err) {
+    console.error(err)
+    sendJsonErr(res, ERR.internalErr)
+    return;
+  }
 
-    try {
-      await BUCKET.pushBinary(uncompressedAudioStream, audioFileName);
-      permalink = await BUCKET.getBinaryPermalink(audioFileName);
-    } catch (err) {
-      console.error(err)
-      sendJsonErr(res, ERR.internalErr)
-      return;
-    }
+  const episode = {
+    id: epId,
+    title: title,
+    number: number,
+    permalink: permalink,
+    explicit: explicit === "true",
+  }
 
+  await USER_DB.insertEpisodeForUser({_id: userid}, podcastID, episode)
 
-      console.log("not here")
-
-    const pdEpisodeEntry = {
-      epId,
-      epTitle: title,
-      epNumber: number,
-      epPermalink: permalink,
-      epExplicit: explicit === "true",
-    };
-
-    let updateBlob = { podcasts: {
-        ...user.podcasts
-    }}
-
-    updateBlob.podcasts[podcastID].episodes.push(pdEpisodeEntry);
-    await USER_DB.updateUser({_id: userid}, { $set: updateBlob })
-
-    res.writeHead(200, {
-      "Content-type": "application/json",
-    })
-    res.write(JSON.stringify(user));
-    res.end();
+  res.writeHead(200, {
+    "Content-type": "application/json",
+  })
+  res.write(JSON.stringify(user));
+  res.end();
 };
