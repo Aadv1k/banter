@@ -2,18 +2,18 @@ const {
   handleRouteAuthMSCallback,
   handleRouteAuthMS,
 } = require("../routes/AuthMicrosoft");
+
 const {
   handleRouteAuthSpotify,
   handleRouteAuthSpotifyCallback,
 } = require("../routes/AuthSpotify");
 
 const routeFilepath = require("../routes/Filepath");
-const routeUploadEpisode = require("../routes/UploadEpisode");
 const routeDashboard = require("../routes/Dashboard");
 const routeLogin = require("../routes/Login");
 const routeLogout = require("../routes/Logout");
 const routeSignup = require("../routes/Signup");
-const routeGetUserInfo = require("../routes/UserInfo");
+const routeCreateEpisode = require("../routes/CreateEpisode.js");
 
 const http = require("http");
 const { renderView } = require("./common");
@@ -43,10 +43,8 @@ module.exports = http.createServer(async (req, res) => {
     await handleRouteAuthSpotifyCallback(req, res);
   } else if (URI.startsWith("/auth/spotify")) {
     handleRouteAuthSpotify(req, res);
-  } else if (URI.startsWith("/upload-episode")) {
-    routeUploadEpisode(req, res);
-  } else if (URI.startsWith("/userinfo")) {
-    routeGetUserInfo(req, res);
+  } else if (URI.startsWith("/createEpisode")) {
+    routeCreateEpisode(req, res);
   } else {
     renderView(req, res, "404.ejs", 404, {}, true);
   }

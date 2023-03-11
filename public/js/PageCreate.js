@@ -22,13 +22,9 @@ export default class PageCreate extends Component {
 
   componentDidMount() {
     const podcastData = {
-      "hqwhqhweqhoehqowieho": {
+      "foo": {
         name: "my cool podcast",
       },
-
-      "qwdjqwdhwohwiehowhqwohef": {
-        name: "my cooller podcast",
-      }
     }
 
     if (Object.keys(podcastData).length != 0) {

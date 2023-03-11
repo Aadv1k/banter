@@ -18,7 +18,7 @@ export default class ModalForm extends Component {
   }
 
 
-  handleSubmit(e) {
+  async handleSubmit(e) {
     e.preventDefault();
     const formData = new FormData(e.target);
     const formProps = Object.fromEntries(formData);
@@ -43,10 +43,28 @@ export default class ModalForm extends Component {
       return;
     }
 
+    /*
     if (formProps.epAudio.type != "audio/aac") {
       toast("Invalid audio file format; only aac accepted", "danger", "bi bi-exclamation-triangle-fill");
       return;
     }
+    */
+
+
+    const postFormData = new FormData();
+    postFormData.append("audio", formProps.epAudio),
+
+    postFormData.append("title", formProps.epTitle),
+    postFormData.append("number", formProps.epNumber),
+    postFormData.append("podcastID", selectedPodcastName),
+    postFormData.append("explicit", formProps.epExplicit === "on")
+
+    const res = await fetch("/createEpisode", {
+      method: "POST",
+      body: postFormData
+    });
+    const data = await res.json();
+    console.log(data);
   }
 
   render() {
