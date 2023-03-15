@@ -6,6 +6,7 @@ module.exports = {
   ATLAS_PWD: process.env.ATLAS_PWD,
 
   MAX_EPISODE_SIZE_IN_MB: 100,
+  MAX_IMAGE_SIZE_IN_MB: 5,
 
   MS_CLIENT_ID: process.env.MS_CLIENT_ID,
   MS_CLIENT_SECRET: process.env.MS_CLIENT_SECRET,
@@ -75,6 +76,14 @@ module.exports = {
       code: 500,
     },
 
+
+    invalidImageFileFormat: {
+      error: "invalid-image-file-format",
+      message:
+        "the provided file format for the cover was invalid",
+      code: 400,
+    },
+
     invalidAudioFileFormat: {
       error: "invalid-audio-file-format",
       message:
@@ -89,10 +98,18 @@ module.exports = {
       code: 400,
     },
 
+    exceedsImageSizeLimit: {
+      error: "exceeds-imageh-size-limit",
+      message:
+        "the provided image exeeds the image size limit of a 10 Megabytes",
+      code: 400,
+    },
+
     invalidPassword: {
       error: "invalid-password",
       message: "the password given for the user is invalid",
       code: 401,
     },
   },
+
 };

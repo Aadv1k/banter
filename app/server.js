@@ -14,6 +14,7 @@ const routeLogin = require("../routes/Login");
 const routeLogout = require("../routes/Logout");
 const routeSignup = require("../routes/Signup");
 const routeCreateEpisode = require("../routes/CreateEpisode.js");
+const routeCreatePodcast = require("../routes/CreatePodcast.js");
 
 const http = require("http");
 const { renderView } = require("./common");
@@ -45,6 +46,8 @@ module.exports = http.createServer(async (req, res) => {
     handleRouteAuthSpotify(req, res);
   } else if (URI.startsWith("/createEpisode")) {
     routeCreateEpisode(req, res);
+  } else if (URI.startsWith("/createPodcast")) {
+    routeCreatePodcast(req, res);
   } else {
     renderView(req, res, "404.ejs", 404, {}, true);
   }

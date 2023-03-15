@@ -1,5 +1,5 @@
 const { BucketStore } = require("../models/BucketStore.js");
-const { ERR, MAX_EPISODE_SIZE_IN_MB } = require("../app/constants");
+const { ERR, MAX_IMAGE_SIZE_IN_MB} = require("../app/constants");
 const { sendJsonErr, isCookieAndSessionValid } = require("../app/common");
 const cookie = require("cookie");
 
@@ -15,10 +15,12 @@ const formidable = require("formidable");
 module.exports = async (req, res) => {
   const BUCKET = new BucketStore();
   await USER_DB.init();
+  /*
   if (!isCookieAndSessionValid(req)) {
     sendJsonErr(res, ERR.unauthorized);
     return;
   }
+  */
 
   if (req.method !== "POST") {
     sendJsonErr(res, ERR.invalidMethod);
@@ -38,43 +40,31 @@ module.exports = async (req, res) => {
   });
 
 
-  if (![ files.audio, fields.title, fields.number, fields.explicit, fields.podcastID, ].every((e) => e)) {
+  if (![ files.cover, fields.title, fields.explicit, fields.description, fields.category].every((e) => e)) {
     sendJsonErr(res, ERR.badInput);
     return;
   }
 
-  const podcasts = await USER_DB.getPodcastsForUser({_id: userid});
-  if (!podcasts?.[podcastID]) {
-    sendJsonErr(res, ERR.invalidPodcastID) 
-    return;
-  }
-
-  const audioFile = files["audio"];
-  const audioFileType = audioFile.mimetype;
-  if (audioFileType != "audio/mpeg") {
+  const coverFile = files["cover"];
+  const imageFileType = coverFile.mimetype;
+  if (!["image/jpeg", "image/png"].includes(imageFileType)) {
     sendJsonErr(res, ERR.invalidAudioFileFormat);
     return;
   }
 
-  const audioSizeInMB = parseInt(audioFile.size / 8e5);
-  if (audioSizeInMB > MAX_EPISODE_SIZE_IN_MB) {
-    sendJsonErr(res, ERR.exceedsAudioSizeLimit);
+  const imageFileSizeInMB = parseInt(coverFile.size / 8e5);
+  if (imageFileSizeInMB > MAX_IMAGE_SIZE_IN_MB) {
+    sendJsonErr(res, ERR.exceedsImageSizeLimit);
     return;
   }
 
-  const { title, number, explicit, podcastID } = fields;
-  const epId = uuid();
+  const { title, explicit, description, category } = fields;
+  const pID = uuid();
 
-  const userid = Store.get(cookie.parse(req.headers.cookie).sessionid).uid;
+  //const userid = Store.get(cookie.parse(req.headers.cookie).sessionid).uid;
+  const userid =  "13c56ed2-f36f-469f-a718-2b06b546f571";
   const user = await USER_DB.getUser({_id: userid});
   if (!user) {
-    sendJsonErr(res, ERR.userNotFound);
-    return;
-  }
-
-  const userPodcast = user?.podcasts?.[podcastID];
-
-  if (!userPodcast) {
     sendJsonErr(res, ERR.userNotFound);
     return;
   }
@@ -82,7 +72,7 @@ module.exports = async (req, res) => {
   let permalink;
 
   try {
-    const { path } = await BUCKET.pushFile(audioFile.filepath);
+    const { path } = await BUCKET.pushFile(coverFile.filepath);
     permalink = path;
   } catch (err) {
     console.error(err)
@@ -90,19 +80,26 @@ module.exports = async (req, res) => {
     return;
   }
 
-  const episode = {
-    id: epId,
-    title: title,
-    number: number,
-    permalink: permalink,
+  const podcast = {
+    id: pID,
+    title,
+    category,
+    description,
+    cover: permalink,
     explicit: explicit === "true",
   }
 
-  await USER_DB.insertEpisodeForUser({_id: userid}, podcastID, episode)
-
-  res.writeHead(200, {
-    "Content-type": "application/json",
-  })
-  res.write(JSON.stringify(user));
-  res.end();
+  try {
+    await USER_DB.insertPodcastForUser({_id: userid}, podcast);
+    res.writeHead(200, {
+      "Content-type": "application/json",
+    })
+    res.write(JSON.stringify({
+      message: "successfully created a new podcast for the user",
+      code: 200
+    }));
+    res.end();
+  } catch {
+    sendJsonErr(res, ERR.internalErr);
+  }
 };
