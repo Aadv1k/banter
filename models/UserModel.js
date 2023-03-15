@@ -1,4 +1,5 @@
 const { MongoClient } = require("mongodb");
+const oid = require('mongodb').ObjectId;
 
 const { ATLAS_PWD } = require("../app/constants.js");
 const ATLAS_URL = `mongodb+srv://user-1:${ATLAS_PWD}@banter-dev.acxedwo.mongodb.net`;
@@ -26,9 +27,14 @@ class UserModel {
     this.users = this.db.collection("users");
   }
 
+  parseQuery(q) {
+    q["_id"] = new oid(q["_id"]);
+    return q;
+  }
+
   async pushUser(user) {
     await this.users.insertOne({
-      _id: user._id,
+      _id: new oid(user._id),
       name: user.name,
       email: user.email,
       password: user.password,
@@ -37,11 +43,13 @@ class UserModel {
   }
 
   async getUser(query) {
+    query = this.parseQuery(query);
     const user = await this.users.findOne(query);
     return user ?? null;
   }
 
   async deleteEpisodeForUser(userQuery, podcastID, episodeID) {
+    userQuery = this.parseQuery(userQuery)
     const user = await this.users.findOne(userQuery);
     if (!user?.podcasts?.[podcastID]) {
       return null;
@@ -67,6 +75,7 @@ class UserModel {
   }
 
   async getPodcastsForUser(userQuery) {
+    userQuery = this.parseQuery(userQuery)
     const user = await this.users.findOne(userQuery);
     if (!user) {
       return null;
@@ -75,18 +84,19 @@ class UserModel {
   }
 
   async insertEpisodeForUser(userQuery, podcastID, episode) {
+    userQuery = this.parseQuery(userQuery)
     const user = await this.users.findOne(userQuery);
     if (!user?.podcasts?.[podcastID]) {
       return null;
     }
-
     const episodes = user.podcasts?.[podcastID].episodes ?? [];
     episodes.push(episode);
-
     try {
       this.users.updateUser(userQuery, {
         $set: {
-          episodes,
+          podcasts: {
+            episodes,
+          }
         }
       })
     } catch {
@@ -95,6 +105,7 @@ class UserModel {
   }
 
   async insertPodcastForUser(userQuery, podcastObj) {
+    userQuery = this.parseQuery(userQuery)
     const user = await this.users.findOne(userQuery);
     const podcasts = user?.podcasts ?? {};
     podcasts[podcastObj.id] = {
@@ -118,14 +129,11 @@ class UserModel {
   }
 
   async userExists(query) {
+    query = this.parseQuery(query);
     if (await this.users.findOne(query)) {
       return true;
     }
     return false;
-  }
-
-  async updateUser(source, target) {
-    await this.users.updateOne(source, target);
   }
 
   async close() {

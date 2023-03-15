@@ -3,6 +3,7 @@ const {
   generatePassword,
   setSessionIdAndRedirect,
   redirect,
+  newID,
 } = require("../app/common");
 
 const {
@@ -16,7 +17,6 @@ const { Store } = require("../models/MemoryStore.js");
 const { User, UserModel } = require("../models/UserModel.js");
 const USER_DB = new UserModel();
 
-const { v4: uuid } = require("uuid");
 const fetch = require("node-fetch-commonjs");
 const querystring = require("querystring");
 
@@ -74,7 +74,7 @@ async function handleRouteAuthMSCallback(req, res) {
   });
 
   const {displayName: username, userPrincipalName: email, error} = await userRes.json();
-  const newSid = uuid();
+  const newSid = newID();
   const dbUser = await USER_DB.getUser({ email });
 
   if (dbUser) {
@@ -89,7 +89,7 @@ async function handleRouteAuthMSCallback(req, res) {
   }
 
 
-  const newUid = uuid();
+  const newUid = newID();
   await USER_DB.pushUser(
     new User(
       newUid,

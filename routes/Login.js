@@ -6,9 +6,8 @@ const {
   md5,
   redirect,
   renderView,
+  newID,
 } = require("../app/common");
-
-const {v4: uuid} = require("uuid");
 
 const { Store } = require("../models/MemoryStore");
 const { UserModel } = require("../models/UserModel");
@@ -35,7 +34,7 @@ module.exports = async (req, res) => {
         sendJsonErr(res, ERR.badInput);
         return;
       }
-      const sid = uuid();
+      const sid = newID();
       const hashedPassword = md5(formData.password);
       const dbUser = await USER_DB.getUser({ email: formData.email });
 

@@ -1,9 +1,7 @@
 const { BucketStore } = require("../models/BucketStore.js");
 const { ERR, MAX_IMAGE_SIZE_IN_MB} = require("../app/constants");
-const { sendJsonErr, isCookieAndSessionValid } = require("../app/common");
+const { sendJsonErr, isCookieAndSessionValid, newID } = require("../app/common");
 const cookie = require("cookie");
-
-const {v4: uuid} = require("uuid");
 
 const { UserModel } = require("../models/UserModel.js");
 const { Store } = require("../models/MemoryStore.js");
@@ -20,6 +18,8 @@ module.exports = async (req, res) => {
     sendJsonErr(res, ERR.unauthorized);
     return;
   }
+
+  const userid = Store.get(cookie.parse(req.headers.cookie).sessionid).uid;
   
   if (req.method !== "POST") {
     sendJsonErr(res, ERR.invalidMethod);
@@ -58,9 +58,6 @@ module.exports = async (req, res) => {
   }
 
   const { title, explicit, description, category } = fields;
-  const pID = uuid();
-
-  const userid = Store.get(cookie.parse(req.headers.cookie).sessionid).uid;
   const user = await USER_DB.getUser({_id: userid});
   if (!user) {
     sendJsonErr(res, ERR.userNotFound);
@@ -79,7 +76,7 @@ module.exports = async (req, res) => {
   }
 
   const podcast = {
-    id: pID,
+    id: newID(),
     title,
     category,
     description,

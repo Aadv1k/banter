@@ -29,6 +29,7 @@ module.exports = {
     js: "text/javascript",
     png: "image/png",
     ico: "image/x-icon",
+    xml: "application/xml",
   },
 
   ERR: {

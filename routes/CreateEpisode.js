@@ -1,9 +1,7 @@
 const { BucketStore } = require("../models/BucketStore.js");
 const { ERR, MAX_EPISODE_SIZE_IN_MB } = require("../app/constants");
-const { sendJsonErr, isCookieAndSessionValid } = require("../app/common");
+const { sendJsonErr, isCookieAndSessionValid, newID} = require("../app/common");
 const cookie = require("cookie");
-
-const {v4: uuid} = require("uuid");
 
 const { UserModel } = require("../models/UserModel.js");
 const { Store } = require("../models/MemoryStore.js");
@@ -15,11 +13,15 @@ const formidable = require("formidable");
 module.exports = async (req, res) => {
   const BUCKET = new BucketStore();
   await USER_DB.init();
+  /*
   if (!isCookieAndSessionValid(req)) {
     sendJsonErr(res, ERR.unauthorized);
     return;
   }
+  */
 
+  //const userid = Store.get(cookie.parse(req.headers.cookie).sessionid).uid;
+  const userid = "6411ebab105bcd05b8790c57";
   if (req.method !== "POST") {
     sendJsonErr(res, ERR.invalidMethod);
     return;
@@ -44,7 +46,7 @@ module.exports = async (req, res) => {
   }
 
   const podcasts = await USER_DB.getPodcastsForUser({_id: userid});
-  if (!podcasts?.[podcastID]) {
+  if (!podcasts?.[fields.podcastID]) {
     sendJsonErr(res, ERR.invalidPodcastID) 
     return;
   }
@@ -63,9 +65,8 @@ module.exports = async (req, res) => {
   }
 
   const { title, number, explicit, podcastID } = fields;
-  const epId = uuid();
+  const epId = newID();
 
-  const userid = Store.get(cookie.parse(req.headers.cookie).sessionid).uid;
   const user = await USER_DB.getUser({_id: userid});
   if (!user) {
     sendJsonErr(res, ERR.userNotFound);
@@ -98,7 +99,10 @@ module.exports = async (req, res) => {
     explicit: explicit === "true",
   }
 
-  await USER_DB.insertEpisodeForUser({_id: userid}, podcastID, episode)
+  if (!await USER_DB.insertEpisodeForUser({_id: userid}, podcastID, episode)) {
+    sendJsonErr(res, ERR.internalErr);
+    return;
+  }
 
   res.writeHead(200, {
     "Content-type": "application/json",

@@ -14,6 +14,10 @@ function sendJsonErr(res, err) {
   res.end();
 }
 
+function newID(len) {
+  crypto.randomBytes(len ?? 8).toString("base64");
+}
+
 function isCookieAndSessionValid(req) {
   const ck = cookie.parse(req.headers.cookie ?? "");
   return (
@@ -86,4 +90,5 @@ module.exports = {
   redirect,
   md5,
   renderView,
+  newID,
 };
