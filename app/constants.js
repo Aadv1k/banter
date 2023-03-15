@@ -16,7 +16,11 @@ module.exports = {
   SPOTIFY_CLIENT_SECRET: process.env.SPOTIFY_CLIENT_SECRET,
   SPOTIFY_REDIRECT: process.env.SPOTIFY_REDIRECT,
 
-  DBX_ACCESS_TOKEN: process.env.DBX_ACCESS_TOKEN,
+
+
+  CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,
+  CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET ,
+  CLOUDINARY_CLOUD_NAME: "dbloby3uq",
 
   MIME: {
     json: "application/json",

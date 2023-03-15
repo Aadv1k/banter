@@ -98,8 +98,11 @@ class UserModel {
     const user = await this.users.findOne(userQuery);
     const podcasts = user?.podcasts ?? {};
     podcasts[podcastObj.id] = {
-      title: podcastObj.title,
       cover: podcastObj.cover,
+      title: podcastObj.title,
+      category: podcastObj.category,
+      description: podcastObj.description,
+      explicit: podcastObj.explicit,
       crosspost: podcastObj.crosspost,
     }
 
