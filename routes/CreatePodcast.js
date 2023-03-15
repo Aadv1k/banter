@@ -15,13 +15,12 @@ const formidable = require("formidable");
 module.exports = async (req, res) => {
   const BUCKET = new BucketStore();
   await USER_DB.init();
-  /*
+
   if (!isCookieAndSessionValid(req)) {
     sendJsonErr(res, ERR.unauthorized);
     return;
   }
-  */
-
+  
   if (req.method !== "POST") {
     sendJsonErr(res, ERR.invalidMethod);
     return;
@@ -61,8 +60,7 @@ module.exports = async (req, res) => {
   const { title, explicit, description, category } = fields;
   const pID = uuid();
 
-  //const userid = Store.get(cookie.parse(req.headers.cookie).sessionid).uid;
-  const userid =  "13c56ed2-f36f-469f-a718-2b06b546f571";
+  const userid = Store.get(cookie.parse(req.headers.cookie).sessionid).uid;
   const user = await USER_DB.getUser({_id: userid});
   if (!user) {
     sendJsonErr(res, ERR.userNotFound);
