@@ -13,8 +13,8 @@ export default class PageCreate extends Component {
   constructor(props) {
     super(props);
     this.state = { 
-      modalOpen: false, 
-      hasPodcasts: false, 
+      modalOpen: true, 
+      hasPodcasts: true, 
       podcasts: [],
     };
     this.setModal = this.setModal.bind(this);

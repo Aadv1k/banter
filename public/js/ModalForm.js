@@ -13,6 +13,7 @@ export default class ModalForm extends Component {
     this.state = {
       epNumber: [],
       numInvalid: false,
+      showLoader: false,
       selectedFile: "No file selected",
     }
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -27,10 +28,14 @@ export default class ModalForm extends Component {
 
   async handleSubmit(e) {
     e.preventDefault();
+
+    this.setState({showLoader: true});
+
     const formData = new FormData(e.target);
     const formProps = Object.fromEntries(formData);
 
     const formSelect = document.getElementById("formSelect");
+
     const selectedPodcastName = formSelect.options?.[formSelect.selectedIndex]?.value;
 
     if (!selectedPodcastName) {
@@ -68,7 +73,7 @@ export default class ModalForm extends Component {
       body: postFormData
     });
     const data = await res.json();
-    console.log(data);
+    this.setState({showLoader: false});
   }
 
 
@@ -120,7 +125,9 @@ export default class ModalForm extends Component {
             <input class="checkbox" type="checkbox" name="epExplicit" required>
           </div></div>
 
-            <button class="btn btn--submit" type="submit">Submit</button>
+            <button class="btn btn--submit btn--loader" type="submit">
+            ${this.state.showLoader ? html`<span class="loader"></span>` : `Submit`}
+            </button>
           </form>
         </div>
       </div>

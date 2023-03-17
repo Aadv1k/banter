@@ -28,7 +28,9 @@ class UserModel {
   }
 
   parseQuery(q) {
-    q["_id"] = new oid(q["_id"]);
+    if (q["_id"]) {
+      q["_id"] = new oid(q["_id"]);
+    }
     return q;
   }
 
@@ -44,6 +46,7 @@ class UserModel {
 
   async getUser(query) {
     query = this.parseQuery(query);
+    console.log(query);
     const user = await this.users.findOne(query);
     return user ?? null;
   }

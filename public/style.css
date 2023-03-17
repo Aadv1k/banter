@@ -19,6 +19,28 @@ p {
 .btn {
   all: unset;
   cursor: pointer;
+  position: relative;
+}
+.btn span.loader {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  display: block;
+  left: 50%;
+  top: 50%;
+  border-radius: 50%;
+  border: 3.8px solid;
+  border-color: #dbd5d2;
+  border-right-color: #b9ada8;
+  animation: spinner 1s infinite linear;
+}
+@keyframes spinner {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
 }
 .btn--primary {
   background-color: black;
@@ -38,8 +60,9 @@ p {
   border-radius: 1000px;
 }
 .btn--submit {
-  background-color: #dbd5d2;
+  background-color: #f15b3e;
   border: 1px solid #f15b3e;
+  height: 20px;
   border-radius: 2px;
   text-align: center;
   transition: background-color 150ms ease-in-out, color 200ms ease-in-out;
@@ -179,8 +202,8 @@ p {
   top: 10px;
   z-index: 10000;
   right: 0;
-  max-width: 250px;
-  padding: 0.8rem 1rem;
+  max-width: 300px;
+  padding: 0.8rem 1.6rem 1rem 0.8rem;
   align-items: center;
   display: flex;
   transform: translateX(100%);
@@ -210,7 +233,7 @@ p {
 .toast p {
   color: white;
   font-size: 0.9rem;
-  max-width: 20ch;
+  max-width: 15ch;
 }
 .toast__icon {
   color: white;

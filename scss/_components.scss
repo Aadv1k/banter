@@ -20,6 +20,32 @@ p {
 .btn {
   all: unset;
   cursor: pointer;
+  position: relative;
+
+  span.loader {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    display: block;
+    left: 50%;
+    top: 50%;
+    border-radius: 50%;
+    border: 3.8px solid;
+    border-color: $main-bg;
+    border-right-color: darken($text-clr-1, 10%);
+    animation: spinner 1s infinite linear;
+  }
+
+  @keyframes spinner {
+    0% {
+      transform: translate(-50%, -50%) rotate(0deg);
+    }
+
+    to {
+      transform: translate(-50%, -50%) rotate(360deg);
+    }
+  }
+
 
   &--primary {
     background-color: black;
@@ -42,8 +68,9 @@ p {
   }
 
   &--submit {
-    background-color: $main-bg;
+      background-color: $accent;
     border: 1px solid $accent;
+    height: 20px;
     border-radius: 2px;
     text-align: center;
     transition: background-color 150ms ease-in-out, color 200ms ease-in-out;
@@ -214,8 +241,8 @@ p {
   top: 10px;
   z-index: 10000;
   right: 0;
-  max-width: 250px;
-  padding: 0.8rem 1rem;
+  max-width: 300px;
+  padding: 0.8rem 1.6rem 1rem 0.8rem;
   align-items: center;
   display: flex;
   transform: translateX(100%);
@@ -251,7 +278,7 @@ p {
   p {
     color: $toast-fill;
     font-size: 0.9rem;
-    max-width: 20ch;
+    max-width: 15ch;
   }
 
   &__icon {
