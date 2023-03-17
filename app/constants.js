@@ -17,7 +17,6 @@ module.exports = {
   SPOTIFY_REDIRECT: process.env.SPOTIFY_REDIRECT,
 
 
-
   CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,
   CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET ,
   CLOUDINARY_CLOUD_NAME: "dbloby3uq",
@@ -36,6 +35,18 @@ module.exports = {
     badInput: {
       error: "bad-input",
       message: "the provided input was invalid",
+      code: 400,
+    },
+
+    episodeLimitExceeded: {
+      error: "episode-limit-exceeded",
+      message: "the given user has exceeded their limit for new episodes",
+      code: 400,
+    },
+
+    podcastLimitExceeded: {
+      error: "podcast-limit-exceeded",
+      message: "the given user has exceeded their limit for new podcasts",
       code: 400,
     },
 

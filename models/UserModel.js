@@ -48,6 +48,26 @@ class UserModel {
     return user ?? null;
   }
 
+  async getEpisodeForUser(query, pid, eid = undefined) {
+    query = this.parseQuery(query);
+    const user = await this.users.findOne(query);
+
+    if (!eid) {
+      return user?.podcasts?.[pid]?.episodes ?? null
+    } 
+    return user?.podcasts?.[pid]?.episodes.find(e => e.id === eid) ?? null
+  }
+
+  async getPodcastForUser(query, id = undefined) {
+    query = this.parseQuery(query);
+    const user = await this.users.findOne(query);
+
+    if (id) {
+      return user?.podcasts?.[id] ?? null
+    } 
+    return user?.podcasts ?? null
+  }
+
   async deleteEpisodeForUser(userQuery, podcastID, episodeID) {
     userQuery = this.parseQuery(userQuery)
     const user = await this.users.findOne(userQuery);

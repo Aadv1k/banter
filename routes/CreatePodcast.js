@@ -9,7 +9,6 @@ const { Store } = require("../models/MemoryStore.js");
 const USER_DB = new UserModel();
 const formidable = require("formidable");
 
-
 module.exports = async (req, res) => {
   const BUCKET = new BucketStore();
   await USER_DB.init();
