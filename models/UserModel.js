@@ -85,21 +85,25 @@ class UserModel {
 
   async insertEpisodeForUser(userQuery, podcastID, episode) {
     userQuery = this.parseQuery(userQuery)
+
     const user = await this.users.findOne(userQuery);
     if (!user?.podcasts?.[podcastID]) {
       return null;
     }
-    const episodes = user.podcasts?.[podcastID].episodes ?? [];
+
+    const podcast = user.podcasts?.[podcastID];
+    const episodes = podcast?.episodes ?? [];
     episodes.push(episode);
+    podcast.episodes = episodes;
+
+    const updateQuery = user.podcasts;
+    updateQuery[podcastID] = podcast;
+
     try {
-      this.users.updateUser(userQuery, {
-        $set: {
-          podcasts: {
-            episodes,
-          }
-        }
-      })
-    } catch {
+      this.users.updateOne(userQuery, {
+        $set: { podcasts: updateQuery, }})
+    } catch (err) {
+      console.error(err);
       return null;
     }
   }

@@ -13,32 +13,26 @@ class BucketStore {
     this.permalink;
     this.bucket = cloudinary;
   }
-
-
   async pushFile(filepath) {
     const { size: fileSize } = statSync(filepath);
     let fileSizeInMB = fileSize / 8e4;
-    let result;
 
-    console.log(fileSizeInMB);
+    const response = new Promise((resolve, reject) => {
+      this.bucket.uploader[fileSizeInMB > 100 ? "upload_large": "upload"](
+      filepath, 
+      { resource_type: 'auto' }, 
+      (err, result) => { 
+        if (err) reject(err) 
+        resolve(result);
+      }
+    )});
 
     try {
-      if (fileSizeInMB > 100) {
-        result = await this.bucket.uploader
-          .upload_large(filepath)
-        console.log(result);
-      } else {
-        result = await this.bucket.uploader
-          .upload(filepath) 
-      }
+      const output = await response
+      return {path: output.url};
     } catch (err) {
-      console.error(err);
-      return null
-    } 
-
-    this.permalink = result.url;
-    return { id: result.asset_id, path: result.url };
-  }
-}
+      return null;
+    }
+}}
 
 module.exports = { BucketStore };
