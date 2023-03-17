@@ -1,19 +1,18 @@
 const { BucketStore } = require("../models/BucketStore.js");
 const { ERR, MAX_IMAGE_SIZE_IN_MB} = require("../app/constants");
-const { sendJsonErr, isCookieAndSessionValid, newID } = require("../app/common");
+const { sendJsonErr, isCookieAndSessionValid } = require("../app/common");
 const cookie = require("cookie");
+const crypto = require("crypto");
 
 const { UserModel } = require("../models/UserModel.js");
 const { Store } = require("../models/MemoryStore.js");
 const USER_DB = new UserModel();
-const fs = require("fs");
 const formidable = require("formidable");
 
 
 module.exports = async (req, res) => {
   const BUCKET = new BucketStore();
   await USER_DB.init();
-
   if (!isCookieAndSessionValid(req)) {
     sendJsonErr(res, ERR.unauthorized);
     return;
@@ -39,7 +38,7 @@ module.exports = async (req, res) => {
   });
 
 
-  if (![ files.cover, fields.title, fields.explicit, fields.description, fields.category].every((e) => e)) {
+  if (![ files.cover, fields.title, fields.explicit, fields.description, fields.category, fields.language].every((e) => e)) {
     sendJsonErr(res, ERR.badInput);
     return;
   }
@@ -57,15 +56,15 @@ module.exports = async (req, res) => {
     return;
   }
 
-  const { title, explicit, description, category } = fields;
+  const { title, explicit, description, category, language} = fields;
   const user = await USER_DB.getUser({_id: userid});
   if (!user) {
     sendJsonErr(res, ERR.userNotFound);
     return;
   }
 
-  let permalink;
 
+  let permalink;
   try {
     const { path } = await BUCKET.pushFile(coverFile.filepath);
     permalink = path;
@@ -76,7 +75,8 @@ module.exports = async (req, res) => {
   }
 
   const podcast = {
-    id: newID(),
+    id: crypto.randomBytes(8).toString("hex"),
+    language,
     title,
     category,
     description,
@@ -90,11 +90,17 @@ module.exports = async (req, res) => {
       "Content-type": "application/json",
     })
     res.write(JSON.stringify({
-      message: "successfully created a new podcast for the user",
-      code: 200
+      message: "new podcast created successfully",
+      code: 200,
+      data: {
+        id: podcast.id,
+        title: podcast.title,
+        cover: podcast.cover,
+      }
     }));
     res.end();
-  } catch {
+  } catch (err) {
+    console.error(err);
     sendJsonErr(res, ERR.internalErr);
   }
 };

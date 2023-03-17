@@ -15,7 +15,7 @@ function sendJsonErr(res, err) {
 }
 
 function newID(len) {
-  crypto.randomBytes(len ?? 8).toString("base64");
+  crypto.randomBytes(len ?? 8).toString("hex");
 }
 
 function isCookieAndSessionValid(req) {
@@ -82,6 +82,7 @@ function renderView(req, res, file, httpStatusCode, data, cache) {
 function generatePassword(length) {
   return crypto.randomBytes(length).toString("hex");
 }
+
 module.exports = {
   sendJsonErr,
   isCookieAndSessionValid,

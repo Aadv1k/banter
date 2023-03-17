@@ -108,13 +108,14 @@ class UserModel {
     userQuery = this.parseQuery(userQuery)
     const user = await this.users.findOne(userQuery);
     const podcasts = user?.podcasts ?? {};
+
     podcasts[podcastObj.id] = {
       cover: podcastObj.cover,
+      language: podcastObj.language,
       title: podcastObj.title,
       category: podcastObj.category,
       description: podcastObj.description,
       explicit: podcastObj.explicit,
-      crosspost: podcastObj.crosspost,
     }
 
     try {

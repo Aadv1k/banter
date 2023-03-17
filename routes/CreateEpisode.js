@@ -2,26 +2,24 @@ const { BucketStore } = require("../models/BucketStore.js");
 const { ERR, MAX_EPISODE_SIZE_IN_MB } = require("../app/constants");
 const { sendJsonErr, isCookieAndSessionValid, newID} = require("../app/common");
 const cookie = require("cookie");
+const crypto = require("crypto");
 
 const { UserModel } = require("../models/UserModel.js");
 const { Store } = require("../models/MemoryStore.js");
 const USER_DB = new UserModel();
-const fs = require("fs");
 const formidable = require("formidable");
 
 
 module.exports = async (req, res) => {
   const BUCKET = new BucketStore();
   await USER_DB.init();
-  /*
+
   if (!isCookieAndSessionValid(req)) {
     sendJsonErr(res, ERR.unauthorized);
     return;
   }
-  */
 
-  //const userid = Store.get(cookie.parse(req.headers.cookie).sessionid).uid;
-  const userid = "6411ebab105bcd05b8790c57";
+  const userid = Store.get(cookie.parse(req.headers.cookie).sessionid).uid;
   if (req.method !== "POST") {
     sendJsonErr(res, ERR.invalidMethod);
     return;
@@ -40,7 +38,7 @@ module.exports = async (req, res) => {
   });
 
 
-  if (![ files.audio, fields.title, fields.number, fields.explicit, fields.podcastID, ].every((e) => e)) {
+  if (![ files.audio, fields.title, fields.number, fields.explicit, fields.podcastID, fields.description].every((e) => e)) {
     sendJsonErr(res, ERR.badInput);
     return;
   }
@@ -64,8 +62,7 @@ module.exports = async (req, res) => {
     return;
   }
 
-  const { title, number, explicit, podcastID } = fields;
-  const epId = newID();
+  const { title, number, explicit, podcastID, description} = fields;
 
   const user = await USER_DB.getUser({_id: userid});
   if (!user) {
@@ -80,26 +77,26 @@ module.exports = async (req, res) => {
     return;
   }
 
-  let permalink;
-
-  try {
-    const { path } = await BUCKET.pushFile(audioFile.filepath);
-    permalink = path;
-  } catch (err) {
+  const { path: permalink } = await BUCKET.pushFile(audioFile.filepath).catch(err => {
     console.error(err)
     sendJsonErr(res, ERR.internalErr)
     return;
-  }
+  });
 
   const episode = {
-    id: epId,
-    title: title,
-    number: number,
-    permalink: permalink,
+    id: crypto.randomBytes(8).toString("hex"),
+    title,
+    description,
+    number,
+    permalink,
+    createdAt: new Date().toISOString(),
     explicit: explicit === "true",
   }
 
-  if (!await USER_DB.insertEpisodeForUser({_id: userid}, podcastID, episode)) {
+  try {
+    await USER_DB.insertEpisodeForUser({_id: userid}, podcastID, episode) 
+  } catch (err) {
+    console.error(err);
     sendJsonErr(res, ERR.internalErr);
     return;
   }
@@ -107,6 +104,14 @@ module.exports = async (req, res) => {
   res.writeHead(200, {
     "Content-type": "application/json",
   })
-  res.write(JSON.stringify(user));
+  res.write(JSON.stringify({
+    message: "new episode created successfully",
+    code: 200,
+    data: {
+      id: episode.id,
+      title: episode.title,
+      permalink: episode.permalink,
+    }
+  }));
   res.end();
 };
