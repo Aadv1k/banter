@@ -6,6 +6,7 @@ module.exports = {
   ATLAS_PWD: process.env.ATLAS_PWD,
 
   MAX_EPISODE_SIZE_IN_MB: 100,
+  MAX_IMAGE_SIZE_IN_MB: 5,
 
   MS_CLIENT_ID: process.env.MS_CLIENT_ID,
   MS_CLIENT_SECRET: process.env.MS_CLIENT_SECRET,
@@ -15,7 +16,10 @@ module.exports = {
   SPOTIFY_CLIENT_SECRET: process.env.SPOTIFY_CLIENT_SECRET,
   SPOTIFY_REDIRECT: process.env.SPOTIFY_REDIRECT,
 
-  DBX_ACCESS_TOKEN: process.env.DBX_ACCESS_TOKEN,
+
+  CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,
+  CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET ,
+  CLOUDINARY_CLOUD_NAME: "dbloby3uq",
 
   MIME: {
     json: "application/json",
@@ -24,6 +28,7 @@ module.exports = {
     js: "text/javascript",
     png: "image/png",
     ico: "image/x-icon",
+    xml: "application/xml",
   },
 
   ERR: {
@@ -31,6 +36,24 @@ module.exports = {
       error: "bad-input",
       message: "the provided input was invalid",
       code: 400,
+    },
+
+    episodeLimitExceeded: {
+      error: "episode-limit-exceeded",
+      message: "the given user has exceeded their limit for new episodes",
+      code: 400,
+    },
+
+    podcastLimitExceeded: {
+      error: "podcast-limit-exceeded",
+      message: "the given user has exceeded their limit for new podcasts",
+      code: 400,
+    },
+
+    invalidPodcastID: {
+      error: "invalid-podcast-id",
+      message: "the podcast ID provided does not exist",
+      code: 404,
     },
 
     invalidMethod: {
@@ -69,10 +92,18 @@ module.exports = {
       code: 500,
     },
 
+
+    invalidImageFileFormat: {
+      error: "invalid-image-file-format",
+      message:
+        "the provided file format for the cover was invalid",
+      code: 400,
+    },
+
     invalidAudioFileFormat: {
       error: "invalid-audio-file-format",
       message:
-        "the provided file format for episode was invalid; only AAC is accepted",
+        "the provided file format for episode was invalid",
       code: 400,
     },
 
@@ -83,10 +114,18 @@ module.exports = {
       code: 400,
     },
 
+    exceedsImageSizeLimit: {
+      error: "exceeds-imageh-size-limit",
+      message:
+        "the provided image exeeds the image size limit of a 10 Megabytes",
+      code: 400,
+    },
+
     invalidPassword: {
       error: "invalid-password",
       message: "the password given for the user is invalid",
       code: 401,
     },
   },
+
 };

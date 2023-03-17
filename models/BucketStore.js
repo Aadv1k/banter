@@ -1,62 +1,38 @@
-const { DBX_ACCESS_TOKEN } = require("../app/constants.js");
-const { Dropbox } = require("dropbox");
+const cloudinary = require('cloudinary').v2;
+const { CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET, CLOUDINARY_CLOUD_NAME} = require("../app/constants")
+const { statSync } = require("fs");
 
 class BucketStore {
   constructor() {
-    this.bucket = new Dropbox({ accessToken: DBX_ACCESS_TOKEN });
-  }
-
-  async pushBinary(data, name) {
-    const { result } = await this.bucket.filesUpload({
-      path: `/${name}`,
-      contents: data,
-    });
-    if (!result) return null;
-    return { id: result.id, path: result.path_display };
-  }
-
-  async getBinaryPermalink(name) {
-    const dbxUrl =
-      "https://api.dropboxapi.com/2/sharing/create_shared_link_with_settings";
-    const res = await fetch(dbxUrl, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${DBX_ACCESS_TOKEN}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        path: `/${name}`,
-        settings: {
-          access: "viewer",
-          allow_download: true,
-          audience: "public",
-          requested_visibility: "public",
-        },
-      }),
+    cloudinary.config({
+      cloud_name: CLOUDINARY_CLOUD_NAME,
+      api_key: CLOUDINARY_API_KEY,
+      api_secret: CLOUDINARY_API_SECRET
     });
 
-    const data = await res.json();
-    if (!data) return null;
+    this.permalink;
+    this.bucket = cloudinary;
+  }
+  async pushFile(filepath) {
+    const { size: fileSize } = statSync(filepath);
+    let fileSizeInMB = fileSize / 8e4;
 
-    if (data.error[".tag"] === "shared_link_already_exists") {
-      const res = await fetch(
-        "https://api.dropboxapi.com/2/sharing/list_shared_links",
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${DBX_ACCESS_TOKEN}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            path: "/" + Audio.fileName,
-          }),
-        }
-      );
-      const data = await res.json();
-      return data.url;
+    const response = new Promise((resolve, reject) => {
+      this.bucket.uploader[fileSizeInMB > 100 ? "upload_large": "upload"](
+      filepath, 
+      { resource_type: 'auto' }, 
+      (err, result) => { 
+        if (err) reject(err) 
+        resolve(result);
+      }
+    )});
+
+    try {
+      const output = await response
+      return {path: output.url};
+    } catch (err) {
+      return null;
     }
-    return data.url;
-  }
-}
+}}
 
 module.exports = { BucketStore };

@@ -14,6 +14,10 @@ function sendJsonErr(res, err) {
   res.end();
 }
 
+function newID(len) {
+  crypto.randomBytes(len ?? 8).toString("hex");
+}
+
 function isCookieAndSessionValid(req) {
   const ck = cookie.parse(req.headers.cookie ?? "");
   return (
@@ -40,19 +44,37 @@ function setSessionIdAndRedirect(res, sid) {
   res.end();
 }
 
-function renderView(res, file, httpStatusCode, data) {
+function renderView(req, res, file, httpStatusCode, data, cache) {
+  cache = cache ?? false;
+
   const viewPath = path.join(__dirname, "../views", file);
+  const filehash = md5(readFileSync(viewPath));
+
+  if (req.headers?.["if-none-match"] === filehash) {
+    res.statusCode = 304;
+    res.end();
+    return;
+  }
+
 
   if (existsSync(viewPath)) {
     ejs.renderFile(viewPath, data ?? {}, (err, data) => {
       if (err) {
         console.error(err);
       }
-      res.writeHead(httpStatusCode ?? 200, { "Content-type": MIME.html });
+
+      let resHeaders = { "Content-type": MIME.html };
+
+      if (cache) {
+        resHeaders["Cache-Control"] = "max-age=31536000, no-cache";
+        resHeaders["Etag"] = filehash;
+      }
+
+      res.writeHead(httpStatusCode ?? 200, resHeaders);
       res.write(data);
     });
   } else {
-    renderView(res, "404.ejs", 404);
+    renderView(req, res, "404.ejs", 404, {}, true);
   }
   res.end();
 }
@@ -60,6 +82,7 @@ function renderView(res, file, httpStatusCode, data) {
 function generatePassword(length) {
   return crypto.randomBytes(length).toString("hex");
 }
+
 module.exports = {
   sendJsonErr,
   isCookieAndSessionValid,
@@ -68,4 +91,5 @@ module.exports = {
   redirect,
   md5,
   renderView,
+  newID,
 };

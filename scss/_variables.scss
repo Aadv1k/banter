@@ -1,6 +1,6 @@
 $accent: #f15b3e;
 $main-bg: #dbd5d2;
-$text-clr-1: #112a46;
+$text-clr-1: darken($main-bg, 5%);
 $text-clr-2: darken($main-bg, 40%);
 $text-clr-3: darken($main-bg, 60%);
 $btn-shadow: -4px 4px 0px 0px darken($accent, 10%);

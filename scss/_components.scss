@@ -46,7 +46,7 @@ p {
     border: 1px solid $accent;
     border-radius: 2px;
     text-align: center;
-    transition: background-color 200ms ease-in-out;
+    transition: background-color 200ms ease-in-out, color 200ms ease-in-out;
   }
 
   &--submit:active {
@@ -56,6 +56,7 @@ p {
   @media (hover: hover) {
     &--submit:hover {
       background-color: $accent;
+      color: black;
     }
   }
 }
@@ -83,8 +84,11 @@ p {
     color: $text-clr-2;
   }
 
-  input:not(input[type="checkbox"]) {
+  > .form__itm > input {
     all: unset;
+  }
+
+  input:not(input[type="checkbox"]) {
     border-bottom: 1px solid $accent;
     padding: 0.2rem 0.5rem 0.2rem 0;
   }
@@ -153,6 +157,7 @@ p {
   border-radius: 3px;
   position: absolute;
   top: 10px;
+  z-index: 999;
   right: 0;
   max-width: 250px;
   padding: 0.8rem 1rem;
@@ -248,42 +253,86 @@ p {
   }
 }
 
-.modal {
+.episode-modal {
   height: 100vh;
-  max-width: calc(100% - 80px);
-  width: 100%;
+  max-width: 600px;
+  width: calc(100% - 80px);
   padding: 1rem;
-  position: absolute;
   z-index: 999;
   background-color: $main-bg;
+  position: fixed;
 
-
-  .form {
-    align-items: flex-start;
-    margin-top: 1rem;
-  }
-
-  .form__itm {
-    width: 100%;
-  }
-
-  &__close {
+  .modal__close {
     position: absolute;
     top: 10px;
     right: 1rem;
   }
 
-  &__title {
+
+
+
+  .form__itm {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    label {
+      margin-bottom: 1px;
+      order: 2;
+      font-weight: normal;
+      font-size: 0.9rem;
+    }
+  }
+
+  .form__file {
+    @extend .form__itm;
+    align-items: flex-start;
+    flex-direction: column-reverse;
+  }
+
+  label {
+    color: $text-clr-3;
+  }
+
+  input {
+    background-color: $text-clr-1;
+  }
+
+  .btn--submit {
+    width: 100%;
+    padding-block: 0.3rem;
+  }
+
+  .modal__title {
     font-size: 1.8rem;
     text-transform: capitalize;
   }
 
-  &__close i {
+  .modal__select {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .modal__select  select {
+    width: 100%;
+    background-color: $text-clr-1;
+  }
+
+  .modal__close i {
     font-size: 1.3rem;
     color: $text-clr-2;
   }
 
-  &__content {
-    margin-top: 1rem;
+  .modal__content {
+    margin-top: 1.2rem;
+  }
+
+  @media screen and (min-width: 700px) {
+    position: absolute;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    height: fit-content;
+
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 }

@@ -24,7 +24,6 @@ exports.default = async (req, res) => {
   }
 
   const audioForm = formidable({ multiples: false });
-
   audioForm.parse(req, async (err, fields, files) => {
     if (
       ![

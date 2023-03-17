@@ -3,6 +3,7 @@ const {
   generatePassword,
   setSessionIdAndRedirect,
   redirect,
+  newID,
 } = require("../app/common");
 
 const {
@@ -16,11 +17,10 @@ const { Store } = require("../models/MemoryStore.js");
 const { User, UserModel } = require("../models/UserModel.js");
 const USER_DB = new UserModel();
 
-const { v4: uuid } = require("uuid");
 const fetch = require("node-fetch-commonjs");
 const querystring = require("querystring");
 
-const MS_SCOPES = "user.read";
+const MS_SCOPES = "User.Read";
 
 function handleRouteAuthMS(req, res) {
   const query = querystring.stringify({
@@ -28,6 +28,7 @@ function handleRouteAuthMS(req, res) {
     client_id: MS_CLIENT_ID,
     redirect_uri: MS_REDIRECT,
     scope: MS_SCOPES,
+    response_mode: 'query'
   });
   const MSUrl = `https://login.microsoftonline.com/common/oauth2/v2.0/authorize?${query}`;
   redirect(res, MSUrl);
@@ -36,6 +37,7 @@ function handleRouteAuthMS(req, res) {
 async function handleRouteAuthMSCallback(req, res) {
   await USER_DB.init();
   const { code: authToken } = querystring.parse(req.url.split("?").pop());
+
 
   if (!authToken) {
     sendJsonErr(res, ERR.badInput);
@@ -71,9 +73,9 @@ async function handleRouteAuthMSCallback(req, res) {
     },
   });
 
-  const userData = await userRes.json();
-  const newSid = uuid();
-  const dbUser = await USER_DB.getUser({ email: userData.userPrincipalName });
+  const {displayName: username, userPrincipalName: email, error} = await userRes.json();
+  const newSid = newID();
+  const dbUser = await USER_DB.getUser({ email });
 
   if (dbUser) {
     Store.store(newSid, { uid: dbUser._id });
@@ -81,17 +83,18 @@ async function handleRouteAuthMSCallback(req, res) {
     return;
   }
 
-  if (userData.error) {
+  if (error || !username || !email ) {
     sendJsonErr(res, ERR.internalErr);
     return;
   }
 
-  const newUid = uuid();
+
+  const newUid = newID();
   await USER_DB.pushUser(
     new User(
       newUid,
-      userData.displayName,
-      userData.userPrincipalName,
+      username,
+      email,
       generatePassword(16)
     )
   );

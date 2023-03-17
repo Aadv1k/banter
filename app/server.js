@@ -2,18 +2,22 @@ const {
   handleRouteAuthMSCallback,
   handleRouteAuthMS,
 } = require("../routes/AuthMicrosoft");
+
 const {
   handleRouteAuthSpotify,
   handleRouteAuthSpotifyCallback,
 } = require("../routes/AuthSpotify");
 
 const routeFilepath = require("../routes/Filepath");
-const routeUploadEpisode = require("../routes/UploadEpisode");
 const routeDashboard = require("../routes/Dashboard");
 const routeLogin = require("../routes/Login");
 const routeLogout = require("../routes/Logout");
 const routeSignup = require("../routes/Signup");
-const routeGetUserInfo = require("../routes/UserInfo");
+const routeCreateEpisode = require("../routes/CreateEpisode.js");
+const routeCreatePodcast = require("../routes/CreatePodcast.js");
+const routeRSS = require("../routes/RSS.js");
+const routeGetPodcast = require("../routes/GetPodcast.js");
+const routeGetEpisode = require("../routes/GetEpisode.js");
 
 const http = require("http");
 const { renderView } = require("./common");
@@ -24,7 +28,7 @@ module.exports = http.createServer(async (req, res) => {
   const ext = req.url.split(".").pop();
 
   if (URI === "/") {
-    renderView(res, "index.ejs", 200);
+    renderView(req, res, "index.ejs", 200, {}, true);
   } else if (MIME[ext]) {
     routeFilepath(req, res);
   } else if (URI.startsWith("/login")) {
@@ -43,11 +47,18 @@ module.exports = http.createServer(async (req, res) => {
     await handleRouteAuthSpotifyCallback(req, res);
   } else if (URI.startsWith("/auth/spotify")) {
     handleRouteAuthSpotify(req, res);
-  } else if (URI.startsWith("/upload-episode")) {
-    routeUploadEpisode(req, res);
-  } else if (URI.startsWith("/userinfo")) {
-    routeGetUserInfo(req, res);
+  } else if (URI.startsWith("/createEpisode")) {
+    routeCreateEpisode(req, res);
+  } else if (URI.startsWith("/getPodcast")) {
+    routeGetPodcast(req, res);
+  } else if (URI.startsWith("/createPodcast")) {
+    routeCreatePodcast(req, res);
+  } else if (URI.startsWith("/getEpisode")) {
+    routeGetEpisode(req, res);
+  }
+  else if (URI.startsWith("/rss")) {
+    routeRSS(req, res)
   } else {
-    renderView(res, "404.ejs");
+    renderView(req, res, "404.ejs", 404, {}, true);
   }
 });

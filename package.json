@@ -11,12 +11,13 @@
   "author": "Aadvik <aadv1k@outlook.com>",
   "license": "MIT",
   "dependencies": {
+    "cloudinary": "^1.35.0",
     "dotenv": "^16.0.3",
-    "dropbox": "^10.34.0",
     "ejs": "^3.1.8",
     "formidable": "^2.1.1",
     "mongodb": "^5.0.1",
     "node-fetch-commonjs": "^3.2.4",
+    "rss": "^1.2.2",
     "uuid": "^9.0.0"
   },
   "devDependencies": {

@@ -6,10 +6,13 @@ const {
   md5,
   redirect,
   renderView,
+  newID,
 } = require("../app/common");
 
 const { Store } = require("../models/MemoryStore");
 const { UserModel } = require("../models/UserModel");
+
+const querystring = require("querystring");
 
 const USER_DB = new UserModel();
 
@@ -21,7 +24,7 @@ module.exports = async (req, res) => {
       redirect(res, "/dashboard");
       return;
     }
-    renderView(res, "login.ejs", 200);
+    renderView(req, res, "login.ejs", 200, {}, true);
   } else if (req.method === "POST") {
     let body = "";
     req.on("data", (chunk) => (body += chunk.toString()));
@@ -31,7 +34,7 @@ module.exports = async (req, res) => {
         sendJsonErr(res, ERR.badInput);
         return;
       }
-      const sid = uuid();
+      const sid = newID();
       const hashedPassword = md5(formData.password);
       const dbUser = await USER_DB.getUser({ email: formData.email });
 

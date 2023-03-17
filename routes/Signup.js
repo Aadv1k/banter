@@ -22,7 +22,7 @@ module.exports = async (req, res) => {
       res.end();
       return;
     }
-    renderView(res, "signup.ejs", 200);
+    renderView(req, res, "signup.ejs", 200, {}, true);
   } else if (req.method === "POST") {
     let body = "";
     req.on("data", (chunk) => (body += chunk.toString()));

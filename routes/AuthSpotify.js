@@ -14,11 +14,11 @@ const {
   setSessionIdAndRedirect,
   redirect,
   isCookieAndSessionValid,
+  newID,
 } = require("../app/common");
 
 const fetch = require("node-fetch-commonjs");
 const cookie = require("cookie");
-const { v4: uuid } = require("uuid");
 const querystring = require("querystring");
 
 const USER_DB = new UserModel();
@@ -76,8 +76,8 @@ async function handleRouteAuthSpotifyCallback(req, res) {
   });
 
   const userData = await userRes.json();
-  const spotifyUserId = uuid();
-  const spotifySessionId = uuid();
+  const spotifyUserId = newID();
+  const spotifySessionId = newID();
 
   // if cookie exists, then simply update the store with the refresh_token
   if (isCookieAndSessionValid(req)) {
