@@ -9,6 +9,7 @@ const querystring = require("querystring");
 
 module.exports = async (req, res) => {
   await USER_DB.init();
+
   if (!isCookieAndSessionValid(req)) {
     sendJsonErr(res, ERR.unauthorized);
     return;
@@ -16,15 +17,16 @@ module.exports = async (req, res) => {
 
   const { podcastID } = querystring.parse(req.url.split('?').pop());
   const userid = Store.get(cookie.parse(req.headers.cookie).sessionid).uid;
-
   const podcast = await USER_DB.getPodcastForUser({_id: userid}, podcastID);
 
+  res.writeHead(200, {
+    "Content-type": MIME.json
+  })
+
   if (podcast) {
-    res.writeHead(200, {
-      "Content-type": MIME.json
-    })
-    res.write(JSON.stringify(podcast ?? {}));
-    res.end();
-    return;
+    res.write(JSON.stringify(podcast));
+  } else {
+    res.write(JSON.stringify({}));
   }
+  res.end();
 }

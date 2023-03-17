@@ -13,8 +13,15 @@ export default class ModalForm extends Component {
     this.state = {
       epNumber: [],
       numInvalid: false,
+      selectedFile: "No file selected",
     }
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleFileInput = this.handleFileInput.bind(this);
+  }
+
+  handleFileInput(e) {
+    const filename = e.target.value.split('\\').pop();
+    this.setState({selectedFile: filename});
   }
 
 
@@ -31,7 +38,6 @@ export default class ModalForm extends Component {
       return;
     }
     const selectedPodcastId = this.props.podcasts.find(e => e[0] === selectedPodcastName);
-    console.log(selectedPodcastId);
 
     if (!Number(formProps.epNumber)) {
       toast("episode number invalid!", "danger", "bi bi-exclamation-triangle-fill");
@@ -43,21 +49,19 @@ export default class ModalForm extends Component {
       return;
     }
 
-    /*
-    if (formProps.epAudio.type != "audio/aac") {
-      toast("Invalid audio file format; only aac accepted", "danger", "bi bi-exclamation-triangle-fill");
+    if (formProps.epAudio.type.split('/').shift() != "audio") {
+      toast("Invalid audio file format!", "danger", "bi bi-exclamation-triangle-fill");
       return;
     }
-    */
 
 
     const postFormData = new FormData();
-    postFormData.append("audio", formProps.epAudio),
-
-    postFormData.append("title", formProps.epTitle),
-    postFormData.append("number", formProps.epNumber),
-    postFormData.append("podcastID", selectedPodcastName),
-    postFormData.append("explicit", formProps.epExplicit === "on")
+    postFormData.append("audio", formProps.epAudio);
+    postFormData.append("title", formProps.epTitle);
+    postFormData.append("number", formProps.epNumber);
+    postFormData.append("description", formProps.epDescription);
+    postFormData.append("podcastID", selectedPodcastName);
+    postFormData.append("explicit", formProps.epExplicit === "on");
 
     const res = await fetch("/createEpisode", {
       method: "POST",
@@ -66,6 +70,8 @@ export default class ModalForm extends Component {
     const data = await res.json();
     console.log(data);
   }
+
+
 
   render() {
     return html`
@@ -76,35 +82,43 @@ export default class ModalForm extends Component {
 
         <h2 class="modal__title">${this.props.title}</h2>
         <div class="modal__content">
-          <form action="" class="modal__form" onSubmit=${this.handleSubmit}>
+          <form action="" class="modal__form form" onSubmit=${this.handleSubmit}>
 
-            <div class="field select modal__select form__itm" >
+            <div class="form__itm form__select" >
               <select id="formSelect">
                 ${this.props.podcasts.map(e => html`<option>${e[0]}</option>`)}
               </select>
             </div> 
 
-            <div class="field">
-              <p class="label" for="epTitle">Title</p>
-              <input class="input" type="text" name="epTitle" required>
+            <div class="form__itm">
+              <label for="epTitle">Title</label>
+              <input  type="text" name="epTitle" required>
             </div> </div>
 
-            <div class="field">
+
+            <div class="form__itm">
+              <label for="epDesc">Description</label>
+              <input class="input" type="text" name="epDesc" required>
+            </div> </div>
+
+            <div class="form__itm">
               <label class="label" for="epNumber">Episode number</label>
               <input class="input" type="tel" name="epNumber" required>
             </div> </div>
 
-          <div class="field form__file">
-            <label class="label" for="epAudio">Audio in <code>aac</code> format</label>
-            <input type="file" name="epAudio">
+          <div class="form__itm form__file">
+            <label class="label" for="epAudio">
+              Audio for your podcast
+            </label>
+            <p class="form__uploaded-name">${this.state.selectedFile}</p>
+            <i class="bi bi-file-earmark-music"></i>
+            <input type="file" name="epAudio" accept="audio/mp3, audio/mpeg, audio/aac" onChange=${this.handleFileInput}>
           </div></div>
 
-          <div class="field form__itm">
+          <div class="form__itm form__check">
             <label class="label" for="epExplicit">Does the episode include use of profanity?</label>
             <input class="checkbox" type="checkbox" name="epExplicit" required>
           </div></div>
-
-        
 
             <button class="btn btn--submit" type="submit">Submit</button>
           </form>

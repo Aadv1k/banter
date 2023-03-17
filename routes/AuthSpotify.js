@@ -6,6 +6,8 @@ const {
   SPOTIFY_REDIRECT,
 } = require("../app/constants");
 
+const crypto = require("crypto");
+
 const { Store } = require("../models/MemoryStore");
 const { User, UserModel } = require("../models/UserModel");
 const {
@@ -13,9 +15,9 @@ const {
   generatePassword,
   setSessionIdAndRedirect,
   redirect,
-  isCookieAndSessionValid,
-  newID,
 } = require("../app/common");
+
+const {v4: uuid} = require("uuid");
 
 const fetch = require("node-fetch-commonjs");
 const cookie = require("cookie");
@@ -76,23 +78,8 @@ async function handleRouteAuthSpotifyCallback(req, res) {
   });
 
   const userData = await userRes.json();
-  const spotifyUserId = newID();
-  const spotifySessionId = newID();
-
-  // if cookie exists, then simply update the store with the refresh_token
-  if (isCookieAndSessionValid(req)) {
-    const sid = cookie.parse(req.headers.cookie).sessionid;
-    const stored = Store.get(sid);
-
-    if (!stored) {
-      sendJsonErr(res, ERR.userNotFound);
-      return;
-    }
-
-    Store.store(sid, { uid: stored.uid, spotifyRefreshToken: refresh_token });
-    redirect(res, "/dashboard");
-    return;
-  }
+  const spotifyUserId = crypto.randomBytes(12).toString("hex");
+  const spotifySessionId = uuid();
 
   const existingUser = await USER_DB.getUser({ email: userData.email });
 

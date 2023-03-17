@@ -42,10 +42,10 @@ p {
   border: 1px solid #f15b3e;
   border-radius: 2px;
   text-align: center;
-  transition: background-color 200ms ease-in-out, color 200ms ease-in-out;
+  transition: background-color 150ms ease-in-out, color 200ms ease-in-out;
 }
 .btn--submit:active {
-  outline: 2px solid #f36f56;
+  outline: 1px solid #f36f56;
 }
 @media (hover: hover) {
   .btn--submit:hover {
@@ -61,7 +61,14 @@ p {
   gap: 1.8rem;
   border-radius: 3px;
 }
-.form .form__itm, .form .episode-modal .form__file, .episode-modal .form .form__file {
+.form .form__check {
+  justify-content: flex-end;
+  flex-direction: row-reverse !important;
+}
+.form .form__check input[type=checkbox] {
+  all: revert;
+}
+.form .form__itm {
   width: 80%;
   display: flex;
   flex-direction: column;
@@ -72,14 +79,48 @@ p {
   color: #443b37;
 }
 .form input::placeholder {
-  color: #7d6c64;
+  color: #61544d;
 }
-.form > .form__itm > input, .episode-modal .form > .form__file > input {
+.form > .form__itm > input {
   all: unset;
 }
 .form input:not(input[type=checkbox]) {
   border-bottom: 1px solid #f15b3e;
   padding: 0.2rem 0.5rem 0.2rem 0;
+}
+.form .form__select select {
+  padding: 0.5rem 0.3rem;
+  background: #d0c8c4;
+  border: none;
+}
+.form .form__file {
+  position: relative;
+  align-items: center;
+  flex-direction: row;
+  border-radius: 2px;
+  padding: 0.2rem 0.5rem;
+  outline: 2px dotted #f15b3e;
+  justify-content: space-between;
+}
+.form .form__file label {
+  display: none;
+}
+.form .form__file i {
+  color: #d0c8c4;
+  font-size: 2.5rem;
+}
+.form .form__file p {
+  color: #61544d;
+  font-size: 0.9rem;
+  font-style: italic;
+}
+.form .form__file input {
+  opacity: 0;
+  left: 0;
+  z-index: 999;
+  width: 100%;
+  height: 100%;
+  position: absolute;
 }
 .form .form__hr {
   width: 80%;
@@ -105,12 +146,11 @@ p {
   background: #f15b3e;
   padding: 0.5rem;
   border-radius: 3px;
-  border: 1px solid #f15b3e;
   transition: background-color 200ms ease;
 }
 .form .form__auth a:active {
   border-radius: 3px;
-  outline: 2px solid #f36f56;
+  outline: 1px solid #f36f56;
 }
 .form .form__auth svg {
   fill: white;
@@ -128,7 +168,7 @@ p {
 }
 @media (hover: hover) {
   .form .form__auth a:hover {
-    background-color: #dbd5d2;
+    background-color: #f36f56;
   }
 }
 
@@ -137,7 +177,7 @@ p {
   border-radius: 3px;
   position: absolute;
   top: 10px;
-  z-index: 999;
+  z-index: 10000;
   right: 0;
   max-width: 250px;
   padding: 0.8rem 1rem;
@@ -219,9 +259,10 @@ p {
   height: 100vh;
   max-width: 600px;
   width: calc(100% - 80px);
-  padding: 1rem;
+  padding: 2rem 1rem 1rem 1rem;
   z-index: 999;
   background-color: #dbd5d2;
+  overflow: hidden;
   position: fixed;
 }
 .episode-modal .modal__close {
@@ -229,33 +270,25 @@ p {
   top: 10px;
   right: 1rem;
 }
-.episode-modal .form__itm, .episode-modal .form__file {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-}
-.episode-modal .form__itm label, .episode-modal .form__file label {
-  margin-bottom: 1px;
-  order: 2;
-  font-weight: normal;
-  font-size: 0.9rem;
-}
-.episode-modal .form__file {
-  align-items: flex-start;
-  flex-direction: column-reverse;
-}
-.episode-modal label {
-  color: #443b37;
-}
-.episode-modal input {
-  background-color: #d0c8c4;
-}
 .episode-modal .btn--submit {
   width: 100%;
   padding-block: 0.3rem;
 }
+.episode-modal .form {
+  border: none;
+}
+.episode-modal .form__itm {
+  width: 100%;
+}
 .episode-modal .modal__title {
-  font-size: 1.8rem;
+  color: #d0c8c4;
+  font-size: 4.5rem;
+  width: 200%;
+  left: 0;
+  letter-spacing: 2px;
+  position: absolute;
+  top: -5%;
+  z-index: -1;
   text-transform: capitalize;
 }
 .episode-modal .modal__select {
@@ -267,20 +300,26 @@ p {
   background-color: #d0c8c4;
 }
 .episode-modal .modal__close i {
-  font-size: 1.3rem;
-  color: #7d6c64;
+  font-size: 1.4rem;
+  color: #61544d;
 }
 .episode-modal .modal__content {
-  margin-top: 1.2rem;
+  margin-top: 1rem;
 }
 @media screen and (min-width: 700px) {
   .episode-modal {
     position: absolute;
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
     height: fit-content;
+    border-radius: 2px;
+    box-shadow: #f15b3e 0px 1px 4px, #f15b3e 0px 0px 0px 3px;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+  }
+  .episode-modal .modal__title {
+    font-size: 5.5rem;
+    top: -8%;
+    left: -4%;
   }
 }
 
@@ -606,7 +645,7 @@ section {
 }
 .vnav__profile i {
   font-size: 2rem;
-  color: #7d6c64;
+  color: #61544d;
 }
 .vnav .profile__img {
   width: 100%;
@@ -682,7 +721,7 @@ section.create .btn {
 section.create .btn p {
   position: absolute;
   bottom: 4px;
-  text-transform: capitalize;
+  text-transform: uppercase;
   font-size: 1rem;
   left: 50%;
   transform: translateX(-50%);
@@ -692,7 +731,7 @@ section.create .btn i {
   font-size: 3rem;
 }
 section.create .btn--primary {
-  background: linear-gradient(180deg, #f36f56, #ef4726);
+  background: #f15b3e;
 }
 section.create .btn--secondary {
   border: 2px dotted #f15b3e;

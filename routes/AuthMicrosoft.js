@@ -3,8 +3,9 @@ const {
   generatePassword,
   setSessionIdAndRedirect,
   redirect,
-  newID,
 } = require("../app/common");
+
+const crypto = require("crypto");
 
 const {
   ERR,
@@ -74,7 +75,7 @@ async function handleRouteAuthMSCallback(req, res) {
   });
 
   const {displayName: username, userPrincipalName: email, error} = await userRes.json();
-  const newSid = newID();
+  const newSid = uuid();
   const dbUser = await USER_DB.getUser({ email });
 
   if (dbUser) {
@@ -89,7 +90,7 @@ async function handleRouteAuthMSCallback(req, res) {
   }
 
 
-  const newUid = newID();
+  const newUid = crypto.randomBytes(12).toString("hex");
   await USER_DB.pushUser(
     new User(
       newUid,

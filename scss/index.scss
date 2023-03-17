@@ -464,7 +464,7 @@ section.create {
   .btn p {
     position: absolute;
     bottom: 4px;
-    text-transform: capitalize;
+    text-transform: uppercase;
     font-size: 1rem;
     left: 50%;
     transform: translateX(-50%);
@@ -476,11 +476,7 @@ section.create {
   }
 
   .btn--primary {
-    background: linear-gradient(
-      180deg,
-      lighten($accent, 5%),
-      darken($accent, 5%)
-    );
+    background: $accent;
   }
 
   .btn--secondary {
