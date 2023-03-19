@@ -1,0 +1,103 @@
+@use "../variables" as *;
+
+.toast {
+  height: 65px;
+  border-radius: 3px;
+  position: absolute;
+  top: 10px;
+  z-index: 10000;
+  right: 0;
+  max-width: 400px;
+  padding: 0.8rem 1.6rem 1rem 0.8rem;
+  align-items: center;
+  display: flex;
+  transform: translateX(100%);
+  gap: 0.5rem;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+
+  &--success {
+    background-color: $toast-success;
+  }
+
+  &--danger {
+    background-color: $toast-danger;
+  }
+
+  &--info {
+    background-color: $toast-info;
+  }
+
+  &--warn {
+    background-color: $toast-warn;
+  }
+
+  &--show {
+    animation: toast-reveal 200ms ease-out;
+    animation-fill-mode: forwards;
+  }
+
+  &--hide {
+    animation: toast-hide 200ms ease-out;
+    animation-fill-mode: forwards;
+  }
+
+  p {
+    color: $toast-fill;
+    font-size: 0.9rem;
+    max-width: 15ch;
+  }
+
+  &__icon {
+    color: $toast-fill;
+    font-size: 1.3rem;
+    margin-top: 3px;
+  }
+
+  &__btn {
+    position: absolute;
+    right: 5px;
+    top: 3px;
+
+    i {
+      color: $toast-fill;
+      font-size: 1.2rem;
+    }
+  }
+}
+
+
+@keyframes toast-reveal {
+  0% {
+    transform: translateX(100%);
+  }
+
+  50% {
+    transform: translateX(-30%);
+  }
+
+  75% {
+    transform: translateX(-20%);
+  }
+
+  100% {
+    transform: translateX(-5%);
+  }
+}
+
+@keyframes toast-hide {
+  100% {
+    transform: translateX(100%);
+  }
+
+  75% {
+    transform: translateX(-30%);
+  }
+
+  50% {
+    transform: translateX(-20%);
+  }
+
+  0% {
+    transform: translateX(-5%);
+  }
+}

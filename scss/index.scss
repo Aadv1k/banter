@@ -1,5 +1,5 @@
 @use "_variables" as *;
-@use "_components" as *;
+@use "components" as *;
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap");
 
 * {
@@ -497,5 +497,22 @@ section.create {
     .btn i {
       font-size: 3.5rem;
     }
+  }
+}
+
+.podcast-modal {
+  .form__file {
+    justify-content: left;
+  }
+  .form__uploaded-name {
+    background: $text-clr-2-5;
+    padding: .2rem .3rem;
+    max-width: 100%;
+    text-overflow: ellipses;
+    overflow: hidden;
+    white-space: nowrap;
+    color: white;
+    border-radius: 2px;
+    backdrop-filter: blur(5px);
   }
 }

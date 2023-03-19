@@ -1,197 +1,79 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap");
-h2 {
-  font-size: 2rem;
+.modal {
+  height: 100vh;
+  max-width: 600px;
+  width: calc(100% - 80px);
+  padding: 2rem 1rem 1rem 1rem;
+  z-index: 999;
+  background-color: #dbd5d2;
+  overflow: hidden;
+  position: fixed;
 }
-
-h3 {
-  font-size: 1.25rem;
-}
-
-p {
-  line-height: 1.4;
-}
-
-.title {
-  font-weight: bold;
-  text-transform: capitalize;
-}
-
-.btn {
-  all: unset;
-  cursor: pointer;
-  position: relative;
-}
-.btn span.loader {
+.modal .modal__close {
   position: absolute;
-  width: 20px;
-  height: 20px;
-  display: block;
-  left: 50%;
-  top: 50%;
-  border-radius: 50%;
-  border: 3.8px solid;
-  border-color: #dbd5d2;
-  border-right-color: #b9ada8;
-  animation: spinner 1s infinite linear;
+  top: 10px;
+  right: 1rem;
 }
-@keyframes spinner {
-  0% {
-    transform: translate(-50%, -50%) rotate(0deg);
-  }
-  to {
-    transform: translate(-50%, -50%) rotate(360deg);
-  }
+.modal .btn--submit {
+  width: 100%;
+  padding-block: 0.3rem;
 }
-.btn--primary {
-  background-color: black;
-  color: white;
-  border-radius: 1000px;
-}
-.btn--secondary {
-  background-color: transparent;
-  border: 1px solid black;
-  color: black;
-  border-radius: 1000px;
-}
-.btn--disabled {
-  background-color: black;
-  border: 1px solid black;
-  color: white;
-  border-radius: 1000px;
-}
-.btn--submit {
-  background-color: #f15b3e;
-  border: 1px solid #f15b3e;
-  height: 20px;
-  border-radius: 2px;
-  text-align: center;
-  transition: background-color 150ms ease-in-out, color 200ms ease-in-out;
-}
-.btn--submit:active {
-  outline: 1px solid #f36f56;
-}
-@media (hover: hover) {
-  .btn--submit:hover {
-    background-color: #f15b3e;
-    color: black;
-  }
-}
-
-.form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.8rem;
-  border-radius: 3px;
-}
-.form .form__check {
-  justify-content: flex-end;
-  flex-direction: row-reverse !important;
-}
-.form .form__check input[type=checkbox] {
-  all: revert;
-}
-.form .form__itm {
-  width: 80%;
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-}
-.form label,
-.form .form__info {
-  color: #443b37;
-}
-.form input::placeholder {
-  color: #61544d;
-}
-.form > .form__itm > input {
-  all: unset;
-}
-.form input:not(input[type=checkbox]) {
-  border-bottom: 1px solid #f15b3e;
-  padding: 0.2rem 0.5rem 0.2rem 0;
-}
-.form .form__select select {
-  padding: 0.5rem 0.3rem;
-  background: #d0c8c4;
+.modal .form {
   border: none;
 }
-.form .form__file {
-  position: relative;
-  align-items: center;
-  flex-direction: row;
-  border-radius: 2px;
-  padding: 0.2rem 0.5rem;
-  outline: 2px dotted #f15b3e;
-  justify-content: space-between;
+.modal .form__itm {
+  width: 100%;
 }
-.form .form__file label {
-  display: none;
+.modal .form__file {
+  height: 50px;
+  background-size: cover;
+  overflow: hidden;
 }
-.form .form__file i {
+.modal .modal__title {
   color: #d0c8c4;
-  font-size: 2.5rem;
-}
-.form .form__file p {
-  color: #61544d;
-  font-size: 0.9rem;
-  font-style: italic;
-}
-.form .form__file input {
-  opacity: 0;
-  left: 0;
-  z-index: 999;
-  width: 100%;
-  height: 100%;
+  font-size: 3.5rem;
+  width: fit-content;
+  white-space: nowrap;
+  left: 50%;
+  transform: translateX(-50%);
   position: absolute;
+  top: -3%;
+  z-index: -1;
+  text-transform: capitalize;
 }
-.form .form__hr {
-  width: 80%;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: #f15b3e;
-}
-.form .form__hr span,
-.form .form__hr span {
+.modal .modal__select {
   width: 100%;
-  height: 1px;
-  background: #f15b3e;
+  flex-direction: column;
 }
-.form .form__title {
-  margin-bottom: 1rem;
+.modal .modal__select select {
+  width: 100%;
+  background-color: #d0c8c4;
 }
-.form .form__auth {
-  display: flex;
-  gap: 0.5rem;
+.modal .modal__close i {
+  font-size: 1.4rem;
+  color: #61544d;
 }
-.form .form__auth a {
-  background: #f15b3e;
-  padding: 0.5rem;
-  border-radius: 3px;
-  transition: background-color 200ms ease;
+.modal .modal__content {
+  margin-top: 1rem;
 }
-.form .form__auth a:active {
-  border-radius: 3px;
-  outline: 1px solid #f36f56;
-}
-.form .form__auth svg {
-  fill: white;
-  display: block;
-  width: 25px;
-}
-.form .btn--submit {
-  width: 80%;
-  padding-block: 0.5rem;
-}
-@media screen and (min-width: 500px) {
-  .form {
+@media screen and (min-width: 700px) {
+  .modal {
+    position: absolute;
+    height: fit-content;
+    border-radius: 2px;
     border: 1px solid #f15b3e;
+    box-shadow: rgba(241, 91, 62, 0.5) 5px 5px, rgba(241, 91, 62, 0.3) 10px 10px, rgba(241, 91, 62, 0.2) 15px 15px, rgba(241, 91, 62, 0.1) 20px 20px, rgba(241, 91, 62, 0.05) 25px 25px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
-}
-@media (hover: hover) {
-  .form .form__auth a:hover {
-    background-color: #f36f56;
+  .modal .modal__title {
+    font-size: 5.5rem;
+    top: -8%;
+    left: 50%;
+    text-align: center;
+    transform: translateX(-50%);
+    width: max-content;
   }
 }
 
@@ -278,36 +160,44 @@ p {
     transform: translateX(-5%);
   }
 }
-.podcast-modal .form__file {
-  justify-content: left;
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.8rem;
+  border-radius: 3px;
 }
-
-.episode-modal, .podcast-modal {
-  height: 100vh;
-  max-width: 600px;
-  width: calc(100% - 80px);
-  padding: 2rem 1rem 1rem 1rem;
-  z-index: 999;
-  background-color: #dbd5d2;
-  overflow: hidden;
-  position: fixed;
+.form .form__check {
+  justify-content: flex-end;
+  flex-direction: row-reverse !important;
 }
-.episode-modal .modal__close, .podcast-modal .modal__close {
-  position: absolute;
-  top: 10px;
-  right: 1rem;
+.form .form__itm {
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
 }
-.episode-modal .btn--submit, .podcast-modal .btn--submit {
-  width: 100%;
-  padding-block: 0.3rem;
+.form label,
+.form .form__info {
+  color: #443b37;
 }
-.episode-modal .form__file, .podcast-modal .form__file {
-  height: 50px;
-  background-size: cover;
-  overflow: hidden;
+.form .form__itm > input::placeholder {
+  color: #61544d;
 }
-.episode-modal .form__uploaded-bg img, .podcast-modal .form__uploaded-bg img {
-  border: none !important;
+.form .form__itm > input:not(input[type=checkbox]) {
+  all: unset;
+}
+.form .form__itm input:not(input[type=checkbox]) {
+  border-bottom: 1px solid #f15b3e;
+  padding: 0.2rem 0.5rem 0.2rem 0;
+}
+.form .form__select select {
+  padding: 0.5rem 0.3rem;
+  background: #d0c8c4;
+  border: none;
+}
+.form .form__uploaded-bg img {
+  border: none;
   position: absolute;
   width: 100%;
   left: 0;
@@ -317,69 +207,164 @@ p {
   filter: brightness(0.9);
   top: 0;
 }
-.episode-modal .form__uploaded-name, .podcast-modal .form__uploaded-name {
-  background: rgba(97, 84, 77, 0.7);
-  padding: 0.2rem 0.3rem;
-  max-width: 100%;
-  display: inline-block;
-  text-overflow: ellipses;
-  overflow: hidden;
-  white-space: nowrap;
-  color: white !important;
-  border-radius: 2px;
-  backdrop-filter: blur(5px);
-}
-.episode-modal .form, .podcast-modal .form {
-  border: none;
-}
-.episode-modal .form__itm, .podcast-modal .form__itm {
-  width: 100%;
-}
-.episode-modal .modal__title, .podcast-modal .modal__title {
-  color: #d0c8c4;
-  font-size: 4.5rem;
-  width: 200%;
-  left: 0;
-  letter-spacing: 2px;
-  position: absolute;
-  top: -5%;
-  z-index: -1;
-  text-transform: capitalize;
-}
-.episode-modal .modal__select, .podcast-modal .modal__select {
-  width: 100%;
-  flex-direction: column;
-}
-.episode-modal .modal__select select, .podcast-modal .modal__select select {
-  width: 100%;
-  background-color: #d0c8c4;
-}
-.episode-modal .modal__close i, .podcast-modal .modal__close i {
-  font-size: 1.4rem;
+.form .form__uploaded-name {
   color: #61544d;
 }
-.episode-modal .modal__content, .podcast-modal .modal__content {
-  margin-top: 1rem;
+.form .form__file {
+  position: relative;
+  align-items: center;
+  flex-direction: row;
+  border-radius: 2px;
+  padding: 0.2rem 0.5rem;
+  outline: 2px dotted #f15b3e;
+  justify-content: space-between;
 }
-@media screen and (min-width: 700px) {
-  .episode-modal, .podcast-modal {
-    position: absolute;
-    height: fit-content;
-    border-radius: 2px;
+.form .form__file label {
+  display: none;
+}
+.form .form__file i {
+  color: #d0c8c4;
+  font-size: 2.5rem;
+}
+.form .form__file p {
+  color: #61544d;
+  font-size: 0.9rem;
+  font-style: italic;
+}
+.form .form__file input {
+  opacity: 0;
+  left: 0;
+  z-index: 999;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+}
+.form .form__hr {
+  width: 80%;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #f15b3e;
+}
+.form .form__hr span,
+.form .form__hr span {
+  width: 100%;
+  height: 1px;
+  background: #f15b3e;
+}
+.form .form__title {
+  margin-bottom: 1rem;
+}
+.form .form__auth {
+  display: flex;
+  gap: 0.5rem;
+}
+.form .form__auth a {
+  background: #f15b3e;
+  padding: 0.5rem;
+  border-radius: 3px;
+  transition: background-color 200ms ease;
+}
+.form .form__auth a:active {
+  border-radius: 3px;
+  outline: 1px solid #f36f56;
+}
+.form .form__auth svg {
+  fill: white;
+  display: block;
+  width: 25px;
+}
+.form .btn--submit {
+  width: 80%;
+  padding-block: 0.5rem;
+}
+@media screen and (min-width: 500px) {
+  .form {
     border: 1px solid #f15b3e;
-    box-shadow: rgba(241, 91, 62, 0.5) 5px 5px, rgba(241, 91, 62, 0.3) 10px 10px, rgba(241, 91, 62, 0.2) 15px 15px, rgba(241, 91, 62, 0.1) 20px 20px, rgba(241, 91, 62, 0.05) 25px 25px;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
   }
-  .episode-modal .modal__title, .podcast-modal .modal__title {
-    font-size: 5.5rem;
-    top: -8%;
-    left: 50%;
-    text-align: center;
-    transform: translateX(-50%);
-    width: max-content;
+}
+@media (hover: hover) {
+  .form .form__auth a:hover {
+    background-color: #f36f56;
   }
+}
+
+.btn {
+  all: unset;
+  cursor: pointer;
+  position: relative;
+}
+.btn span.loader {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  display: block;
+  left: 50%;
+  top: 50%;
+  border-radius: 50%;
+  border: 3.8px solid;
+  border-color: #dbd5d2;
+  border-right-color: #b9ada8;
+  animation: spinner 1s infinite linear;
+}
+@keyframes spinner {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+.btn--primary {
+  background-color: black;
+  color: white;
+  border-radius: 1000px;
+}
+.btn--secondary {
+  background-color: transparent;
+  border: 1px solid black;
+  color: black;
+  border-radius: 1000px;
+}
+.btn--disabled {
+  background-color: black;
+  border: 1px solid black;
+  color: white;
+  border-radius: 1000px;
+}
+.btn--submit {
+  background-color: #f15b3e;
+  border: 1px solid #f15b3e;
+  height: 20px;
+  border-radius: 2px;
+  text-align: center;
+  transition: background-color 150ms ease-in-out, color 200ms ease-in-out;
+}
+.btn--submit:active {
+  outline: 1px solid #f36f56;
+}
+@media (hover: hover) {
+  .btn--submit:hover {
+    background-color: #f15b3e;
+    color: black;
+  }
+}
+
+h2 {
+  font-size: 2rem;
+}
+
+h3 {
+  font-size: 1.25rem;
+}
+
+p {
+  line-height: 1.4;
+}
+
+.title {
+  font-weight: bold;
+  text-transform: capitalize;
 }
 
 * {
@@ -809,4 +794,19 @@ section.create .btn--secondary {
   section.create .btn i {
     font-size: 3.5rem;
   }
+}
+
+.podcast-modal .form__file {
+  justify-content: left;
+}
+.podcast-modal .form__uploaded-name {
+  background: rgba(97, 84, 77, 0.7);
+  padding: 0.2rem 0.3rem;
+  max-width: 100%;
+  text-overflow: ellipses;
+  overflow: hidden;
+  white-space: nowrap;
+  color: white;
+  border-radius: 2px;
+  backdrop-filter: blur(5px);
 }

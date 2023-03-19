@@ -34,7 +34,7 @@ module.exports = async (req, res) => {
         return;
       }
 
-      const uid = uuid();
+      const uid = crypto.randomBytes(12);
       const sid = uuid();
 
       const hashedPassword = crypto
