@@ -16,7 +16,7 @@
     right: 1rem;
   }
 
-  .btn--submit {
+  .form .btn--submit {
     width: 100%;
     padding-block: 0.3rem;
   }
@@ -25,11 +25,11 @@
     border: none;
   }
 
-  .form__itm {
+  .form .form__itm {
     width: 100%;
   }
 
-  .form__file {
+  .form .form__file {
     height: 50px;
     background-size: cover;
     overflow: hidden;
@@ -37,13 +37,14 @@
 
   .modal__title {
     color: $text-clr-1;
-    font-size: 3.5rem;
+    font-size: clamp(4.5rem, 15vw, 5.5rem);
+
     width: fit-content;
     white-space: nowrap;
     left: 50%;
+    top: -5%;
     transform: translateX(-50%);
     position: absolute;
-    top: -3%;
     z-index: -1;
     text-transform: capitalize;
   }
@@ -69,12 +70,8 @@
 
   @media screen and (min-width: 700px) {
     .modal__title {
-      font-size: 5.5rem;
-      top: -8%;
-      left: 50%;
-      text-align: center;
-      transform: translateX(-50%);
       width: max-content;
+      letter-spacing: 5px;
     }
 
     position: absolute;
@@ -83,6 +80,7 @@
     border: 1px solid $accent;
 
     box-shadow: rgba(241, 91, 62, 0.5) 5px 5px, rgba(241, 91, 62, 0.3) 10px 10px, rgba(241, 91, 62, 0.2) 15px 15px, rgba(241, 91, 62, 0.1) 20px 20px, rgba(241, 91, 62, 0.05) 25px 25px;
+    //box-shadow: 0 0 0 2px rgba(241, 91, 62, 0.8) , 8px 8px 0 0 darken(rgba(241, 91, 62, 1), 10%);
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);

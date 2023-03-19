@@ -14,30 +14,30 @@
   top: 10px;
   right: 1rem;
 }
-.modal .btn--submit {
+.modal .form .btn--submit {
   width: 100%;
   padding-block: 0.3rem;
 }
 .modal .form {
   border: none;
 }
-.modal .form__itm {
+.modal .form .form__itm {
   width: 100%;
 }
-.modal .form__file {
+.modal .form .form__file {
   height: 50px;
   background-size: cover;
   overflow: hidden;
 }
 .modal .modal__title {
   color: #d0c8c4;
-  font-size: 3.5rem;
+  font-size: clamp(4.5rem, 15vw, 5.5rem);
   width: fit-content;
   white-space: nowrap;
   left: 50%;
+  top: -5%;
   transform: translateX(-50%);
   position: absolute;
-  top: -3%;
   z-index: -1;
   text-transform: capitalize;
 }
@@ -68,12 +68,8 @@
     transform: translate(-50%, -50%);
   }
   .modal .modal__title {
-    font-size: 5.5rem;
-    top: -8%;
-    left: 50%;
-    text-align: center;
-    transform: translateX(-50%);
     width: max-content;
+    letter-spacing: 5px;
   }
 }
 
@@ -171,6 +167,9 @@
   justify-content: flex-end;
   flex-direction: row-reverse !important;
 }
+.form .form__check input {
+  all: revert !important;
+}
 .form .form__itm {
   width: 80%;
   display: flex;
@@ -184,7 +183,7 @@
 .form .form__itm > input::placeholder {
   color: #61544d;
 }
-.form .form__itm > input:not(input[type=checkbox]) {
+.form .form__itm > input {
   all: unset;
 }
 .form .form__itm input:not(input[type=checkbox]) {
@@ -765,7 +764,7 @@ section.create .btn {
 section.create .btn p {
   position: absolute;
   bottom: 4px;
-  text-transform: uppercase;
+  text-transform: capitalize;
   font-size: 1rem;
   left: 50%;
   transform: translateX(-50%);
@@ -799,7 +798,7 @@ section.create .btn--secondary {
 .podcast-modal .form__file {
   justify-content: left;
 }
-.podcast-modal .form__uploaded-name {
+.podcast-modal .form__file .form__uploaded-name {
   background: rgba(97, 84, 77, 0.7);
   padding: 0.2rem 0.3rem;
   max-width: 100%;
