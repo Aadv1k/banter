@@ -15,8 +15,8 @@ export default class PageCreate extends Component {
     super(props);
     this.state = { 
       modalOpen: false, 
-      podcastModalOpen: true,
-      hasPodcasts: true, 
+      podcastModalOpen: false,
+      hasPodcasts: false, 
       podcasts: [],
     };
     this.setModal = this.setModal.bind(this);
@@ -28,10 +28,9 @@ export default class PageCreate extends Component {
       .then(d => d.json())
       .then(data => {
         const podcastData = data;
-
         if (Object.keys(podcastData).length != 0) {
           this.setState({hasPodcasts: true});
-          this.setState({podcasts: Object.keys(podcastData).map(e => [podcastData[e].name, e] )});
+          this.setState({podcasts: Object.keys(podcastData).map(e => [podcastData[e].title, e] )});
           return;
         }
       })
