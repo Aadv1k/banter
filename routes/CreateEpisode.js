@@ -38,7 +38,8 @@ module.exports = async (req, res) => {
   });
 
 
-  if (![ files.audio, fields.title, fields.number, fields.explicit, fields.podcastID, fields.description].every((e) => e)) {
+  if (![
+  files.audio, fields.title, fields.number, fields.explicit, fields.podcastID, fields.description].every((e) => e)) {
     sendJsonErr(res, ERR.badInput);
     return;
   }

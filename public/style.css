@@ -202,7 +202,7 @@ p {
   top: 10px;
   z-index: 10000;
   right: 0;
-  max-width: 300px;
+  max-width: 400px;
   padding: 0.8rem 1.6rem 1rem 0.8rem;
   align-items: center;
   display: flex;
@@ -278,7 +278,11 @@ p {
     transform: translateX(-5%);
   }
 }
-.episode-modal {
+.podcast-modal .form__file {
+  justify-content: left;
+}
+
+.episode-modal, .podcast-modal {
   height: 100vh;
   max-width: 600px;
   width: calc(100% - 80px);
@@ -288,22 +292,50 @@ p {
   overflow: hidden;
   position: fixed;
 }
-.episode-modal .modal__close {
+.episode-modal .modal__close, .podcast-modal .modal__close {
   position: absolute;
   top: 10px;
   right: 1rem;
 }
-.episode-modal .btn--submit {
+.episode-modal .btn--submit, .podcast-modal .btn--submit {
   width: 100%;
   padding-block: 0.3rem;
 }
-.episode-modal .form {
+.episode-modal .form__file, .podcast-modal .form__file {
+  height: 50px;
+  background-size: cover;
+  overflow: hidden;
+}
+.episode-modal .form__uploaded-bg img, .podcast-modal .form__uploaded-bg img {
+  border: none !important;
+  position: absolute;
+  width: 100%;
+  left: 0;
+  z-index: -1;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.9);
+  top: 0;
+}
+.episode-modal .form__uploaded-name, .podcast-modal .form__uploaded-name {
+  background: rgba(97, 84, 77, 0.7);
+  padding: 0.2rem 0.3rem;
+  max-width: 100%;
+  display: inline-block;
+  text-overflow: ellipses;
+  overflow: hidden;
+  white-space: nowrap;
+  color: white !important;
+  border-radius: 2px;
+  backdrop-filter: blur(5px);
+}
+.episode-modal .form, .podcast-modal .form {
   border: none;
 }
-.episode-modal .form__itm {
+.episode-modal .form__itm, .podcast-modal .form__itm {
   width: 100%;
 }
-.episode-modal .modal__title {
+.episode-modal .modal__title, .podcast-modal .modal__title {
   color: #d0c8c4;
   font-size: 4.5rem;
   width: 200%;
@@ -314,35 +346,39 @@ p {
   z-index: -1;
   text-transform: capitalize;
 }
-.episode-modal .modal__select {
+.episode-modal .modal__select, .podcast-modal .modal__select {
   width: 100%;
   flex-direction: column;
 }
-.episode-modal .modal__select select {
+.episode-modal .modal__select select, .podcast-modal .modal__select select {
   width: 100%;
   background-color: #d0c8c4;
 }
-.episode-modal .modal__close i {
+.episode-modal .modal__close i, .podcast-modal .modal__close i {
   font-size: 1.4rem;
   color: #61544d;
 }
-.episode-modal .modal__content {
+.episode-modal .modal__content, .podcast-modal .modal__content {
   margin-top: 1rem;
 }
 @media screen and (min-width: 700px) {
-  .episode-modal {
+  .episode-modal, .podcast-modal {
     position: absolute;
     height: fit-content;
     border-radius: 2px;
-    box-shadow: #f15b3e 0px 1px 4px, #f15b3e 0px 0px 0px 3px;
+    border: 1px solid #f15b3e;
+    box-shadow: rgba(241, 91, 62, 0.5) 5px 5px, rgba(241, 91, 62, 0.3) 10px 10px, rgba(241, 91, 62, 0.2) 15px 15px, rgba(241, 91, 62, 0.1) 20px 20px, rgba(241, 91, 62, 0.05) 25px 25px;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
   }
-  .episode-modal .modal__title {
+  .episode-modal .modal__title, .podcast-modal .modal__title {
     font-size: 5.5rem;
     top: -8%;
-    left: -4%;
+    left: 50%;
+    text-align: center;
+    transform: translateX(-50%);
+    width: max-content;
   }
 }
 

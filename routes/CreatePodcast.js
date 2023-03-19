@@ -37,7 +37,13 @@ module.exports = async (req, res) => {
   });
 
 
-  if (![ files.cover, fields.title, fields.explicit, fields.description, fields.category, fields.language].every((e) => e)) {
+  if (![
+  files.cover, 
+    fields.title, 
+    fields.explicit, 
+    fields.description, 
+    fields.category, 
+    fields.language].every((e) => e)) {
     sendJsonErr(res, ERR.badInput);
     return;
   }

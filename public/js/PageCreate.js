@@ -5,6 +5,7 @@ import {
 import htm from "https://unpkg.com/htm@latest?module";
 
 import ModalForm from "/js/ModalForm.js";
+import ModalPodcast from "/js/ModalPodcast.js";
 import { toast } from "/js/Toast.js";
 
 const html = htm.bind(h);
@@ -13,11 +14,13 @@ export default class PageCreate extends Component {
   constructor(props) {
     super(props);
     this.state = { 
-      modalOpen: true, 
+      modalOpen: false, 
+      podcastModalOpen: true,
       hasPodcasts: true, 
       podcasts: [],
     };
     this.setModal = this.setModal.bind(this);
+    this.setPodcastModal = this.setPodcastModal.bind(this);
   }
 
   componentDidMount() {
@@ -35,6 +38,10 @@ export default class PageCreate extends Component {
 
   }
 
+  setPodcastModal() {
+    this.setState({modalOpen: false, podcastModalOpen: !this.state.podcastModalOpen})
+  }
+
   setModal() {
     if (!this.state.hasPodcasts) {
       toast("No podcasts found for the user", "danger", "bi bi-exclamation-circle");
@@ -45,11 +52,14 @@ export default class PageCreate extends Component {
 
   render() {
     return html`
-
-
      ${this.state.modalOpen
         ? html`<${ModalForm} setModal=${this.setModal} podcasts=${this.state.podcasts} title="new episode" />`
         : html``}
+
+     ${this.state.podcastModalOpen
+        ? html`<${ModalPodcast} setModal=${this.setPodcastModal} />`
+        : html``}
+
 
       <section class="create">
         <button class="btn btn--primary" onClick=${this.setModal}>
@@ -57,7 +67,7 @@ export default class PageCreate extends Component {
           <p>new episode</p>
         </button>
 
-        <button class="btn btn--secondary">
+        <button class="btn btn--secondary" onClick=${this.setPodcastModal}>
           <i class="bi bi-mic"></i>
           <p>new podcast</p>
         </button>

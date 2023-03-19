@@ -241,7 +241,7 @@ p {
   top: 10px;
   z-index: 10000;
   right: 0;
-  max-width: 300px;
+  max-width: 400px;
   padding: 0.8rem 1.6rem 1rem 0.8rem;
   align-items: center;
   display: flex;
@@ -335,7 +335,13 @@ p {
   }
 }
 
-.episode-modal {
+.podcast-modal {
+  .form__file {
+    justify-content: left;
+  }
+}
+
+.episode-modal, .podcast-modal {
   height: 100vh;
   max-width: 600px;
   width: calc(100% - 80px);
@@ -356,6 +362,39 @@ p {
     width: 100%;
     padding-block: 0.3rem;
   }
+
+  .form__file {
+    height: 50px;
+    background-size: cover;
+    overflow: hidden;
+  }
+
+  .form__uploaded-bg img {
+    border: none !important;
+    position: absolute;
+    width: 100%;
+    left: 0;
+    z-index: -1;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.9);
+    top: 0;
+  }
+
+  .form__uploaded-name {
+    background: $text-clr-2-5;
+    padding: .2rem .3rem;
+    max-width: 100%;
+    display: inline-block;
+    text-overflow: ellipses;
+    overflow: hidden;
+    white-space: nowrap;
+
+    color: white !important;
+    border-radius: 2px;
+    backdrop-filter: blur(5px);
+  }
+
 
   .form {
     border: none;
@@ -382,7 +421,7 @@ p {
     flex-direction: column;
   }
 
-  .modal__select  select {
+  .modal__select select {
     width: 100%;
     background-color: $text-clr-1;
   }
@@ -401,13 +440,18 @@ p {
     .modal__title {
       font-size: 5.5rem;
       top: -8%;
-      left: -4%;
+      left: 50%;
+      text-align: center;
+      transform: translateX(-50%);
+      width: max-content;
     }
 
     position: absolute;
     height: fit-content;
     border-radius: 2px;
-    box-shadow: $accent 0px 1px 4px, $accent 0px 0px 0px 3px;
+    border: 1px solid $accent;
+
+    box-shadow: rgba(241, 91, 62, 0.5) 5px 5px, rgba(241, 91, 62, 0.3) 10px 10px, rgba(241, 91, 62, 0.2) 15px 15px, rgba(241, 91, 62, 0.1) 20px 20px, rgba(241, 91, 62, 0.05) 25px 25px;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
