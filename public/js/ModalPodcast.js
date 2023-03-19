@@ -62,8 +62,6 @@ export default class ModalForm extends Component {
   async handleSubmit(e) {
     e.preventDefault();
 
-    this.setState({showLoader: true});
-
     const formData = new FormData(e.target);
     const formProps = Object.fromEntries(formData);
 
@@ -86,6 +84,9 @@ export default class ModalForm extends Component {
       return;
     }
 
+    this.setState({showLoader: true});
+
+
     const postFormData = new FormData();
     postFormData.append("cover", formProps.cover);
     postFormData.append("language", selectedLanguage);
@@ -101,18 +102,19 @@ export default class ModalForm extends Component {
 
     if (res.status !== 200) {
       toast("Something went wrong", "danger", "bi bi-exclamation-triangle-fill");
+      this.setState({showLoader: false});
       return;
     }
-    const data = await res.json();
-    toast(`Created new podcast with id ${data.data.id}`, "success", "bi bi-check-circle-fill");
-    
+
+    const {data} = await res.json();
+    toast(`Created new podcast with id ${data.id}`, "success", "bi bi-check-circle-fill");
     this.setState({showLoader: false});
   }
 
 
   render() {
     return html`
-      <div class="podcast-modal">
+      <div class="modal podcast-modal">
         <button class="btn modal__close" onClick=${this.props.setModal}>
           <i class="bi bi-x-lg"></i>
         </button>
