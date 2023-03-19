@@ -158,7 +158,7 @@ export default class ModalForm extends Component {
 
           <div class="form__itm form__check">
             <label class="label" for="explicit">Does your podcast include profanity?</label>
-            <input class="checkbox" type="checkbox" name="explicit" required>
+            <input class="checkbox" type="checkbox" name="explicit">
           </div></div>
 
             <button class="btn btn--submit btn--loader" type="submit">

@@ -122,7 +122,7 @@ export default class ModalForm extends Component {
 
           <div class="form__itm form__check">
             <label class="label" for="epExplicit">Does the episode include use of profanity?</label>
-            <input class="checkbox" type="checkbox" name="epExplicit" required>
+            <input class="checkbox" type="checkbox" name="epExplicit">
           </div></div>
 
             <button class="btn btn--submit btn--loader" type="submit">
