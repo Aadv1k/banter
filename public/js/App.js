@@ -6,6 +6,7 @@ import htm from "https://unpkg.com/htm@latest?module";
 import { Router } from "https://unpkg.com/preact-router@3.0.0?module";
 
 import PageCreate from "/js/PageCreate.js";
+import PageManage from "/js/PageManage.js";
 
 const html = htm.bind(h);
 
@@ -14,6 +15,7 @@ export default class App extends Component {
     return html`  
     <${Router}> 
       <${PageCreate} path="/dashboard/create" />
+      <${PageManage} path="/dashboard/manage" />
     </${Router}>
     `;
   }

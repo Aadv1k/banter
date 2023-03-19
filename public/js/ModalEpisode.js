@@ -77,7 +77,7 @@ export default class ModalEpisode extends Component {
     }
 
     const { data } = await res.json();
-    toast(`Created episode with id ${data.id}`, "danger", "bi bi-exclamation-triangle-fill");
+    toast(`Created episode with id ${data.id}`, "success", "bi bi-check-circle-fill");
     this.setState({showLoader: false});
   }
 
@@ -95,7 +95,7 @@ export default class ModalEpisode extends Component {
             <div class="form__itm form__select" >
               <select id="formSelect">
                 <option selected disabled>Select your podcast</option>
-                ${this.props.podcasts.map(e => html`<option>${e[0]}</option>`)}
+                ${this.props.podcasts.map(e => html`<option value="${e[1]}">${e[0]}</option>`)}
               </select>
             </div> 
 
