@@ -37,12 +37,11 @@
 
   .modal__title {
     color: $text-clr-1;
-    font-size: clamp(4.5rem, 15vw, 5.5rem);
-
-    width: fit-content;
+    font-size: clamp(1.5rem, 15vw, 5.5rem);
+    width: 100%;
     white-space: nowrap;
     left: 50%;
-    top: -5%;
+    top: -3%;
     transform: translateX(-50%);
     position: absolute;
     z-index: -1;
@@ -72,6 +71,7 @@
     .modal__title {
       width: max-content;
       letter-spacing: 5px;
+      top: -8%;
     }
 
     position: absolute;

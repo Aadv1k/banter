@@ -25,7 +25,6 @@ export default class ModalEpisode extends Component {
     this.setState({selectedFile: filename});
   }
 
-
   async handleSubmit(e) {
     e.preventDefault();
 

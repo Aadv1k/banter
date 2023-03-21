@@ -31,11 +31,11 @@
 }
 .modal .modal__title {
   color: #d0c8c4;
-  font-size: clamp(4.5rem, 15vw, 5.5rem);
-  width: fit-content;
+  font-size: clamp(1.5rem, 15vw, 5.5rem);
+  width: 100%;
   white-space: nowrap;
   left: 50%;
-  top: -5%;
+  top: -3%;
   transform: translateX(-50%);
   position: absolute;
   z-index: -1;
@@ -70,6 +70,7 @@
   .modal .modal__title {
     width: max-content;
     letter-spacing: 5px;
+    top: -8%;
   }
 }
 
@@ -178,7 +179,7 @@
 }
 .form label,
 .form .form__info {
-  color: #443b37;
+  color: #0c0a09;
 }
 .form .form__itm > input::placeholder {
   color: #61544d;
@@ -514,7 +515,7 @@ section {
 .features p {
   max-width: 40ch;
   margin-top: 0.5rem;
-  color: #443b37;
+  color: #0c0a09;
 }
 .features .list__itm i {
   font-size: 2.2rem;
@@ -545,7 +546,7 @@ section {
   padding: 1rem 0.5rem;
 }
 .faq p {
-  color: #443b37;
+  color: #0c0a09;
 }
 .faq__list div {
   display: flex;
@@ -591,7 +592,7 @@ section {
   font-size: 1.75rem;
 }
 .pricing p {
-  color: #443b37;
+  color: #0c0a09;
 }
 .pricing .btn {
   width: calc(100% - 1.6rem);
@@ -779,7 +780,7 @@ section.create .btn--primary {
 section.create .btn--secondary {
   border: 2px dotted #f15b3e;
   background-color: transparent;
-  color: #443b37;
+  color: #0c0a09;
   transition: all 200ms ease-in-out;
 }
 @media screen and (min-width: 500px) {
@@ -808,4 +809,64 @@ section.create .btn--secondary {
   color: white;
   border-radius: 2px;
   backdrop-filter: blur(5px);
+}
+
+section.manage {
+  padding: 0.75rem 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+section.manage .manage__itm {
+  width: 100%;
+  position: relative;
+}
+section.manage .itm__title {
+  color: #d0c8c4;
+  font-size: clamp(2.5rem, 10vw, 3.5rem);
+  width: 100%;
+  white-space: nowrap;
+}
+section.manage .itm__list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 0.5rem;
+}
+section.manage .list__itm:not(.list__itm--disabled) {
+  border-radius: 2px;
+  border: 1px solid #f15b3e;
+  padding: 0.2rem 0.3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+section.manage .itm__control {
+  display: flex;
+  gap: 0.2rem;
+}
+section.manage .itm__control .btn--primary, section.manage .itm__control .btn--secondary {
+  background-color: #f26b51;
+  border-radius: 2px;
+  padding: 0.3rem 0.35rem;
+  color: white;
+  font-size: 0.95rem;
+}
+section.manage .itm__control .btn--secondary {
+  background-color: #f79d8b;
+  border: none;
+}
+section.manage .list__itm p {
+  color: #0c0a09;
+  font-size: 0.9rem;
+}
+section.manage .list__itm--disabled {
+  background-color: #dbd5d2;
+  border: none;
+  padding-inline: 0;
+}
+section.manage .list__itm--disabled p {
+  font-style: italic;
+  color: #61544d;
 }
