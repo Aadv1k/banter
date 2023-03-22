@@ -5,7 +5,6 @@ import {
 import htm from "https://unpkg.com/htm@latest?module";
 
 import ModalEpisode from "/js/ModalEpisode.js";
-import ModalPodcast from "/js/ModalPodcast.js";
 import { toast } from "/js/Toast.js";
 
 const html = htm.bind(h);
@@ -16,20 +15,41 @@ export default class PageCreate extends Component {
     this.state = {
       podcasts: [],
       episodeID: null,
-      showEpisodeModal: false,
+      podcastID: null,
+      showEditModal: false,
     };
     this.handleEditClick = this.handleEditClick.bind(this);
+    this.setEditModal = this.setEditModal.bind(this);
   }
 
-  handleEditClick(e) {
-    const epid = e.target.parentElement.parentElement.getAttribute('data-ep');
+  setEditModal() {
+    console.log(this.state.showEditModal);
+    this.setState({showEditModal: !this.state.showEditModal});
+  }
 
-    if (!epid) {
-      toast("episode id not found, try refreshing the page", "warning", "bi bi-exclamation-triangle");
+
+  handleEditClick(e) {
+    console.log(e.currentTarget)
+    const episodeID = e.currentTarget.parentElement.getAttribute('data-ep');
+    const podcastID = e.currentTarget.parentElement.getAttribute('data-podcast');
+
+    if (!episodeID || !podcastID) {
+      toast("episode or podcast ID not found, try refreshing the page", "warn", "bi bi-exclamation-triangle");
       return;
     }
 
-    this.setState({episodeiID: epid, showEditModal: true});
+    let episode;
+
+    for (let podcast of this.state.podcasts) {
+      if (podcast.id !== podcastID) continue;
+      episode = podcast.episodes.find(ep => ep.id === episodeID);
+    } 
+
+    if (!episode) {
+      toast("unable to fetch the epsiodes at the moment", "warn");
+      return;
+    }
+    this.setState({showEditModal: true, defaultEpisodeData: episode, podcastID, });
   }
 
   componentDidMount() {
@@ -54,6 +74,11 @@ export default class PageCreate extends Component {
 
   render() {
     return html`
+
+${this.state.showEditModal ? html`
+<${ModalEpisode} setModal=${this.setEditModal} isEditModal=${true} defaultEpisodeData=${this.state.defaultEpisodeData} podcastID=${this.state.podcastID} />
+` : ``}
+
       <section class="manage">
         ${this.state.podcasts.map((podcast) => {
           return html`<div class="manage__itm">
@@ -64,8 +89,7 @@ export default class PageCreate extends Component {
                     return html`
                       <li class="list__itm">
                         <p>${episode.title}</p>
-                        <!--
-                        <div class="itm__control"  data-ep=${episode.id}>
+                        <div class="itm__control"  data-ep=${episode.id} data-podcast=${podcast.id}>
                           <button class="btn btn--primary" onClick=${this.handleEditClick}>
                             <i class="bi bi-pencil-fill"></i>
                           </button>
@@ -74,7 +98,6 @@ export default class PageCreate extends Component {
                             <i class="bi bi-trash-fill"></i>
                           </button>
                         </div>
-                        -->
                       </li>
                     `;
                   })

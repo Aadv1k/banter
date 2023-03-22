@@ -14,6 +14,7 @@ export default class ModalEpisode extends Component {
       epNumber: [],
       numInvalid: false,
       showLoader: false,
+      defaultEpisodeData: null,
       selectedFile: "No file selected",
     }
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -31,13 +32,19 @@ export default class ModalEpisode extends Component {
     const formData = new FormData(e.target);
     const formProps = Object.fromEntries(formData);
 
-    const formSelect = document.getElementById("formSelect");
+    if (!this.props.isEditModal) {
+      const formSelect = document.getElementById("formSelect");
+      const selectedPodcastName = formSelect.options?.[formSelect.selectedIndex]?.value;
 
-    const selectedPodcastName = formSelect.options?.[formSelect.selectedIndex]?.value;
+      if (!selectedPodcastName) {
+        toast("you need to select a podcast", "danger", "bi bi-exclamation-triangle-fill");
+        return;
+      }
 
-    if (!selectedPodcastName) {
-      toast("you need to select a podcast", "danger", "bi bi-exclamation-triangle-fill");
-      return;
+      if (formProps.audio.type.split('/').shift() != "audio") {
+        toast("Invalid audio file format!", "danger", "bi bi-exclamation-triangle-fill");
+        return;
+      }
     }
 
     if (!Number(formProps.number)) {
@@ -50,25 +57,31 @@ export default class ModalEpisode extends Component {
       return;
     }
 
-    if (formProps.audio.type.split('/').shift() != "audio") {
-      toast("Invalid audio file format!", "danger", "bi bi-exclamation-triangle-fill");
-      return;
-    }
-
     this.setState({showLoader: true});
 
     const postFormData = new FormData();
-    postFormData.append("audio", formProps.audio);
-    postFormData.append("title", formProps.title);
-    postFormData.append("number", formProps.number);
-    postFormData.append("description", formProps.desc);
-    postFormData.append("podcastID", selectedPodcastName);
-    postFormData.append("explicit", formProps.epExplicit === "on");
 
-    const res = await fetch("/createEpisode", {
-      method: "POST",
-      body: postFormData
-    });
+    for (let formItm in formProps) {
+      postFormData.append(formItm, formProps[formItm]);
+    }
+
+    postFormData.append("explicit", formProps.explicit === "on");
+
+    let res;
+    if (this.props.isEditModal) {
+      postFormData.append("episodeID", this.props.defaultEpisodeData.id);
+      postFormData.append("podcastID", this.props.podcastID);
+      res = await fetch("/updateEpisode", {
+        method: "PUT",
+        body: postFormData
+      });
+    } else {
+      res = await fetch("/createEpisode", {
+        method: "POST",
+        body: postFormData
+      });
+    }
+
     if (res.status !== 200) {
       toast("Something went wrong", "danger", "bi bi-exclamation-triangle-fill");
       this.setState({showLoader: false});
@@ -76,7 +89,8 @@ export default class ModalEpisode extends Component {
     }
 
     const { data } = await res.json();
-    toast(`Created episode with id ${data.id}`, "success", "bi bi-check-circle-fill");
+    console.log(data);
+    toast(this.props.isEditModal ? `Updated the episode with id ${data.episodeID}` : `Created episode with id ${data.id}`, "success", "bi bi-check-circle-fill");
     this.setState({showLoader: false});
   }
 
@@ -87,10 +101,13 @@ export default class ModalEpisode extends Component {
           <i class="bi bi-x-lg"></i>
         </button>
 
-        <h2 class="modal__title">new episode</h2>
+        <h2 class="modal__title">
+        ${this.props.isEditModal ? "Update episode" : "new episode"}
+        </h2>
         <div class="modal__content">
           <form action="" class="modal__form form" onSubmit=${this.handleSubmit}>
 
+          ${this.props.isEditModal ? `` : html`
             <div class="form__itm form__select" >
               <select id="formSelect">
                 <option selected disabled>Select your podcast</option>
@@ -98,22 +115,24 @@ export default class ModalEpisode extends Component {
               </select>
             </div> 
 
+          `}
+
             <div class="form__itm">
               <label for="title">Title</label>
-              <input  type="text" name="title" required>
+              <input value=${this.props.isEditModal ? this.props.defaultEpisodeData.title : ""} type="text" name="title" required>
             </div></div>
-
 
             <div class="form__itm">
               <label for="desc">Description</label>
-              <input class="input" type="text" name="desc" required>
+              <input value=${this.props.isEditModal ? this.props.defaultEpisodeData.description : ""} class="input" type="text" name="desc" required>
             </div></div>
 
             <div class="form__itm">
               <label class="label" for="number">Episode number</label>
-              <input class="input" type="tel" name="number" required>
+              <input  value=${this.props.isEditModal ? this.props.defaultEpisodeData.number : ""} class="input" type="tel" name="number" required>
             </div> </div>
 
+          ${this.props.isEditModal ? `` : html`
           <div class="form__itm form__file">
             <label class="label" for="audio">
               Audio for your podcast
@@ -122,13 +141,14 @@ export default class ModalEpisode extends Component {
             <i class="bi bi-file-earmark-music"></i>
             <input type="file" name="audio" accept="audio/mp3, audio/mpeg, audio/aac" onChange=${this.handleFileInput}>
           </div></div>
+          `}
 
           <div class="form__itm form__check">
             <label class="label" for="explicit">Does the episode include use of profanity?</label>
-            <input class="checkbox" type="checkbox" name="explicit">
+            <input class="checkbox" type="checkbox" name="explicit" checked=${this.props.defaultEpisodeData.explicit}>
           </div></div>
 
-            <button class="btn btn--submit btn--loader" type="submit" ${this.state.showLoader ? "disabled" : ""}>
+            <button class="btn btn--submit btn--loader" type="submit" ${this.state.showLoader ? html`disabled` : ""}>
             ${this.state.showLoader ? html`<span class="loader"></span>` : `Submit`}
             </button>
           </form>

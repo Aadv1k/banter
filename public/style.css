@@ -179,10 +179,10 @@
 }
 .form label,
 .form .form__info {
-  color: #0c0a09;
+  color: #61544d;
 }
 .form .form__itm > input::placeholder {
-  color: #61544d;
+  color: #d0c8c4;
 }
 .form .form__itm > input {
   all: unset;
