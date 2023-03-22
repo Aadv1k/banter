@@ -27,10 +27,10 @@ module.exports = async (req, res) => {
 
   res.writeHead(200, {"Content-type": MIME.json})
 
-  const jsonResponse = user?.podcasts ?? {
-    error: "no-podcasts-found", 
-    message: "no podcasts or episodes were found for the user",
-    code: 404
+  const jsonResponse = {
+    id: user._id, 
+    name: user.name,
+    profileImage: user.profileImage,
   }
   res.write(JSON.stringify(jsonResponse))
   res.end();

@@ -8,7 +8,6 @@ const querystring = require("querystring");
 module.exports = async (req, res) => {
   await USER_DB.init();
   const { pid, uid } = querystring.parse(req.url.split('?').pop());
-  console.log(pid, uid)
 
   if (!uid || !pid) {
     sendJsonErr(res, ERR.badInput);
