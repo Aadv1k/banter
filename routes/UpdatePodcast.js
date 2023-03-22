@@ -1,5 +1,5 @@
 const { ERR } = require("../app/constants");
-const { sendJsonErr, isCookieAndSessionValid, newID} = require("../app/common");
+const { sendJsonErr, isCookieAndSessionValid} = require("../app/common");
 const cookie = require("cookie");
 
 const { UserModel } = require("../models/UserModel.js");
@@ -25,7 +25,9 @@ module.exports = async (req, res) => {
 
   const form = formidable({ multiples: false, });
 
-  const {fields, files} = await new Promise((resolve, reject) => {
+
+  // TODO: Implementation for updating binary files  
+  const {fields, _} = await new Promise((resolve, reject) => {
     form.parse(req, (err, fields, files) => {
       if (err) {
         reject(err);
@@ -45,23 +47,17 @@ module.exports = async (req, res) => {
     return;
   }
 
-  if (!podcasts[fields.podcastID].episodes.find(e => e.id == fields.episodeID)) {
-    // TODO: change this to episode id
-    sendJsonErr(res, ERR.invalidEpisodeID)
-    return;
-  }
-
   const user = await USER_DB.getUser({_id: userid});
   if (!user) {
     sendJsonErr(res, ERR.userNotFound);
     return;
   }
 
-  const updatedEpisode = {
+  const updatedPodcast = {
     ...fields,
   }
 
-  if (await USER_DB.updateEpisodeForUser({_id: userid}, fields.podcastID, {id: fields.episodeID}, updatedEpisode) === null) {
+  if (await USER_DB.updatePodcastForUser({_id: userid}, fields.podcastID, updatedPodcast) === null) {
     sendJsonErr(res, ERR.internalErr);
     return;
   }
@@ -70,10 +66,10 @@ module.exports = async (req, res) => {
     "Content-type": "application/json",
   })
   res.write(JSON.stringify({
-    message: "episode updated successfully",
+    message: "podcast updated successfully",
     code: 200,
     data: {
-      ...updatedEpisode
+      ...updatedPodcast
     }
   }));
   res.end();

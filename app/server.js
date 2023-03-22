@@ -19,6 +19,7 @@ const routeRSS = require("../routes/RSS.js");
 const routeGetPodcast = require("../routes/GetPodcast.js");
 const routeGetEpisode = require("../routes/GetEpisode.js");
 const routeUpdateEpisode = require("../routes/UpdateEpisode.js");
+const routeUpdatePodcast = require("../routes/UpdatePodcast.js");
 
 const http = require("http");
 const { renderView } = require("./common");
@@ -60,7 +61,10 @@ module.exports = http.createServer(async (req, res) => {
     routeRSS(req, res)
   } else if (URI.startsWith("/updateEpisode")) {
     routeUpdateEpisode(req, res);
-  } else {
+  } else if (URI.startsWith("/updatePodcast")) {
+    routeUpdatePodcast(req, res);
+  }
+  else {
     renderView(req, res, "404.ejs", 404, {}, true);
   }
 });
