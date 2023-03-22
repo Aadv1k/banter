@@ -156,6 +156,34 @@ class UserModel {
     }
   }
 
+  async updateEpisodeForUser(userQuery, podcastID, oldEpisode, newEpisode) {
+    userQuery = this.parseQuery(userQuery)
+    const user = await this.users.findOne(userQuery);
+    const episodes = user?.podcasts?.[podcastID]?.episodes;
+
+    if (!episodes) {
+      return null;
+    }
+
+    const episodeIdx = episodes.findIndex(e => e.id === oldEpisode.id);
+    if (episodeIdx === null) {
+      return null;
+    }
+
+    const updateQuery = `podcasts.${podcastID}.episodes.${episodeIdx}`; 
+    const updateBlob = {};
+    for (let field of Object.keys(newEpisode)) {
+      updateBlob[`${updateQuery}.${field}`] = newEpisode[field];
+    }
+
+    await this.users.updateOne(userQuery, {
+      $set: {
+        ...updateBlob
+      }
+    })
+  }
+
+
   async userExists(query) {
     query = this.parseQuery(query);
     if (await this.users.findOne(query)) {

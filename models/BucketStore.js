@@ -13,6 +13,7 @@ class BucketStore {
     this.permalink;
     this.bucket = cloudinary;
   }
+
   async pushFile(filepath) {
     const { size: fileSize } = statSync(filepath);
     let fileSizeInMB = fileSize / 8e4;

@@ -50,6 +50,12 @@ module.exports = {
       code: 400,
     },
 
+    invalidEpisodeID: {
+      error: "invalid-episode-id",
+      message: "the episode ID provided does not exist",
+      code: 404,
+    },
+
     invalidPodcastID: {
       error: "invalid-podcast-id",
       message: "the podcast ID provided does not exist",
@@ -120,6 +126,7 @@ module.exports = {
         "the provided image exeeds the image size limit of a 10 Megabytes",
       code: 400,
     },
+
 
     invalidPassword: {
       error: "invalid-password",
