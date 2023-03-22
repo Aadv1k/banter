@@ -7,21 +7,21 @@ const querystring = require("querystring");
 
 module.exports = async (req, res) => {
   await USER_DB.init();
-  const { pid, uid } = querystring.parse(req.url.split('?').pop());
+  const { podcastID, userID } = querystring.parse(req.url.split('?').pop());
 
-  if (!uid || !pid) {
+  if (!userID || !podcastID) {
     sendJsonErr(res, ERR.badInput);
     return;
   }
 
-    const podcasts = await USER_DB.getPodcastsForUser({_id: uid}).catch(_ => {return null});
+    const podcasts = await USER_DB.getPodcastsForUser({_id: userID}).catch(_ => {return null});
 
   if (!podcasts) {
     sendJsonErr(res, ERR.userNotFound)
     return
   }
 
-  let targetPodcast = podcasts[pid];
+  let targetPodcast = podcasts[podcastID];
   if (!targetPodcast) {
     sendJsonErr(res, ERR.invalidPodcastID);
     return;
@@ -30,7 +30,7 @@ module.exports = async (req, res) => {
   let rssFeed = new RSS({
     title: targetPodcast.title,
     description: targetPodcast.description,
-    feed_url: `https://${req.headers.host}/rss?uid=${uid}&pid=${pid}}`,
+    feed_url: `https://${req.headers.host}/rss?uid=${userID}&pid=${podcastID}}`,
     image_url: targetPodcast.cover,
     //author: "",
     //site_url: "",

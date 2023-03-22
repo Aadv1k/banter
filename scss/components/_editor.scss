@@ -1,0 +1,51 @@
+@use "../variables" as *;
+
+.editor {
+  border-radius: 2px;
+  max-width: 600px;
+
+  .editor__header {
+    width: 100%;
+    border-radius: 2px 2px 0 0;
+    align-items: center;
+    background-color: $main-bg-05;
+    box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.14),
+      0px 1px 10px 0px rgba(0, 0, 0, 0.12), 0px 2px 4px -1px rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .editor__btn {
+    padding: .5rem;
+    text-transform: capitalize;
+    font-size: 1rem;
+    transition: 400ms ease-in-out;
+  }
+
+  .editor__btn:hover {
+    background-color: darken($main-bg, 5%);
+  }
+
+  .editor__url {
+    flex: 90%;
+    background-color: $main-bg;
+    border-radius: 100px;
+    padding: .4rem .5rem;
+    font-family: monospace;
+  }
+
+  .editor__code {
+    border-radius: 0 0 2px 2px;
+    width: 100%;
+    background-color: #191919;
+    padding: 1rem;
+    overflow-x: scroll;
+  }
+
+  code {
+    font-family: monospace;
+    width: 100%;
+    white-space: pre;
+    color: white;
+  }
+}

@@ -4,9 +4,7 @@ import {
 } from "https://unpkg.com/preact@latest?module";
 import htm from "https://unpkg.com/htm@latest?module";
 
-import ModalEpisode from "/js/ModalEpisode.js";
-import ModalPodcast from "/js/ModalPodcast.js";
-import { toast } from "/js/Toast.js";
+import { toast } from "/js/Toast.js"
 
 const html = htm.bind(h);
 
@@ -16,7 +14,10 @@ export default class PageShare extends Component {
     this.state = { 
       podcasts: [],
       user: {},
+      rss: null,
     };
+    this.handleEditorClick = this.handleEditorClick.bind(this);
+    this.handleClipboardClick = this.handleClipboardClick.bind(this);
   }
 
   componentDidMount() {
@@ -36,7 +37,7 @@ export default class PageShare extends Component {
       this.setState({
         podcasts: Object.keys(vals[0]).map(e => {
           return {
-            e,
+            id: e,
             ...vals[0][e]
           }
         }),
@@ -47,23 +48,65 @@ export default class PageShare extends Component {
   }
 
 
+  handleClipboardClick(e) {
+    const url = new URL(window.location.href);
+    const rssURL = `${url.protocol}//${url.host}${e.currentTarget.getAttribute("data-url")}`
+    navigator.clipboard.writeText(rssURL);
+    toast("RSS url copied to your clipboard", "success");
+  }
+
+  handleEditorClick(e) {
+    const podcastID =  e.currentTarget.parentElement.parentElement.getAttribute("data-podcast");
+    const userID = this.state.user.id;
+
+
+    let rssBlob = this.state.rss ?? {};
+    fetch(`/rss?userID=${userID}&podcastID=${podcastID}`)
+      .then(res => res.text())
+      .then(data => {
+        rssBlob[podcastID] = [data, `/rss?userID=${userID}&podcastID=${podcastID}`];
+        this.setState({rss: rssBlob});
+      })
+  }
+
   render() {
-    console.log(this.state);
-    /*
-
-    color: $text-clr-1;
-    font-size: clamp(2.5rem, 10vw, 3.5rem);
-    width: 100%;
-    white-space: nowrap;
-    */
     return html`
+        <section class="share">
 
-      <section class="share">
+      ${this.state.podcasts.map(podcast => {
+        return html`
+          <div class="share__itm">
 
-        <div class="share__itm">
-          <div class="itm__title">hello</div>
-        </div>
-      </section>
+            <div class="itm__title">
+              <h2> ${podcast.title} </h2>
+              <img class="title__bg" src=${podcast.cover} />
+            </div>
+
+            <div class="editor itm__editor " data-podcast=${podcast.id}>
+              <div class="editor__header">
+                <button class="btn editor__btn" onClick=${this.handleEditorClick}>
+                  Generate
+                </button>
+                ${this.state.rss?.[podcast.id]?.[0] && html`
+               <div class="editor__url">${this.state.rss?.[podcast.id]?.[1]}</div>
+                <button class="btn editor__btn" data-url=${this.state.rss?.[podcast.id]?.[1]} onClick=${this.handleClipboardClick}>
+                  <i class="bi bi-clipboard2"></i>
+                </button>
+                `}
+              </div>
+
+              <pre class="editor__code">
+                <code>
+                ${this.state.rss?.[podcast.id]?.[0] ?? "Nothing to see here yet."}
+                </code>
+              </pre>
+            </div>
+          
+          </div>
+          `
+      })}
+
+          </section>
 
     `;
   }

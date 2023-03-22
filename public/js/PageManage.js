@@ -52,6 +52,7 @@ export default class PageCreate extends Component {
       toast("unable to fetch the epsiodes at the moment", "warn");
       return;
     }
+
     this.setState({showEpisodeEditModal: true, defaultEpisodeData: episode, podcastID, });
   }
 
@@ -81,7 +82,8 @@ ${this.state.showEpisodeEditModal && html`
         ${this.state.podcasts.map((podcast) => {
           return html`<div class="manage__itm">
             <div class="itm__title">
-            <h2>${podcast.title}</h2>
+              <h2>${podcast.title}</h2>
+              <img class="title__bg" src=${podcast.cover}></img>
             </div>
             <ul class="itm__list">
               ${podcast?.episodes?.length > 0

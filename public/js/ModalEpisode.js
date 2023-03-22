@@ -14,7 +14,6 @@ export default class ModalEpisode extends Component {
       epNumber: [],
       numInvalid: false,
       showLoader: false,
-      defaultEpisodeData: null,
       selectedFile: "No file selected",
     }
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -28,13 +27,14 @@ export default class ModalEpisode extends Component {
 
   async handleSubmit(e) {
     e.preventDefault();
-
     const formData = new FormData(e.target);
     const formProps = Object.fromEntries(formData);
+    let formSelect;
+    let selectedPodcastName;
 
     if (!this.props.isEditModal) {
-      const formSelect = document.getElementById("formSelect");
-      const selectedPodcastName = formSelect.options?.[formSelect.selectedIndex]?.value;
+      formSelect = document.getElementById("formSelect");
+      selectedPodcastName = formSelect.options?.[formSelect.selectedIndex]?.value;
 
       if (!selectedPodcastName) {
         toast("you need to select a podcast", "danger", "bi bi-exclamation-triangle-fill");
@@ -76,6 +76,8 @@ export default class ModalEpisode extends Component {
         body: postFormData
       });
     } else {
+      postFormData.append("podcastID", selectedPodcastName);
+      console.log(postFormData);
       res = await fetch("/createEpisode", {
         method: "POST",
         body: postFormData
@@ -90,7 +92,9 @@ export default class ModalEpisode extends Component {
 
     const { data } = await res.json();
     toast(this.props.isEditModal ? `Updated the episode with id ${data.episodeID}` : `Created episode with id ${data.id}`, "success", "bi bi-check-circle-fill");
-    this.setState({showLoader: false});
+    this.setState({showLoader: false})
+    this.props.setModal();
+    window.location.reload(false);
   }
 
   render() {
@@ -122,8 +126,8 @@ export default class ModalEpisode extends Component {
             </div></div>
 
             <div class="form__itm">
-              <label for="desc">Description</label>
-              <input value=${this.props.isEditModal && this.props?.defaultEpisodeData?.description} class="input" type="text" name="desc" required>
+              <label for="description">Description</label>
+              <input value=${this.props.isEditModal && this.props?.defaultEpisodeData?.description} class="input" type="text" name="description" required>
             </div></div>
 
             <div class="form__itm">
