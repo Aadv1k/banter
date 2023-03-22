@@ -7,6 +7,7 @@ import { Router } from "https://unpkg.com/preact-router@3.0.0?module";
 
 import PageCreate from "/js/PageCreate.js";
 import PageManage from "/js/PageManage.js";
+import PageShare from "/js/PageShare.js";
 
 const html = htm.bind(h);
 
@@ -16,6 +17,7 @@ export default class App extends Component {
     <${Router}> 
       <${PageCreate} path="/dashboard/create" />
       <${PageManage} path="/dashboard/manage" />
+      <${PageShare} path="/dashboard/share" />
     </${Router}>
     `;
   }

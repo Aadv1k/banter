@@ -32,7 +32,6 @@ export default class PageCreate extends Component {
     this.setState({showPodcastEditModal: !this.state.showPodcastEditModal});
   }
 
-
   handleEpisodeEditClick(e) {
     const episodeID = e.currentTarget.parentElement.getAttribute('data-ep');
     const podcastID = e.currentTarget.parentElement.getAttribute('data-podcast');
@@ -57,11 +56,7 @@ export default class PageCreate extends Component {
   }
 
   componentDidMount() {
-    fetch("/getPodcast", {
-      headers: {
-        "Access-Control-Allow-Origin": "*"
-      }
-    })
+    fetch("/getPodcast")
       .then((d) => d.json())
       .then((data) => {
         const podcastData = data;
@@ -73,7 +68,7 @@ export default class PageCreate extends Component {
             hasPodcasts: true,
           });
         }
-      }).catch(err => console.log("shit"));
+      }).catch(err => console.log(err));
   }
 
   render() {
@@ -87,7 +82,6 @@ ${this.state.showEpisodeEditModal && html`
           return html`<div class="manage__itm">
             <div class="itm__title">
             <h2>${podcast.title}</h2>
-
             </div>
             <ul class="itm__list">
               ${podcast?.episodes?.length > 0
@@ -95,7 +89,7 @@ ${this.state.showEpisodeEditModal && html`
                     return html`
                       <li class="list__itm">
                         <div class="itm__content">
-                          <strong>${episode.title}</strong>
+                          <strong>EP#${episode.number}: ${episode.title}</strong>
                           <p>${episode.description}</p>
                         </div>
 

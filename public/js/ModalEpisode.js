@@ -118,17 +118,17 @@ export default class ModalEpisode extends Component {
 
             <div class="form__itm">
               <label for="title">Title</label>
-              <input value=${this.props.isEditModal ?? this.props?.defaultEpisodeData?.title} type="text" name="title" required>
+              <input value=${this.props.isEditModal && this.props?.defaultEpisodeData?.title} type="text" name="title" required>
             </div></div>
 
             <div class="form__itm">
               <label for="desc">Description</label>
-              <input value=${this.props.isEditModal ?? this.props?.defaultEpisodeData?.description} class="input" type="text" name="desc" required>
+              <input value=${this.props.isEditModal && this.props?.defaultEpisodeData?.description} class="input" type="text" name="desc" required>
             </div></div>
 
             <div class="form__itm">
               <label class="label" for="number">Episode number</label>
-              <input  value=${this.props.isEditModal ?? this.props?.defaultEpisodeData?.number} class="input" type="tel" name="number" required>
+              <input  value=${this.props.isEditModal && this.props?.defaultEpisodeData?.number} class="input" type="tel" name="number" required>
             </div> </div>
 
           ${this.props.isEditModal ? `` : html`

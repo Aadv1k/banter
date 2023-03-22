@@ -518,6 +518,13 @@ section.create {
   }
 }
 
+section.share {
+  padding: .75rem .5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
 section.manage {
   padding: .75rem .5rem;
   display: flex;
@@ -563,6 +570,7 @@ section.manage {
     display: flex;
     flex-direction: column;
     width: 100%;
+    margin-top: 1rem;
     gap: .5rem;
   }
 
@@ -592,7 +600,6 @@ section.manage {
 
   .list__itm:not(.list__itm--disabled) {
     border-radius: 2px;
-    border: 1px solid $accent;
     padding: .4rem .3rem;
     display: flex;
     gap: .5rem;
