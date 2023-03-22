@@ -530,6 +530,28 @@ section.manage {
   }
 
   .itm__title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  } 
+
+  .title__control {
+    display: flex;
+    align-items: center;
+  }
+
+  .title__control .btn {
+    background-color: transparent;
+    border: none;
+  }
+
+  .title__control .btn i {
+    color: $text-clr-1;
+    font-size: clamp(2.5rem, 10vw, 3.5rem);
+  }
+
+  .itm__title h2 {
     color: $text-clr-1;
     font-size: clamp(2.5rem, 10vw, 3.5rem);
     width: 100%;
@@ -544,36 +566,47 @@ section.manage {
     gap: .5rem;
   }
 
-  .list__itm:not(.list__itm--disabled) {
-    border-radius: 2px;
-    border: 1px solid $accent;
-    padding: .2rem .3rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
   .itm__control {
     display: flex;
-    gap: .2rem;
   }
 
   .itm__control .btn--primary, .itm__control .btn--secondary {
-    background-color: $accent-2;
-    border-radius: 2px;
-    padding: .3rem .35rem;
+    background-color: $accent;
+    flex: 50%;
+    border-radius: 0;
+    text-align: center;
+    padding: .3rem .4rem;
     color: white;
     font-size: .95rem;
+    border: 1px solid $accent;
   }
 
-   .itm__control .btn--secondary {
-     background-color: $accent-1;
-     border: none;
-   }
+  .btn i {
+    vertical-align: middle;
+  }
 
-  .list__itm p {
-    color: $text-clr-3;
-    font-size: .9rem;
+  .itm__control .btn--secondary {
+    background-color: transparent;
+    color: $text-clr-2;
+  }
+
+  .list__itm:not(.list__itm--disabled) {
+    border-radius: 2px;
+    border: 1px solid $accent;
+    padding: .4rem .3rem;
+    display: flex;
+    gap: .5rem;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .itm__content strong {
+    color: $text-clr-2;
+    font-weight: bold;
+  }
+
+  .itm__content p {
+    color: $text-clr-2;
   }
 
   .list__itm--disabled {
@@ -585,6 +618,25 @@ section.manage {
       font-style: italic;
       color: $text-clr-2;
     }
+  }
+
+  @media screen and (min-width: 750px) {
+    .list__itm:not(.list__itm--disabled) {
+      flex-direction: row;
+      align-items: center;
+      padding-inline: .6rem;
+    }
+
+    .itm__control {
+      gap: .3rem;
+    }
+
+    .itm__control .btn {
+      border-radius: 2px;
+      width: 25px;
+      height: 25px;
+    }
+
   }
 
 }
