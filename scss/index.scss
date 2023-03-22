@@ -575,6 +575,7 @@ section.manage {
     width: 100%;
     position: relative;
     display: flex;
+    flex-direction: column;
   }
 
   .itm__title {
@@ -594,9 +595,7 @@ section.manage {
     color: $text-clr-1;
     width: 100%;
     font-size: clamp(2rem, 10vw, 3.8rem);
-    white-space: nowrap;
   }
-
 
   .itm__title .title__bg {
     width: 100%;
@@ -605,7 +604,6 @@ section.manage {
     z-index: -1;
 
   }
-
 
   .title__control {
     display: flex;

@@ -2,6 +2,7 @@ const { ERR, MAX_EPISODE_SIZE_IN_MB } = require("../app/constants");
 const { sendJsonErr, isCookieAndSessionValid } = require("../app/common");
 
 const querystring = require("querystring");
+const cookie = require("cookie");
 
 const { UserModel } = require("../models/UserModel.js");
 const { Store } = require("../models/MemoryStore.js");

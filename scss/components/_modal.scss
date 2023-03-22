@@ -36,6 +36,37 @@
     overflow: hidden;
   }
 
+  .modal__title-normal {
+    color: $text-clr-2;
+  }
+
+  .modal__control {
+    display: flex;
+    gap: .5rem;
+    width: 100%;
+
+    .btn {
+      border: 1px solid $accent;
+      flex: 50%;
+      text-align: center;
+      margin-top: .5rem;
+      font-size: 1rem;
+      padding-block: .5rem;
+      text-transform: capitalize;
+      border-radius: 3px;
+    }
+
+    .btn--primary {
+      background-color: $accent;
+      color: white;
+    }
+
+    .btn--secondary {
+      background-color: transparent;
+      color: $text-clr-2;
+    }
+  }
+
   .modal__title {
     color: $text-clr-1;
     font-size: clamp(1.5rem, 15vw, 5.5rem);

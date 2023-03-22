@@ -29,6 +29,32 @@
   background-size: cover;
   overflow: hidden;
 }
+.modal .modal__title-normal {
+  color: #61544d;
+}
+.modal .modal__control {
+  display: flex;
+  gap: 0.5rem;
+  width: 100%;
+}
+.modal .modal__control .btn {
+  border: 1px solid #f15b3e;
+  flex: 50%;
+  text-align: center;
+  margin-top: 0.5rem;
+  font-size: 1rem;
+  padding-block: 0.5rem;
+  text-transform: capitalize;
+  border-radius: 3px;
+}
+.modal .modal__control .btn--primary {
+  background-color: #f15b3e;
+  color: white;
+}
+.modal .modal__control .btn--secondary {
+  background-color: transparent;
+  color: #61544d;
+}
 .modal .modal__title {
   color: #d0c8c4;
   font-size: clamp(1.5rem, 15vw, 5.5rem);
@@ -903,6 +929,7 @@ section.manage .manage__itm {
   width: 100%;
   position: relative;
   display: flex;
+  flex-direction: column;
 }
 section.manage .itm__title {
   display: flex;
@@ -920,7 +947,6 @@ section.manage .itm__title h2 {
   color: #d0c8c4;
   width: 100%;
   font-size: clamp(2rem, 10vw, 3.8rem);
-  white-space: nowrap;
 }
 section.manage .itm__title .title__bg {
   width: 100%;

@@ -94,7 +94,6 @@ export default class ModalEpisode extends Component {
     toast(this.props.isEditModal ? `Updated the episode with id ${data.episodeID}` : `Created episode with id ${data.id}`, "success", "bi bi-check-circle-fill");
     this.setState({showLoader: false})
     this.props.setModal();
-    window.location.reload(false);
   }
 
   render() {

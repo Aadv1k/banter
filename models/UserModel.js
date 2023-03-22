@@ -46,7 +46,6 @@ class UserModel {
 
   async getUser(query) {
     query = this.parseQuery(query);
-    console.log(query);
     const user = await this.users.findOne(query);
     return user ?? null;
   }
@@ -78,21 +77,18 @@ class UserModel {
       return null;
     }
 
-    const episodes = user.podcasts?.[podcastID]?.episodes;
-
-    if (!episodes || episodes.length === 0) {
-      return null;
-    }
-
-    const target = episodes.findIndex(e => { e.id === episodeID });
-    episodes.splice(target, 1);
-
     let updateBlob = {};
-    updateBlob[podcastID] = episodes
+    updateBlob[`podcasts.${podcastID}.episodes`] = {id: episodeID};
 
-    if (!await this.users.updateOne(userQuery, { $set: {
-      podcasts: updateBlob
-    }})) {
+    try {
+      await this.users.updateOne(
+        userQuery, 
+        { 
+          $pull: { ...updateBlob }
+        }
+      )
+    } catch(err) {
+      console.error(err)
       return null;
     }
   }

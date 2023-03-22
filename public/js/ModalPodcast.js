@@ -72,12 +72,12 @@ export default class ModalForm extends Component {
       }
     }
 
-      const formSelect = document.getElementById("formSelect");
-      const selectedLanguage = formSelect.options?.[formSelect.selectedIndex]?.value;
-      if (!selectedLanguage) {
-        toast("you need to select a language for your podcast", "danger", "bi bi-exclamation-triangle-fill");
-        return;
-      }
+    const formSelect = document.getElementById("formSelect");
+    const selectedLanguage = formSelect.options?.[formSelect.selectedIndex]?.value;
+    if (!selectedLanguage) {
+      toast("you need to select a language for your podcast", "danger", "bi bi-exclamation-triangle-fill");
+      return;
+    }
 
     if (formProps.title.length > 64) {
       toast("Podcast title can't exceed 64 characters", "danger", "bi bi-exclamation-triangle-fill");
@@ -86,12 +86,12 @@ export default class ModalForm extends Component {
 
     this.setState({showLoader: true});
 
-
     const postFormData = new FormData();
     for (let formItm in formProps) {
       postFormData.append(formItm, formProps[formItm]);
     }
 
+    postFormData.append("languages", selectedLanguage);
 
     let res;
     if (this.props.isEditModal) {
