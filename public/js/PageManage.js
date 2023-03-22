@@ -16,20 +16,24 @@ export default class PageCreate extends Component {
       podcasts: [],
       episodeID: null,
       podcastID: null,
-      showEditModal: false,
+      showEpisodeEditModal: false,
+      showPodcastEditModal: false,
     };
-    this.handleEditClick = this.handleEditClick.bind(this);
-    this.setEditModal = this.setEditModal.bind(this);
+    this.handleEpisodeEditClick = this.handleEpisodeEditClick.bind(this);
+    this.setEpisodeEditModal = this.setEpisodeEditModal.bind(this);
+    this.setPodcastEditModal = this.setPodcastEditModal.bind(this);
   }
 
-  setEditModal() {
-    console.log(this.state.showEditModal);
-    this.setState({showEditModal: !this.state.showEditModal});
+  setEpisodeEditModal() {
+    this.setState({showEpisodeEditModal: !this.state.showEpisodeEditModal});
+  }
+
+  setPodcastEditModal() {
+    this.setState({showPodcastEditModal: !this.state.showPodcastEditModal});
   }
 
 
-  handleEditClick(e) {
-    console.log(e.currentTarget)
+  handleEpisodeEditClick(e) {
     const episodeID = e.currentTarget.parentElement.getAttribute('data-ep');
     const podcastID = e.currentTarget.parentElement.getAttribute('data-podcast');
 
@@ -49,7 +53,7 @@ export default class PageCreate extends Component {
       toast("unable to fetch the epsiodes at the moment", "warn");
       return;
     }
-    this.setState({showEditModal: true, defaultEpisodeData: episode, podcastID, });
+    this.setState({showEpisodeEditModal: true, defaultEpisodeData: episode, podcastID, });
   }
 
   componentDidMount() {
@@ -62,11 +66,11 @@ export default class PageCreate extends Component {
       .then((data) => {
         const podcastData = data;
         if (Object.keys(podcastData).length != 0) {
-          this.setState({ hasPodcasts: true });
           this.setState({
             podcasts: Object.keys(podcastData).map((e) => {
               return { id: e, ...podcastData[e] };
             }),
+            hasPodcasts: true,
           });
         }
       }).catch(err => console.log("shit"));
@@ -75,27 +79,33 @@ export default class PageCreate extends Component {
   render() {
     return html`
 
-${this.state.showEditModal ? html`
-<${ModalEpisode} setModal=${this.setEditModal} isEditModal=${true} defaultEpisodeData=${this.state.defaultEpisodeData} podcastID=${this.state.podcastID} />
-` : ``}
-
+${this.state.showEpisodeEditModal && html`
+<${ModalEpisode} setModal=${this.setEpisodeEditModal} isEditModal=${true} defaultEpisodeData=${this.state.defaultEpisodeData} podcastID=${this.state.podcastID} />
+` }
       <section class="manage">
         ${this.state.podcasts.map((podcast) => {
           return html`<div class="manage__itm">
-            <h2 class="itm__title">${podcast.title}</h2>
+            <div class="itm__title">
+            <h2>${podcast.title}</h2>
+
+            </div>
             <ul class="itm__list">
               ${podcast?.episodes?.length > 0
                 ? podcast.episodes.map((episode) => {
                     return html`
                       <li class="list__itm">
-                        <p>${episode.title}</p>
+                        <div class="itm__content">
+                          <strong>${episode.title}</strong>
+                          <p>${episode.description}</p>
+                        </div>
+
                         <div class="itm__control"  data-ep=${episode.id} data-podcast=${podcast.id}>
-                          <button class="btn btn--primary" onClick=${this.handleEditClick}>
-                            <i class="bi bi-pencil-fill"></i>
+                          <button class="btn btn--primary" onClick=${this.handleEpisodeEditClick}>
+                            <i class="bi bi-pencil"></i>
                           </button>
 
                           <button class="btn btn--secondary">
-                            <i class="bi bi-trash-fill"></i>
+                            <i class="bi bi-x-lg"></i>
                           </button>
                         </div>
                       </li>

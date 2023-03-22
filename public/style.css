@@ -822,6 +822,24 @@ section.manage .manage__itm {
   position: relative;
 }
 section.manage .itm__title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+section.manage .title__control {
+  display: flex;
+  align-items: center;
+}
+section.manage .title__control .btn {
+  background-color: transparent;
+  border: none;
+}
+section.manage .title__control .btn i {
+  color: #d0c8c4;
+  font-size: clamp(2.5rem, 10vw, 3.5rem);
+}
+section.manage .itm__title h2 {
   color: #d0c8c4;
   font-size: clamp(2.5rem, 10vw, 3.5rem);
   width: 100%;
@@ -834,32 +852,41 @@ section.manage .itm__list {
   width: 100%;
   gap: 0.5rem;
 }
+section.manage .itm__control {
+  display: flex;
+}
+section.manage .itm__control .btn--primary, section.manage .itm__control .btn--secondary {
+  background-color: #f15b3e;
+  flex: 50%;
+  border-radius: 0;
+  text-align: center;
+  padding: 0.3rem 0.4rem;
+  color: white;
+  font-size: 0.95rem;
+  border: 1px solid #f15b3e;
+}
+section.manage .btn i {
+  vertical-align: middle;
+}
+section.manage .itm__control .btn--secondary {
+  background-color: transparent;
+  color: #61544d;
+}
 section.manage .list__itm:not(.list__itm--disabled) {
   border-radius: 2px;
   border: 1px solid #f15b3e;
-  padding: 0.2rem 0.3rem;
+  padding: 0.4rem 0.3rem;
   display: flex;
+  gap: 0.5rem;
+  flex-direction: column;
   justify-content: space-between;
-  align-items: center;
 }
-section.manage .itm__control {
-  display: flex;
-  gap: 0.2rem;
+section.manage .itm__content strong {
+  color: #61544d;
+  font-weight: bold;
 }
-section.manage .itm__control .btn--primary, section.manage .itm__control .btn--secondary {
-  background-color: #f26b51;
-  border-radius: 2px;
-  padding: 0.3rem 0.35rem;
-  color: white;
-  font-size: 0.95rem;
-}
-section.manage .itm__control .btn--secondary {
-  background-color: #f79d8b;
-  border: none;
-}
-section.manage .list__itm p {
-  color: #0c0a09;
-  font-size: 0.9rem;
+section.manage .itm__content p {
+  color: #61544d;
 }
 section.manage .list__itm--disabled {
   background-color: #dbd5d2;
@@ -869,4 +896,19 @@ section.manage .list__itm--disabled {
 section.manage .list__itm--disabled p {
   font-style: italic;
   color: #61544d;
+}
+@media screen and (min-width: 750px) {
+  section.manage .list__itm:not(.list__itm--disabled) {
+    flex-direction: row;
+    align-items: center;
+    padding-inline: 0.6rem;
+  }
+  section.manage .itm__control {
+    gap: 0.3rem;
+  }
+  section.manage .itm__control .btn {
+    border-radius: 2px;
+    width: 25px;
+    height: 25px;
+  }
 }

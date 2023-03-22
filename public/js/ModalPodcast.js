@@ -65,22 +65,22 @@ export default class ModalForm extends Component {
     const formData = new FormData(e.target);
     const formProps = Object.fromEntries(formData);
 
-    const formSelect = document.getElementById("formSelect");
-
-    const selectedLanguage = formSelect.options?.[formSelect.selectedIndex]?.value;
-
-    if (!selectedLanguage) {
-      toast("you need to select a language for your podcast", "danger", "bi bi-exclamation-triangle-fill");
-      return;
+    if (!this.props.isEditModal) {
+      if (formProps.cover.type.split('/').shift() != "image") {
+        toast("Invalid image file format!", "danger", "bi bi-exclamation-triangle-fill");
+        return;
+      }
     }
+
+      const formSelect = document.getElementById("formSelect");
+      const selectedLanguage = formSelect.options?.[formSelect.selectedIndex]?.value;
+      if (!selectedLanguage) {
+        toast("you need to select a language for your podcast", "danger", "bi bi-exclamation-triangle-fill");
+        return;
+      }
 
     if (formProps.title.length > 64) {
       toast("Podcast title can't exceed 64 characters", "danger", "bi bi-exclamation-triangle-fill");
-      return;
-    }
-
-    if (formProps.cover.type.split('/').shift() != "image") {
-      toast("Invalid image file format!", "danger", "bi bi-exclamation-triangle-fill");
       return;
     }
 
@@ -88,17 +88,24 @@ export default class ModalForm extends Component {
 
 
     const postFormData = new FormData();
-    postFormData.append("cover", formProps.cover);
-    postFormData.append("language", selectedLanguage);
-    postFormData.append("title", formProps.title);
-    postFormData.append("category", formProps.category);
-    postFormData.append("description", formProps.description);
-    postFormData.append("explicit", formProps.epExplicit === "on");
+    for (let formItm in formProps) {
+      postFormData.append(formItm, formProps[formItm]);
+    }
 
-    const res = await fetch("/createPodcast", {
-      method: "POST",
-      body: postFormData
-    });
+
+    let res;
+    if (this.props.isEditModal) {
+      postFormData.append("podcastID", this.props.podcastID);
+      res = await fetch("/updatePodcast", {
+        method: "PUT",
+        body: postFormData
+      });
+    } else {
+      res = await fetch("/createPodcast", {
+        method: "POST",
+        body: postFormData
+      });
+    }
 
     if (res.status !== 200) {
       toast("Something went wrong", "danger", "bi bi-exclamation-triangle-fill");
@@ -107,7 +114,8 @@ export default class ModalForm extends Component {
     }
 
     const {data} = await res.json();
-    toast(`Created new podcast with id ${data.id}`, "success", "bi bi-check-circle-fill");
+    console.log(data);
+    toast(this.props.isEditModal ? `Updated new podcast with id ${data.podcastID}` : `Created new podcast with id ${data.id}`, "success", "bi bi-check-circle-fill");
     this.setState({showLoader: false});
   }
 
@@ -147,6 +155,7 @@ export default class ModalForm extends Component {
               <input class="input" type="text" name="category" required>
             </div> </div>
 
+${this.props.isEditModal ?? html`
           <div class="form__itm form__file">
             <label class="label" for="cover">
               Cover for your podcast
@@ -157,6 +166,7 @@ export default class ModalForm extends Component {
             <p class="form__uploaded-name">${this.state.selectedFile}</p>
             <input type="file" name="cover" accept="image/jpeg, image/png" onChange=${this.handleFileInput}>
           </div></div>
+`}
 
           <div class="form__itm form__check">
             <label class="label" for="explicit">Does your podcast include profanity?</label>

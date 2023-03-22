@@ -89,7 +89,6 @@ export default class ModalEpisode extends Component {
     }
 
     const { data } = await res.json();
-    console.log(data);
     toast(this.props.isEditModal ? `Updated the episode with id ${data.episodeID}` : `Created episode with id ${data.id}`, "success", "bi bi-check-circle-fill");
     this.setState({showLoader: false});
   }
@@ -119,17 +118,17 @@ export default class ModalEpisode extends Component {
 
             <div class="form__itm">
               <label for="title">Title</label>
-              <input value=${this.props.isEditModal ? this.props.defaultEpisodeData.title : ""} type="text" name="title" required>
+              <input value=${this.props.isEditModal ?? this.props?.defaultEpisodeData?.title} type="text" name="title" required>
             </div></div>
 
             <div class="form__itm">
               <label for="desc">Description</label>
-              <input value=${this.props.isEditModal ? this.props.defaultEpisodeData.description : ""} class="input" type="text" name="desc" required>
+              <input value=${this.props.isEditModal ?? this.props?.defaultEpisodeData?.description} class="input" type="text" name="desc" required>
             </div></div>
 
             <div class="form__itm">
               <label class="label" for="number">Episode number</label>
-              <input  value=${this.props.isEditModal ? this.props.defaultEpisodeData.number : ""} class="input" type="tel" name="number" required>
+              <input  value=${this.props.isEditModal ?? this.props?.defaultEpisodeData?.number} class="input" type="tel" name="number" required>
             </div> </div>
 
           ${this.props.isEditModal ? `` : html`
@@ -145,7 +144,7 @@ export default class ModalEpisode extends Component {
 
           <div class="form__itm form__check">
             <label class="label" for="explicit">Does the episode include use of profanity?</label>
-            <input class="checkbox" type="checkbox" name="explicit" checked=${this.props.defaultEpisodeData.explicit}>
+            <input class="checkbox" type="checkbox" name="explicit" checked=${this.props?.defaultEpisodeData?.explicit}>
           </div></div>
 
             <button class="btn btn--submit btn--loader" type="submit" ${this.state.showLoader ? html`disabled` : ""}>
