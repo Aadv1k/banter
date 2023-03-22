@@ -21,6 +21,7 @@ const routeGetEpisode = require("../routes/GetEpisode.js");
 const routeUpdateEpisode = require("../routes/UpdateEpisode.js");
 const routeUpdatePodcast = require("../routes/UpdatePodcast.js");
 const routeUserinfo = require("../routes/UserInfo.js")
+const routeDeleteEpisode = require("../routes/DeleteEpisode.js");
 
 const http = require("http");
 const { renderView } = require("./common");
@@ -66,6 +67,8 @@ module.exports = http.createServer(async (req, res) => {
     routeUpdatePodcast(req, res);
   } else if (URI.startsWith("/userinfo")) {
     routeUserinfo(req, res);
+  } else if (URI.startsWith("/deleteEpisode")) {
+    routeDeleteEpisode(req, res);
   }
   else {
     renderView(req, res, "404.ejs", 404, {}, true);
