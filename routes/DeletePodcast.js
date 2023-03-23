@@ -23,15 +23,15 @@ module.exports = async (req, res) => {
     return;
   }
 
-  const { episodeID, podcastID } = querystring.parse(req.url.split('?').pop());
+  const { podcastID } = querystring.parse(req.url.split('?').pop());
 
-  if (!episodeID || !podcastID) {
+  if (!podcastID) {
     sendJsonErr(res, ERR.badInput);
     return;
   }
 
   try {
-    const res = await USER_DB.deleteEpisodeForUser({_id: userid}, podcastID, episodeID) 
+    const res = await USER_DB.deletePodcastForUser({_id: userid}, podcastID) 
     if (res === null) {
       sendJsonErr(res, ERR.internalErr);
       return;
@@ -46,7 +46,7 @@ module.exports = async (req, res) => {
     "Content-type": "application/json",
   })
   res.write(JSON.stringify({
-    message: "episode deleted successfully",
+    message: "podcast deleted successfully",
     code: 200,
   }));
   res.end();

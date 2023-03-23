@@ -16,12 +16,17 @@ const routeSignup = require("../routes/Signup");
 const routeCreateEpisode = require("../routes/CreateEpisode.js");
 const routeCreatePodcast = require("../routes/CreatePodcast.js");
 const routeRSS = require("../routes/RSS.js");
+
 const routeGetPodcast = require("../routes/GetPodcast.js");
 const routeGetEpisode = require("../routes/GetEpisode.js");
+
 const routeUpdateEpisode = require("../routes/UpdateEpisode.js");
 const routeUpdatePodcast = require("../routes/UpdatePodcast.js");
-const routeUserinfo = require("../routes/UserInfo.js")
+
 const routeDeleteEpisode = require("../routes/DeleteEpisode.js");
+const routeDeletePodcast = require("../routes/DeletePodcast.js");
+
+const routeUserinfo = require("../routes/UserInfo.js")
 
 const http = require("http");
 const { renderView } = require("./common");
@@ -69,6 +74,8 @@ module.exports = http.createServer(async (req, res) => {
     routeUserinfo(req, res);
   } else if (URI.startsWith("/deleteEpisode")) {
     routeDeleteEpisode(req, res);
+  } else if (URI.startsWith("/deletePodcast")) {
+    routeDeletePodcast(req, res);
   }
   else {
     renderView(req, res, "404.ejs", 404, {}, true);

@@ -70,6 +70,26 @@ class UserModel {
     return user?.podcasts ?? null
   }
 
+  async deletePodcastForUser(userQuery, podcastID) {
+    userQuery = this.parseQuery(userQuery)
+    const user = await this.users.findOne(userQuery);
+
+    if (!user) {
+      return null;
+    }
+
+    let updateBlob = {};
+    updateBlob[`podcasts.${podcastID}`] = "";
+
+    try {
+      this.users.updateOne(userQuery, {
+        $unset: { ...updateBlob }
+      })
+    } catch (_) {
+      return null;
+    }
+  }
+
   async deleteEpisodeForUser(userQuery, podcastID, episodeID) {
     userQuery = this.parseQuery(userQuery)
     const user = await this.users.findOne(userQuery);
@@ -204,7 +224,6 @@ class UserModel {
       return null;
     })
   }
-
 
   async userExists(query) {
     query = this.parseQuery(query);
