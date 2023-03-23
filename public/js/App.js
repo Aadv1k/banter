@@ -15,7 +15,7 @@ export default class App extends Component {
   render() {
     return html`  
     <${Router}> 
-      <${PageCreate} path="/dashboard/create" />
+      <${PageCreate} default path="/dashboard/create" />
       <${PageManage} path="/dashboard/manage" />
       <${PageShare} path="/dashboard/share" />
     </${Router}>
