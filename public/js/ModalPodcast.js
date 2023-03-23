@@ -128,9 +128,12 @@ export default class ModalForm extends Component {
         </button>
 
 
-        <h2 class="modal__title">New podcast</h2>
+        <h2 class="modal__title">${this.props.isEditModal ? "Update podcast" : "new podcast"}</h2>
+
+        
         <div class="modal__content">
           <form action="" class="modal__form form" onSubmit=${this.handleSubmit}>
+
 
         <div class="form__itm form__select modal__select">
         <select name="language" default="Choose a language for your podcast" id="formSelect">

@@ -30,6 +30,8 @@ module.exports = async (req, res) => {
     return;
   }
 
+  console.log(podcastID);
+
   try {
     const res = await USER_DB.deletePodcastForUser({_id: userid}, podcastID) 
     if (res === null) {

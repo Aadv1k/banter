@@ -589,8 +589,6 @@ section.share {
   } 
 
   .itm__title h2 {
-    padding: .4rem;
-    margin-left: .5rem;
     border-radius: 2px;
     color: $text-clr-1;
     width: 100%;
@@ -624,8 +622,10 @@ section.manage {
 
   .itm__title {
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
     justify-content: space-between;
+    padding: .5rem;
     width: 100%;
     position: relative;
     overflow: hidden; 
@@ -633,8 +633,6 @@ section.manage {
   } 
 
   .itm__title h2 {
-    padding: .4rem;
-    margin-left: .5rem;
     border-radius: 2px;
     color: $text-clr-1;
     width: 100%;
@@ -643,10 +641,10 @@ section.manage {
 
   .itm__title .title__bg {
     width: 100%;
+    top: -10%;
     position: absolute;
     object-fit: cover;
     z-index: -1;
-
   }
 
   .title__control {
@@ -677,8 +675,13 @@ section.manage {
     display: flex;
   }
 
-  .itm__control .btn--primary, .itm__control .btn--secondary {
-    background-color: $accent;
+  .podcast__control {
+    width: 100%;
+    gap: 0;
+  }
+
+  .podcast__control .btn--primary, .podcast__control .btn--secondary {
+    background-color: $text-clr-1;
     flex: 50%;
     border-radius: 0;
     text-align: center;
@@ -688,6 +691,14 @@ section.manage {
     border: 1px solid $accent;
   }
 
+  .itm__control .btn--primary, .itm__control .btn--secondary {
+    background-color: $text-clr-2 !important;
+    padding: .3rem .4rem;
+    color: white;
+    font-size: .95rem;
+    border: none;
+  }
+
   .btn i {
     vertical-align: middle;
   }
@@ -695,6 +706,10 @@ section.manage {
   .itm__control .btn--secondary {
     background-color: transparent;
     color: $text-clr-2;
+  }
+
+  .podcast__control .btn--secondary {
+    color: white;
   }
 
   .list__itm:not(.list__itm--disabled) {
@@ -727,6 +742,16 @@ section.manage {
   }
 
   @media screen and (min-width: 750px) {
+
+    .itm__title {
+      flex-direction: row;
+      align-items: center;
+    }
+
+    .podcast__control {
+      width: auto;
+    }
+
     .list__itm:not(.list__itm--disabled) {
       flex-direction: row;
       align-items: center;
