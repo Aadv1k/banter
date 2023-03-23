@@ -208,7 +208,7 @@
   color: #61544d;
 }
 .form .form__itm > input::placeholder {
-  color: #d0c8c4;
+  color: #61544d;
 }
 .form .form__itm > input {
   all: unset;
@@ -326,6 +326,7 @@
   background-color: #e6e2e0;
   box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12), 0px 2px 4px -1px rgba(0, 0, 0, 0.2);
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
 }
 .editor .editor__btn {
@@ -334,20 +335,21 @@
   font-size: 1rem;
   transition: 400ms ease-in-out;
 }
-.editor .editor__btn:hover {
-  background-color: #d0c8c4;
+.editor .editor__btn:active {
+  background-color: #c4bbb6;
 }
 .editor .editor__url {
-  flex: 90%;
   background-color: #dbd5d2;
   border-radius: 100px;
   padding: 0.4rem 0.5rem;
   font-family: monospace;
+  width: 100%;
+  word-wrap: break-word;
 }
 .editor .editor__code {
   border-radius: 0 0 2px 2px;
   width: 100%;
-  background-color: #191919;
+  background-color: #d0c8c4;
   padding: 1rem;
   overflow-x: scroll;
 }
@@ -355,7 +357,12 @@
   font-family: monospace;
   width: 100%;
   white-space: pre;
-  color: white;
+  color: #0c0a09;
+}
+@media screen and (min-width: 500px) {
+  .editor .editor__header {
+    flex-direction: row;
+  }
 }
 
 .btn {
@@ -753,10 +760,15 @@ section {
 
 .login-form {
   max-width: 500px;
+  margin-block: 0;
 }
 @media screen and (min-width: 500px) {
   .login-form {
-    margin-top: 8rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 500px;
   }
   .login-form .form {
     padding-block: 2rem;
@@ -773,7 +785,7 @@ section {
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 1rem;
+  padding: 1rem 0.5rem;
 }
 .vnav__profile {
   width: 40px;
@@ -836,8 +848,8 @@ section {
 }
 
 .dashboard-page {
-  margin-left: 80px;
-  width: calc(100% - 80px);
+  margin-left: 55px;
+  width: calc(100% - 55px);
   overflow-x: hidden;
 }
 .dashboard-page section {

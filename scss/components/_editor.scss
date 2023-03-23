@@ -12,6 +12,7 @@
     box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.14),
       0px 1px 10px 0px rgba(0, 0, 0, 0.12), 0px 2px 4px -1px rgba(0, 0, 0, 0.2);
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
   }
 
@@ -22,22 +23,23 @@
     transition: 400ms ease-in-out;
   }
 
-  .editor__btn:hover {
-    background-color: darken($main-bg, 5%);
+  .editor__btn:active {
+    background-color: darken($main-bg, 10%);
   }
 
   .editor__url {
-    flex: 90%;
     background-color: $main-bg;
     border-radius: 100px;
     padding: .4rem .5rem;
     font-family: monospace;
+    width: 100%;
+    word-wrap: break-word;
   }
 
   .editor__code {
     border-radius: 0 0 2px 2px;
     width: 100%;
-    background-color: #191919;
+    background-color: $text-clr-1;
     padding: 1rem;
     overflow-x: scroll;
   }
@@ -46,6 +48,13 @@
     font-family: monospace;
     width: 100%;
     white-space: pre;
-    color: white;
+    color: $text-clr-3;
+  }
+
+  @media screen and (min-width: 500px)  {
+    .editor__header {
+      flex-direction: row;
+
+    }
   }
 }

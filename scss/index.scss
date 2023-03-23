@@ -370,9 +370,14 @@ section {
 
 .login-form {
   max-width: 500px;
-
+  margin-block: 0;
   @media screen and (min-width: 500px) {
-    margin-top: 8rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 500px;
+
     .form {
       padding-block: 2rem;
     }
@@ -390,7 +395,7 @@ section {
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 1rem;
+  padding: 1rem .5rem;
 
   &__profile {
     width: 40px;
@@ -467,8 +472,8 @@ section {
 }
 
 .dashboard-page {
-  margin-left: 80px;
-  width: calc(100% - 80px);
+  margin-left: 55px;
+  width: calc(100% - 55px);
   overflow-x: hidden;
 
   section {
@@ -778,7 +783,6 @@ footer {
     gap: .5rem;
     list-style: none;
   }
-
 
   li a  i {
     font-size: 2rem;
