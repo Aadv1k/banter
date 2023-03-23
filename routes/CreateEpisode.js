@@ -50,6 +50,11 @@ module.exports = async (req, res) => {
     return;
   }
 
+  if (podcasts[fields.podcastID]?.episodes?.length >= 50) {
+    sendJsonErr(res, ERR.episodeLimitExceeded);
+    return;
+  }
+
   const audioFile = files["audio"];
   const audioFileType = audioFile.mimetype;
   if (audioFileType != "audio/mpeg") {
