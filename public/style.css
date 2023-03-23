@@ -587,8 +587,16 @@ section {
   align-self: flex-end;
   margin-bottom: 1rem;
   margin-left: 1rem;
-  font-size: 2.5rem;
+  font-size: 2rem;
   max-width: 25ch;
+}
+@media screen and (min-width: 500px) {
+  .hero {
+    height: 350px;
+  }
+  .hero__sub {
+    font-size: 2.4rem;
+  }
 }
 
 .features {
