@@ -21,9 +21,31 @@ section.hero {
   margin: 0 auto;
 }
 
+
+section > h2:not(.hero__sub) {
+    margin-block: 0.5rem;
+    color: $text-clr-1;
+    font-size: clamp(5rem, 15vw, 8em);
+    position: absolute;
+    z-index: -1;
+    top: 0;
+
+    @media screen and (max-width: 350px) {
+      font-size: 3rem;
+      top: 1.5rem;
+    }
+
+    @media screen and (min-width: 600px) {
+      top: -10%;
+    }
+}
+
 section {
   max-width: 1000px;
-  margin: 2.5rem auto;
+  margin: 3rem auto;
+  position: relative;
+  padding-top: 5rem;
+
 }
 
 .navbar {
@@ -40,6 +62,7 @@ section {
     font-size: 2.3rem;
     text-decoration: none;
     font-weight: bold;
+    width: fit-content;
   }
 
   .nav__links {
@@ -55,6 +78,7 @@ section {
 
   .nav__links a {
     padding-block: 0.6rem;
+    font-size: .95rem;
     width: 100%;
     text-align: center;
     text-transform: capitalize;
@@ -109,7 +133,7 @@ section {
     padding: 0.8rem 1.3rem;
 
     .nav__title {
-      font-size: 3rem;
+      font-size: 2.5rem;
     }
 
     .nav__links a:nth-child(2) {
@@ -130,24 +154,22 @@ section {
 .hero {
   background-color: $accent;
   color: black;
-  height: 330px;
+  height: 350px;
   display: flex;
 
   &__sub {
     align-self: flex-end;
     margin-bottom: 1rem;
     margin-left: 1rem;
-    font-size: 2.2rem;
+    font-size: 2.5rem;
     max-width: 25ch;
   }
 }
 
 .features {
   width: 90%;
-
-  &__title {
-    margin-block: 0.5rem;
-  }
+  padding-top: 5rem;
+  position: relative;
 
   &__list {
     list-style: none;
@@ -157,9 +179,16 @@ section {
     justify-content: space-between;
   }
 
+  h3 {
+    color: $text-clr-2;
+    text-decoration: none; 
+    border-left: 3px solid $accent;
+    padding-left: .4rem;
+    width: fit-content;
+  }
+
   .list__itm {
-    border: 2px dotted $accent;
-    //background: #e7a991;
+    background-image: linear-gradient(90deg, darken($main-bg, 2%), darken($main-bg, 2.5%));
     border-radius: 3px;
     padding: 2rem 1rem;
     display: flex;
@@ -170,7 +199,7 @@ section {
   p {
     max-width: 40ch;
     margin-top: 0.5rem;
-    color: $text-clr-3;
+    color: $text-clr-2;
   }
 
   .list__itm i {
@@ -178,8 +207,8 @@ section {
   }
 
   @media screen and (min-width: 500px) {
-    .features__list {
-      flex-direction: row;
+    p {
+      max-width: 100%;
     }
   }
 }
@@ -187,9 +216,6 @@ section {
 .faq {
   width: 90%;
 
-  &__title {
-    margin-block: 0.5rem;
-  }
 
   &__list {
     list-style: none;
@@ -199,6 +225,7 @@ section {
   }
 
   &__list li {
+    background-color: $main-bg;
     border: 2px dotted $accent;
     border-radius: 2px;
     display: flex;
@@ -224,11 +251,14 @@ section {
     display: flex;
     flex-direction: column;
     gap: 0.8rem;
-    margin-block: 1rem;
   }
 
   .pricing__prices .highlight {
-    background: $accent;
+  background: linear-gradient(
+    180deg,
+    lighten($accent, 3%),
+    darken($accent, 5%)
+  );
 
     p {
       color: black;
@@ -236,7 +266,7 @@ section {
   }
 
   .pricing__prices .disabled {
-    opacity: 0.5;
+    opacity: 0.6;
     user-select: none;
     cursor: not-allowed;
 
@@ -298,10 +328,11 @@ section {
   @media screen and (min-width: 500px) {
     .pricing__prices {
       flex-direction: row;
+      justify-content: center;
     }
 
     .pricing__prices > div {
-      max-width: 33%;
+      max-width: 50%;
     }
   }
 }
@@ -703,3 +734,53 @@ section.manage {
 
 }
 
+
+.overview {
+
+  &__img {
+    position: relative;
+  }
+
+  &__img img {
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+    object-fit: cover;
+    height: 500px;
+  }
+
+  &__content {
+    padding-inline: 1rem;
+    gap: .5rem;
+    display: flex;
+    align-items: center;
+  }
+}
+
+footer {
+  padding: 2rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+
+  background: $text-clr-2;
+  color: $text-clr-1;
+
+  .nav__title {
+    font-size: 2.3rem;
+    text-decoration: none;
+    font-weight: bold;
+  }
+
+  .footer__links {
+    display: flex;
+    gap: .5rem;
+    list-style: none;
+  }
+
+
+  li a  i {
+    font-size: 2rem;
+  }
+}
