@@ -1,6 +1,6 @@
 const { BucketStore } = require("../models/BucketStore.js");
-const { ERR, MAX_IMAGE_SIZE_IN_MB} = require("../app/constants");
-const { sendJsonErr, isCookieAndSessionValid } = require("../app/common");
+const { ERR, MAX_IMAGE_SIZE_IN_MB } = require("../common/constants.js");
+const { sendJsonErr, isCookieAndSessionValid } = require("../common/common.js");
 const cookie = require("cookie");
 const crypto = require("crypto");
 
@@ -18,15 +18,15 @@ module.exports = async (req, res) => {
   }
 
   const userid = Store.get(cookie.parse(req.headers.cookie).sessionid).uid;
-  
+
   if (req.method !== "POST") {
     sendJsonErr(res, ERR.invalidMethod);
     return;
   }
 
-  const form = formidable({ multiples: false, });
+  const form = formidable({ multiples: false });
 
-  const {fields, files} = await new Promise((resolve, reject) => {
+  const { fields, files } = await new Promise((resolve, reject) => {
     form.parse(req, (err, fields, files) => {
       if (err) {
         reject(err);
@@ -36,13 +36,16 @@ module.exports = async (req, res) => {
     });
   });
 
-  if (![
-  files.cover, 
-    fields.title, 
-    fields.explicit, 
-    fields.description, 
-    fields.category, 
-    fields.language].every((e) => e)) {
+  if (
+    ![
+      files.cover,
+      fields.title,
+      fields.explicit,
+      fields.description,
+      fields.category,
+      fields.language
+    ].every((e) => e)
+  ) {
     sendJsonErr(res, ERR.badInput);
     return;
   }
@@ -60,21 +63,20 @@ module.exports = async (req, res) => {
     return;
   }
 
-  const { title, explicit, description, category, language} = fields;
-  const user = await USER_DB.getUser({_id: userid});
+  const { title, explicit, description, category, language } = fields;
+  const user = await USER_DB.getUser({ _id: userid });
   if (!user) {
     sendJsonErr(res, ERR.userNotFound);
     return;
   }
-
 
   let permalink;
   try {
     const { path } = await BUCKET.pushFile(coverFile.filepath);
     permalink = path;
   } catch (err) {
-    console.error(err)
-    sendJsonErr(res, ERR.internalErr)
+    console.error(err);
+    sendJsonErr(res, ERR.internalErr);
     return;
   }
 
@@ -85,23 +87,25 @@ module.exports = async (req, res) => {
     category,
     description,
     cover: permalink,
-    explicit: explicit === "true",
-  }
+    explicit: explicit === "true"
+  };
 
   try {
-    await USER_DB.insertPodcastForUser({_id: userid}, podcast);
+    await USER_DB.insertPodcastForUser({ _id: userid }, podcast);
     res.writeHead(200, {
-      "Content-type": "application/json",
-    })
-    res.write(JSON.stringify({
-      message: "new podcast created successfully",
-      code: 200,
-      data: {
-        id: podcast.id,
-        title: podcast.title,
-        cover: podcast.cover,
-      }
-    }));
+      "Content-type": "application/json"
+    });
+    res.write(
+      JSON.stringify({
+        message: "new podcast created successfully",
+        code: 200,
+        data: {
+          id: podcast.id,
+          title: podcast.title,
+          cover: podcast.cover
+        }
+      })
+    );
     res.end();
   } catch (err) {
     console.error(err);

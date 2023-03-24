@@ -1,9 +1,5 @@
-import {
-  createElement as h,
-  Component,
-} from "https://unpkg.com/preact@latest?module";
+import { createElement as h, Component } from "https://unpkg.com/preact@latest?module";
 import htm from "https://unpkg.com/htm@latest?module";
-
 
 import ModalEpisode from "/js/ModalEpisode.js";
 import ModalPodcast from "/js/ModalPodcast.js";
@@ -22,7 +18,7 @@ export default class PageCreate extends Component {
       showEpisodeEditModal: false,
       showPodcastEditModal: false,
       showEpisodeDeleteModal: false,
-      showPodcastDeleteModal: false,
+      showPodcastDeleteModal: false
     };
     this.handleEpisodeEditClick = this.handleEpisodeEditClick.bind(this);
     this.handleEpisodeDeleteClick = this.handleEpisodeDeleteClick.bind(this);
@@ -41,84 +37,104 @@ export default class PageCreate extends Component {
   }
 
   setEpisodeEditModal() {
-    this.setState({showEpisodeEditModal: !this.state.showEpisodeEditModal});
+    this.setState({ showEpisodeEditModal: !this.state.showEpisodeEditModal });
   }
 
   setPodcastEditModal() {
-    this.setState({showPodcastEditModal: !this.state.showPodcastEditModal});
+    this.setState({ showPodcastEditModal: !this.state.showPodcastEditModal });
   }
 
   setEpisodeDeleteModal() {
-    this.setState({showEpisodeDeleteModal: !this.state.showEpisodeDeleteModal});
+    this.setState({
+      showEpisodeDeleteModal: !this.state.showEpisodeDeleteModal
+    });
   }
 
   setPodcastDeleteModal() {
-    this.setState({showPodcastDeleteModal: !this.state.showPodcastDeleteModal});
+    this.setState({
+      showPodcastDeleteModal: !this.state.showPodcastDeleteModal
+    });
   }
 
-  handleEpisodeDelete({episodeID, podcastID}) {
-    fetch(`/deleteEpisode?episodeID=${episodeID}&podcastID=${podcastID}`, {method: "DELETE"})
-      .then(res => {
-        if (res.status !== 200) {
-          toast("was unable to delete the episode", "warn", "bi bi-exclamation-triangle");
-          return;
-        }
-        window.location.reload(false);
-      })
+  handleEpisodeDelete({ episodeID, podcastID }) {
+    fetch(`/deleteEpisode?episodeID=${episodeID}&podcastID=${podcastID}`, {
+      method: "DELETE"
+    }).then((res) => {
+      if (res.status !== 200) {
+        toast("was unable to delete the episode", "warn", "bi bi-exclamation-triangle");
+        return;
+      }
+      window.location.reload(false);
+    });
   }
 
   handlePodcastDelete({ podcastID }) {
-    fetch(`/deletePodcast?podcastID=${podcastID}`, {method: "DELETE"})
-      .then(res => {
-        if (res.status !== 200) {
-          toast("was unable to delete the episode", "warn", "bi bi-exclamation-triangle");
-          return;
-        }       
-        window.location.reload(false);
-      })
+    fetch(`/deletePodcast?podcastID=${podcastID}`, { method: "DELETE" }).then((res) => {
+      if (res.status !== 200) {
+        toast("was unable to delete the episode", "warn", "bi bi-exclamation-triangle");
+        return;
+      }
+      window.location.reload(false);
+    });
   }
 
   handlePodcastDeleteClick(e) {
-    const podcastID = e.currentTarget.parentElement.getAttribute('data-podcast');
+    const podcastID = e.currentTarget.parentElement.getAttribute("data-podcast");
     if (!podcastID) {
-      toast("episode or podcast ID not found, try refreshing the page", "warn", "bi bi-exclamation-triangle");
+      toast(
+        "episode or podcast ID not found, try refreshing the page",
+        "warn",
+        "bi bi-exclamation-triangle"
+      );
       return;
     }
 
-    this.setState({podcastID: podcastID})
+    this.setState({ podcastID: podcastID });
     this.setPodcastDeleteModal();
   }
 
   handleEpisodeDeleteClick(e) {
-    const episodeID = e.currentTarget.parentElement.getAttribute('data-ep');
-    const podcastID = e.currentTarget.parentElement.getAttribute('data-podcast');
+    const episodeID = e.currentTarget.parentElement.getAttribute("data-ep");
+    const podcastID = e.currentTarget.parentElement.getAttribute("data-podcast");
 
     if (!episodeID || !podcastID) {
-      toast("episode or podcast ID not found, try refreshing the page", "warn", "bi bi-exclamation-triangle");
+      toast(
+        "episode or podcast ID not found, try refreshing the page",
+        "warn",
+        "bi bi-exclamation-triangle"
+      );
       return;
     }
 
-    this.setState({episodeID: episodeID, podcastID: podcastID})
+    this.setState({ episodeID: episodeID, podcastID: podcastID });
     this.setEpisodeDeleteModal();
   }
 
   handlePodcastEditClick(e) {
-    const podcastID = e.currentTarget.parentElement.getAttribute('data-podcast');
+    const podcastID = e.currentTarget.parentElement.getAttribute("data-podcast");
 
     if (!podcastID) {
       toast("podcast ID not found, try refreshing the page", "warn", "bi bi-exclamation-triangle");
       return;
     }
 
-    this.setState({showPodcastEditModal: true, defaultPodcastData: this.state.podcasts.find(e => e.id === podcastID), podcastID: podcastID});
+    this.setState({
+      showPodcastEditModal: true,
+      defaultPodcastData: this.state.podcasts.find((e) => e.id === podcastID),
+      podcastID: podcastID
+    });
   }
 
   handleEpisodeEditClick(e) {
-    const episodeID = e.currentTarget.parentElement.getAttribute('data-ep');
-    const podcastID = e.currentTarget.parentElement.getAttribute('data-podcast');
+    const episodeID = e.currentTarget.parentElement.getAttribute("data-ep");
+    const podcastID = e.currentTarget.parentElement.getAttribute("data-podcast");
 
     if (!episodeID || !podcastID) {
-      toast("episode or podcast ID not found, try refreshing the page", "warn", "bi bi-exclamation-triangle");
+      toast(
+        "episode or podcast ID not found, try refreshing the page",
+        "warn",
+        "bi bi-exclamation-triangle"
+      );
       return;
     }
 
@@ -126,14 +142,18 @@ export default class PageCreate extends Component {
 
     for (let podcast of this.state.podcasts) {
       if (podcast.id !== podcastID) continue;
-      episode = podcast.episodes.find(ep => ep.id === episodeID);
-    } 
+      episode = podcast.episodes.find((ep) => ep.id === episodeID);
+    }
 
     if (!episode) {
       toast("unable to fetch the epsiodes at the moment", "warn");
       return;
     }
-    this.setState({showEpisodeEditModal: true, defaultEpisodeData: episode, podcastID, });
+    this.setState({
+      showEpisodeEditModal: true,
+      defaultEpisodeData: episode,
+      podcastID
+    });
   }
 
   componentDidMount() {
@@ -148,31 +168,50 @@ export default class PageCreate extends Component {
             podcasts: Object.keys(podcastData).map((e) => {
               return { id: e, ...podcastData[e] };
             }),
-            hasPodcasts: true,
+            hasPodcasts: true
           });
         }
-      }).catch(err => console.log(err));
+      })
+      .catch((err) => console.log(err));
   }
 
   render() {
     return html`
-
-${this.state.showEpisodeDeleteModal && html`
-<${Modal} setModal=${this.setEpisodeDeleteModal} delete=${this.handleEpisodeDelete} podcastID=${this.state.podcastID} episodeID=${this.state.episodeID}/>
-` }
-
-${this.state.showPodcastDeleteModal && html`
-<${Modal} setModal=${this.setPodcastDeleteModal} delete=${this.handlePodcastDelete} podcastID=${this.state.podcastID} />
-` }
-
-
-${this.state.showPodcastEditModal && html`
-<${ModalPodcast} defaultPodcastData=${this.state.defaultPodcastData} setModal=${this.setPodcastEditModal} isEditModal=${true} podcastID=${this.state.podcastID} />
-` }
-
-${this.state.showEpisodeEditModal && html`
-<${ModalEpisode} setModal=${this.setEpisodeEditModal} isEditModal=${true} defaultEpisodeData=${this.state.defaultEpisodeData} podcastID=${this.state.podcastID} />
-` }
+      ${this.state.showEpisodeDeleteModal &&
+      html`
+        <${Modal}
+          setModal=${this.setEpisodeDeleteModal}
+          delete=${this.handleEpisodeDelete}
+          podcastID=${this.state.podcastID}
+          episodeID=${this.state.episodeID}
+        />
+      `}
+      ${this.state.showPodcastDeleteModal &&
+      html`
+        <${Modal}
+          setModal=${this.setPodcastDeleteModal}
+          delete=${this.handlePodcastDelete}
+          podcastID=${this.state.podcastID}
+        />
+      `}
+      ${this.state.showPodcastEditModal &&
+      html`
+        <${ModalPodcast}
+          defaultPodcastData=${this.state.defaultPodcastData}
+          setModal=${this.setPodcastEditModal}
+          isEditModal=${true}
+          podcastID=${this.state.podcastID}
+        />
+      `}
+      ${this.state.showEpisodeEditModal &&
+      html`
+        <${ModalEpisode}
+          setModal=${this.setEpisodeEditModal}
+          isEditModal=${true}
+          defaultEpisodeData=${this.state.defaultEpisodeData}
+          podcastID=${this.state.podcastID}
+        />
+      `}
       <section class="manage">
         ${this.state.podcasts.map((podcast) => {
           return html`<div class="manage__itm">
@@ -199,16 +238,18 @@ ${this.state.showEpisodeEditModal && html`
                           <p>${episode.description}</p>
                         </div>
 
-                        <div class="itm__control"  data-ep=${episode.id} data-podcast=${podcast.id}>
+                        <div class="itm__control" data-ep=${episode.id} data-podcast=${podcast.id}>
                           <button class="btn btn--primary" onClick=${this.handleEpisodeEditClick}>
                             <i class="bi bi-pencil"></i>
                           </button>
 
-                          <button class="btn btn--secondary" onClick=${this.handleEpisodeDeleteClick}>
+                          <button
+                            class="btn btn--secondary"
+                            onClick=${this.handleEpisodeDeleteClick}
+                          >
                             <i class="bi bi-x-lg"></i>
                           </button>
                         </div>
-
                       </li>
                     `;
                   })

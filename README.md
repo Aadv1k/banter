@@ -11,7 +11,7 @@ npm run build # npm run dev
 
 ## Tech stack
 
-The app is loosely based around the [MVC](https://developer.mozilla.org/en-US/docs/Glossary/MVC) Architecutre, and the `/dashboard` is a SPA rendered via [preact](https://preactjs.com/). Everything from the *oAuth (spofity, microsoft)*, to *MongoDB queries* is implemented from *scratch*.
+The app is loosely based around the [MVC](https://developer.mozilla.org/en-US/docs/Glossary/MVC) Architecutre, and the `/dashboard` is a SPA rendered via [preact](https://preactjs.com/). Everything from the _oAuth (spofity, microsoft)_, to _MongoDB queries_ is implemented from _scratch_.
 
 ### Backend
 
@@ -34,10 +34,9 @@ The app is loosely based around the [MVC](https://developer.mozilla.org/en-US/do
 
 ## Frontend
 
-- SASS 
+- SASS
 - Preact
 - Gulp
-
 
 ## Codebase
 
@@ -53,7 +52,6 @@ Markdown                         1              5              0             13
 SUM:                            48            727             31           3579
 -------------------------------------------------------------------------------
 ```
-
 
 ### OAuth
 
@@ -73,9 +71,9 @@ oAuth is implemented for ![Microsoft](https://img.shields.io/badge/Microsoft-00a
 
 ### Routes
 
-Each file within the `./routes/` directory returns a function which consumes a node-http `Request` and `Response` object. 
+Each file within the `./routes/` directory returns a function which consumes a node-http `Request` and `Response` object.
 
-Here are all the possible *error* responses that can be returned by the app
+Here are all the possible _error_ responses that can be returned by the app
 
 ```js
 {
@@ -179,7 +177,6 @@ Here are all the possible *error* responses that can be returned by the app
 },
 ```
 
-
 ### Models
 
 - `./models/BucketStore.js`: Exports a class which contains functions to push local files to a bucket like [Cloudinary](https://cloudinary.com)
@@ -204,10 +201,10 @@ Here is what a user object looks like looks like
 
 ### Styles
 
-For the Front-End ![SASS](https://img.shields.io/badge/Sass-CC6699?style=plastic&logo=sass&logoColor=white) is used. 
+For the Front-End ![SASS](https://img.shields.io/badge/Sass-CC6699?style=plastic&logo=sass&logoColor=white) is used.
 The `./scss/` folder is structured like so
 
-- `_variables.scss`: Variables for rest of the styles 
+- `_variables.scss`: Variables for rest of the styles
 - `components/`
   - `_btn.scss`: The styles for the button
   - `_editor.scss`: Style for the editor elements in `/dashboard/share`
@@ -219,15 +216,15 @@ The `./scss/` folder is structured like so
 
 ### JavaScript
 
-A large part of the frontend is handled by ![Preact](https://img.shields.io/badge/Preact-20232A?style=plastic&logo=react&logoColor=61DAFB ) which is a minified version of the actual React and is pulled as a CDN.  
+A large part of the frontend is handled by ![Preact](https://img.shields.io/badge/Preact-20232A?style=plastic&logo=react&logoColor=61DAFB) which is a minified version of the actual React and is pulled as a CDN.  
 When the user accesses `/dashboard`, the server responds with static html, the static html links to a index file, after which point all the dynamic UI of the app is handled as a SPA here is the overview of `./public/js/` Folder
 
 - `App.js`: Exports a single `<App />` component that ties in with the html `dashboard.ejs`
-- `Modal.js`: Exports a `<Modal />` component 
-- `ModalEpisode.js`: Exports a `<ModalEpisode />` component which is used to edit/create a new episode 
-- `ModalPodcast.js`: Exports a `<ModalPodcast />` component which is used to edit/create a new podcast 
-- `PageCreate.js`: Component that is routed by `/dashboard/create/` is also the default route 
-- `PageManage.js`: Component that is routed by `/dashboard/manage/` 
-- `PageShare.js`: Component that is routed by `/dashboard/share/` 
+- `Modal.js`: Exports a `<Modal />` component
+- `ModalEpisode.js`: Exports a `<ModalEpisode />` component which is used to edit/create a new episode
+- `ModalPodcast.js`: Exports a `<ModalPodcast />` component which is used to edit/create a new podcast
+- `PageCreate.js`: Component that is routed by `/dashboard/create/` is also the default route
+- `PageManage.js`: Component that is routed by `/dashboard/manage/`
+- `PageShare.js`: Component that is routed by `/dashboard/share/`
 - `Toast.js`: Component that exports a `Toast` function which uses a `.toast` for styles
 - `index.js`: Component linked to `dashboard.ejs`

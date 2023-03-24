@@ -1,5 +1,5 @@
-const { ERR } = require("../app/constants");
-const { sendJsonErr, isCookieAndSessionValid } = require("../app/common");
+const { ERR } = require("../common/constants.js");
+const { sendJsonErr, isCookieAndSessionValid } = require("../common/common.js");
 
 const querystring = require("querystring");
 const cookie = require("cookie");
@@ -7,7 +7,6 @@ const cookie = require("cookie");
 const { UserModel } = require("../models/UserModel.js");
 const { Store } = require("../models/MemoryStore.js");
 const USER_DB = new UserModel();
-
 
 module.exports = async (req, res) => {
   await USER_DB.init();
@@ -17,13 +16,13 @@ module.exports = async (req, res) => {
   }
 
   const userid = Store.get(cookie.parse(req.headers.cookie).sessionid).uid;
-  
+
   if (req.method !== "DELETE") {
     sendJsonErr(res, ERR.invalidMethod);
     return;
   }
 
-  const { podcastID } = querystring.parse(req.url.split('?').pop());
+  const { podcastID } = querystring.parse(req.url.split("?").pop());
 
   if (!podcastID) {
     sendJsonErr(res, ERR.badInput);
@@ -33,7 +32,7 @@ module.exports = async (req, res) => {
   console.log(podcastID);
 
   try {
-    const res = await USER_DB.deletePodcastForUser({_id: userid}, podcastID) 
+    const res = await USER_DB.deletePodcastForUser({ _id: userid }, podcastID);
     if (res === null) {
       sendJsonErr(res, ERR.internalErr);
       return;
@@ -45,11 +44,13 @@ module.exports = async (req, res) => {
   }
 
   res.writeHead(200, {
-    "Content-type": "application/json",
-  })
-  res.write(JSON.stringify({
-    message: "podcast deleted successfully",
-    code: 200,
-  }));
+    "Content-type": "application/json"
+  });
+  res.write(
+    JSON.stringify({
+      message: "podcast deleted successfully",
+      code: 200
+    })
+  );
   res.end();
 };

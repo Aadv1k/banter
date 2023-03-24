@@ -4,17 +4,16 @@ $main-bg-05: lighten($main-bg, 5%);
 
 $text-clr-1: darken($main-bg, 5%);
 $text-clr-2: darken($main-bg, 50%);
-$text-clr-2-5: rgba(97,84,77,0.4);
+$text-clr-2-5: rgba(97, 84, 77, 0.4);
 $text-clr-3: darken($main-bg, 80%);
 $btn-shadow: -4px 4px 0px 0px darken($accent, 10%);
-
 
 $accent-1: #f79d8b;
 $accent-2: #f26b51;
 
 $toast-fill: white;
 
-$toast-danger: #DC3545;
-$toast-success: #28A745;
-$toast-warn: #FFC107;
-$toast-info: #17A2B8;
+$toast-danger: #dc3545;
+$toast-success: #28a745;
+$toast-warn: #ffc107;
+$toast-info: #17a2b8;

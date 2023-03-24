@@ -1,5 +1,5 @@
-const { ERR } = require("../app/constants");
-const { sendJsonErr, isCookieAndSessionValid, newID} = require("../app/common");
+const { ERR } = require("../common/constants.js");
+const { sendJsonErr, isCookieAndSessionValid, newID } = require("../common/common.js");
 const cookie = require("cookie");
 
 const { UserModel } = require("../models/UserModel.js");
@@ -7,25 +7,24 @@ const { Store } = require("../models/MemoryStore.js");
 const USER_DB = new UserModel();
 const formidable = require("formidable");
 
-
 module.exports = async (req, res) => {
   await USER_DB.init();
-  
+
   if (!isCookieAndSessionValid(req)) {
     sendJsonErr(res, ERR.unauthorized);
     return;
   }
 
- const userid = Store.get(cookie.parse(req.headers.cookie).sessionid).uid;
+  const userid = Store.get(cookie.parse(req.headers.cookie).sessionid).uid;
 
   if (req.method !== "PUT") {
     sendJsonErr(res, ERR.invalidMethod);
     return;
   }
 
-  const form = formidable({ multiples: false, });
+  const form = formidable({ multiples: false });
 
-  const {fields, files} = await new Promise((resolve, reject) => {
+  const { fields, files } = await new Promise((resolve, reject) => {
     form.parse(req, (err, fields, files) => {
       if (err) {
         reject(err);
@@ -39,42 +38,51 @@ module.exports = async (req, res) => {
     return;
   }
 
-  const podcasts = await USER_DB.getPodcastsForUser({_id: userid});
+  const podcasts = await USER_DB.getPodcastsForUser({ _id: userid });
   if (!podcasts?.[fields.podcastID]) {
-    sendJsonErr(res, ERR.invalidPodcastID) 
+    sendJsonErr(res, ERR.invalidPodcastID);
     return;
   }
 
-  if (!podcasts[fields.podcastID].episodes.find(e => e.id == fields.episodeID)) {
+  if (!podcasts[fields.podcastID].episodes.find((e) => e.id == fields.episodeID)) {
     // TODO: change this to episode id
-    sendJsonErr(res, ERR.invalidEpisodeID)
+    sendJsonErr(res, ERR.invalidEpisodeID);
     return;
   }
 
-  const user = await USER_DB.getUser({_id: userid});
+  const user = await USER_DB.getUser({ _id: userid });
   if (!user) {
     sendJsonErr(res, ERR.userNotFound);
     return;
   }
 
   const updatedEpisode = {
-    ...fields,
-  }
+    ...fields
+  };
 
-  if (await USER_DB.updateEpisodeForUser({_id: userid}, fields.podcastID, {id: fields.episodeID}, updatedEpisode) === null) {
+  if (
+    (await USER_DB.updateEpisodeForUser(
+      { _id: userid },
+      fields.podcastID,
+      { id: fields.episodeID },
+      updatedEpisode
+    )) === null
+  ) {
     sendJsonErr(res, ERR.internalErr);
     return;
   }
 
   res.writeHead(200, {
-    "Content-type": "application/json",
-  })
-  res.write(JSON.stringify({
-    message: "episode updated successfully",
-    code: 200,
-    data: {
-      ...updatedEpisode
-    }
-  }));
+    "Content-type": "application/json"
+  });
+  res.write(
+    JSON.stringify({
+      message: "episode updated successfully",
+      code: 200,
+      data: {
+        ...updatedEpisode
+      }
+    })
+  );
   res.end();
 };

@@ -1,7 +1,4 @@
-import {
-  createElement as h,
-  Component,
-} from "https://unpkg.com/preact@latest?module";
+import { createElement as h, Component } from "https://unpkg.com/preact@latest?module";
 import htm from "https://unpkg.com/htm@latest?module";
 
 const html = htm.bind(h);
@@ -14,7 +11,7 @@ export default class ModalForm extends Component {
       epNumber: [],
       numInvalid: false,
       showLoader: false,
-      selectedFile: "No file selected",
+      selectedFile: "No file selected"
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleFileInput = this.handleFileInput.bind(this);
@@ -42,7 +39,7 @@ export default class ModalForm extends Component {
       ["Swedish", "sv-se"],
       ["Finnish", "fi-fi"],
       ["Danish", "da-dk"],
-      ["Norwegian", "no-no"],
+      ["Norwegian", "no-no"]
     ]);
   }
 
@@ -68,17 +65,12 @@ export default class ModalForm extends Component {
 
     if (!this.props.isEditModal) {
       if (formProps.cover.type.split("/").shift() != "image") {
-        toast(
-          "Invalid image file format!",
-          "danger",
-          "bi bi-exclamation-triangle-fill"
-        );
+        toast("Invalid image file format!", "danger", "bi bi-exclamation-triangle-fill");
         return;
       }
 
       formSelect = document.getElementById("formSelect");
-      selectedLanguage =
-        formSelect.options?.[formSelect.selectedIndex]?.value;
+      selectedLanguage = formSelect.options?.[formSelect.selectedIndex]?.value;
       if (!selectedLanguage) {
         toast(
           "you need to select a language for your podcast",
@@ -115,22 +107,17 @@ export default class ModalForm extends Component {
 
       res = await fetch("/updatePodcast", {
         method: "PUT",
-        body: postFormData,
+        body: postFormData
       });
-
     } else {
       res = await fetch("/createPodcast", {
         method: "POST",
-        body: postFormData,
+        body: postFormData
       });
     }
 
     if (res.status !== 200) {
-      toast(
-        "Something went wrong",
-        "danger",
-        "bi bi-exclamation-triangle-fill"
-      );
+      toast("Something went wrong", "danger", "bi bi-exclamation-triangle-fill");
       this.setState({ showLoader: false });
       return;
     }
@@ -145,7 +132,7 @@ export default class ModalForm extends Component {
       "bi bi-check-circle-fill"
     );
     this.setState({ showLoader: false });
-    window.location.reload(false)
+    window.location.reload(false);
     this.props.setModal();
   }
 
@@ -157,14 +144,10 @@ export default class ModalForm extends Component {
         </button>
 
 
-        <h2 class="modal__title">${
-          this.props.isEditModal ? "Update podcast" : "new podcast"
-        }</h2>
+        <h2 class="modal__title">${this.props.isEditModal ? "Update podcast" : "new podcast"}</h2>
         
         <div class="modal__content">
-          <form action="" class="modal__form form" onSubmit=${
-            this.handleSubmit
-          }>
+          <form action="" class="modal__form form" onSubmit=${this.handleSubmit}>
 
 
 
@@ -178,9 +161,7 @@ export default class ModalForm extends Component {
                     default="Choose a language for your podcast"
                     id="formSelect"
                   >
-                    <option value="" disabled selected>
-                      Select your language
-                    </option>
+                    <option value="" disabled selected>Select your language</option>
                     ${Array.from(this.languageMap).map(
                       (e) => html`<option value="${e[1]}">${e[0]}</option>`
                     )}
@@ -199,14 +180,15 @@ export default class ModalForm extends Component {
 
             <div class="form__itm">
               <label for="description">Description</label>
-              <input value=${this.props.isEditModal && this.props?.defaultPodcastData?.description} class="input" type="text" name="description" required>
+              <input value=${
+                this.props.isEditModal && this.props?.defaultPodcastData?.description
+              } class="input" type="text" name="description" required>
             </div></div>
 
             <div class="form__itm">
               <label for="category">Category</label>
               <input value=${
-                this.props.isEditModal &&
-                this.props?.defaultPodcastData?.category
+                this.props.isEditModal && this.props?.defaultPodcastData?.category
               } class="input" type="text" name="description" required>
             </div> </div>
 
@@ -218,11 +200,7 @@ ${
               Cover for your podcast
             </label>
             <span class="form__uploaded-bg">
-            ${
-              this.state.selectedCover
-                ? html`<img src="${this.state.selectedCover}" />`
-                : ""
-            }
+            ${this.state.selectedCover ? html`<img src="${this.state.selectedCover}" />` : ""}
             </span>
             <p class="form__uploaded-name">${this.state.selectedFile}</p>
             <input type="file" name="cover" accept="image/jpeg, image/png" onChange=${
@@ -240,11 +218,7 @@ ${
           </div></div>
 
             <button class="btn btn--submit btn--loader" type="submit">
-            ${
-              this.state.showLoader
-                ? html`<span class="loader"></span>`
-                : `Submit`
-            }
+            ${this.state.showLoader ? html`<span class="loader"></span>` : `Submit`}
             </button>
           </form>
         </div>

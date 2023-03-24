@@ -1,24 +1,26 @@
-const { ERR, MIME} = require("../app/constants");
-const { sendJsonErr } = require("../app/common");
+const { ERR, MIME } = require("../common/constants.js");
+const { sendJsonErr } = require("../common/common.js");
 const { UserModel } = require("../models/UserModel.js");
-const RSS  = require("rss");
+const RSS = require("rss");
 const USER_DB = new UserModel();
 const querystring = require("querystring");
 
 module.exports = async (req, res) => {
   await USER_DB.init();
-  const { podcastID, userID } = querystring.parse(req.url.split('?').pop());
+  const { podcastID, userID } = querystring.parse(req.url.split("?").pop());
 
   if (!userID || !podcastID) {
     sendJsonErr(res, ERR.badInput);
     return;
   }
 
-    const podcasts = await USER_DB.getPodcastsForUser({_id: userID}).catch(_ => {return null});
+  const podcasts = await USER_DB.getPodcastsForUser({ _id: userID }).catch((_) => {
+    return null;
+  });
 
   if (!podcasts) {
-    sendJsonErr(res, ERR.userNotFound)
-    return
+    sendJsonErr(res, ERR.userNotFound);
+    return;
   }
 
   let targetPodcast = podcasts[podcastID];
@@ -35,7 +37,7 @@ module.exports = async (req, res) => {
     //author: "",
     //site_url: "",
     language: targetPodcast.language
-  })
+  });
 
   if (targetPodcast.episodes) {
     for (let episode of targetPodcast.episodes) {
@@ -44,16 +46,15 @@ module.exports = async (req, res) => {
         title: episode.title,
         description: episode.description,
         url: episode.audio,
-        date_published: episode.createdAt,
-      })
+        date_published: episode.createdAt
+      });
     }
-
   }
 
-  const xmlResponse = rssFeed.xml({indent: true}) 
+  const xmlResponse = rssFeed.xml({ indent: true });
   res.writeHead(200, {
-    "Content-type": MIME.xml,
-  })
-  res.write(xmlResponse)
+    "Content-type": MIME.xml
+  });
+  res.write(xmlResponse);
   res.end();
 };

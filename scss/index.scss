@@ -21,23 +21,22 @@ section.hero {
   margin: 0 auto;
 }
 
-
 section > h2:not(.hero__sub) {
-    margin-block: 0.5rem;
-    color: $text-clr-1;
-    font-size: clamp(5rem, 15vw, 8em);
-    position: absolute;
-    z-index: -1;
-    top: 0;
+  margin-block: 0.5rem;
+  color: $text-clr-1;
+  font-size: clamp(5rem, 15vw, 8em);
+  position: absolute;
+  z-index: -1;
+  top: 0;
 
-    @media screen and (max-width: 350px) {
-      font-size: 3rem;
-      top: 1.5rem;
-    }
+  @media screen and (max-width: 350px) {
+    font-size: 3rem;
+    top: 1.5rem;
+  }
 
-    @media screen and (min-width: 600px) {
-      top: -10%;
-    }
+  @media screen and (min-width: 600px) {
+    top: -10%;
+  }
 }
 
 section {
@@ -45,7 +44,6 @@ section {
   margin: 3rem auto;
   position: relative;
   padding-top: 5rem;
-
 }
 
 .navbar {
@@ -78,7 +76,7 @@ section {
 
   .nav__links a {
     padding-block: 0.6rem;
-    font-size: .95rem;
+    font-size: 0.95rem;
     width: 100%;
     text-align: center;
     text-transform: capitalize;
@@ -126,8 +124,8 @@ section {
 
     flex-direction: row;
     position: fixed;
-    box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.14),
-      0px 1px 10px 0px rgba(0, 0, 0, 0.12), 0px 2px 4px -1px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12),
+      0px 2px 4px -1px rgba(0, 0, 0, 0.2);
     width: 100%;
     align-items: center;
     padding: 0.8rem 1.3rem;
@@ -189,9 +187,9 @@ section {
 
   h3 {
     color: $text-clr-2;
-    text-decoration: none; 
+    text-decoration: none;
     border-left: 3px solid $accent;
-    padding-left: .4rem;
+    padding-left: 0.4rem;
     width: fit-content;
   }
 
@@ -223,7 +221,6 @@ section {
 
 .faq {
   width: 90%;
-
 
   &__list {
     list-style: none;
@@ -262,11 +259,7 @@ section {
   }
 
   .pricing__prices .highlight {
-  background: linear-gradient(
-    180deg,
-    lighten($accent, 3%),
-    darken($accent, 5%)
-  );
+    background: linear-gradient(180deg, lighten($accent, 3%), darken($accent, 5%));
 
     p {
       color: black;
@@ -348,11 +341,7 @@ section {
 .sold-yet {
   width: 100%;
   max-width: 100%;
-  background: linear-gradient(
-    180deg,
-    lighten($accent, 3%),
-    darken($accent, 5%)
-  );
+  background: linear-gradient(180deg, lighten($accent, 3%), darken($accent, 5%));
   padding: 2rem 1.5rem;
 
   > div {
@@ -403,7 +392,7 @@ section {
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem .5rem;
+  padding: 1rem 0.5rem;
 
   &__profile {
     width: 40px;
@@ -551,7 +540,7 @@ section.create {
 
   .form__file .form__uploaded-name {
     background: $text-clr-2-5;
-    padding: .2rem .3rem;
+    padding: 0.2rem 0.3rem;
     max-width: 100%;
     text-overflow: ellipses;
     overflow: hidden;
@@ -563,7 +552,7 @@ section.create {
 }
 
 section.share {
-  padding: .75rem .5rem;
+  padding: 0.75rem 0.5rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -571,7 +560,7 @@ section.share {
   .share__itm {
     display: flex;
     flex-direction: column;
-    gap: .5rem;
+    gap: 0.5rem;
   }
 
   .editor {
@@ -584,9 +573,9 @@ section.share {
     justify-content: space-between;
     width: 100%;
     position: relative;
-    overflow: hidden; 
+    overflow: hidden;
     background-image: linear-gradient(90deg, $text-clr-2, $text-clr-2-5);
-  } 
+  }
 
   .itm__title h2 {
     border-radius: 2px;
@@ -596,19 +585,16 @@ section.share {
     white-space: nowrap;
   }
 
-
   .itm__title .title__bg {
     width: 100%;
     position: absolute;
     object-fit: cover;
     z-index: -1;
-
   }
-
 }
 
 section.manage {
-  padding: .75rem .5rem;
+  padding: 0.75rem 0.5rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -625,12 +611,12 @@ section.manage {
     flex-direction: column;
     align-items: flex-start;
     justify-content: space-between;
-    padding: .5rem;
+    padding: 0.5rem;
     width: 100%;
     position: relative;
-    overflow: hidden; 
+    overflow: hidden;
     background-image: linear-gradient(90deg, $text-clr-2, $text-clr-2-5);
-  } 
+  }
 
   .itm__title h2 {
     border-radius: 2px;
@@ -668,7 +654,7 @@ section.manage {
     flex-direction: column;
     width: 100%;
     margin-top: 1rem;
-    gap: .5rem;
+    gap: 0.5rem;
   }
 
   .itm__control {
@@ -690,12 +676,12 @@ section.manage {
   }
 
   .itm__control .btn {
-    padding: .3rem .4rem;
+    padding: 0.3rem 0.4rem;
     flex: 50%;
     border-radius: 0;
     text-align: center;
     color: white;
-    font-size: .95rem;
+    font-size: 0.95rem;
     border: none;
     background-color: $accent;
   }
@@ -712,9 +698,9 @@ section.manage {
 
   .list__itm:not(.list__itm--disabled) {
     border-radius: 2px;
-    padding: .4rem .3rem;
+    padding: 0.4rem 0.3rem;
     display: flex;
-    gap: .5rem;
+    gap: 0.5rem;
     flex-direction: column;
     justify-content: space-between;
   }
@@ -740,12 +726,10 @@ section.manage {
   }
 
   @media screen and (min-width: 750px) {
-
     .itm__title {
       flex-direction: row;
       align-items: center;
     }
-
 
     .podcast__control {
       width: auto;
@@ -754,11 +738,11 @@ section.manage {
     .list__itm:not(.list__itm--disabled) {
       flex-direction: row;
       align-items: center;
-      padding-inline: .6rem;
+      padding-inline: 0.6rem;
     }
 
     .itm__control {
-      gap: .3rem;
+      gap: 0.3rem;
     }
 
     .itm__control .btn {
@@ -766,14 +750,10 @@ section.manage {
       width: 25px;
       height: 25px;
     }
-
   }
-
 }
 
-
 .overview {
-
   &__img {
     position: relative;
   }
@@ -786,7 +766,7 @@ section.manage {
 
   &__content {
     padding-inline: 1rem;
-    gap: .5rem;
+    gap: 0.5rem;
     display: flex;
     align-items: center;
   }
@@ -812,11 +792,11 @@ footer {
 
   .footer__links {
     display: flex;
-    gap: .5rem;
+    gap: 0.5rem;
     list-style: none;
   }
 
-  li a  i {
+  li a i {
     font-size: 2rem;
   }
 }

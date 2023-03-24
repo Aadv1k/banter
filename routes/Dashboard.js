@@ -6,13 +6,9 @@ const cookie = require("cookie");
 
 const USER_DB = new UserModel();
 
-const { MIME } = require("../app/constants");
+const { MIME } = require("../common/constants.js");
 
-const {
-  isCookieAndSessionValid,
-  redirect,
-  renderView,
-} = require("../app/common");
+const { isCookieAndSessionValid, redirect, renderView } = require("../common/common.js");
 
 module.exports = async (req, res) => {
   await USER_DB.init();
@@ -38,6 +34,6 @@ module.exports = async (req, res) => {
 
   renderView(req, res, "dashboard.ejs", 200, {
     spotifyLoggedIn: Boolean(spotifyRefreshToken),
-    user,
+    user
   });
 };

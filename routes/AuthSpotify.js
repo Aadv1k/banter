@@ -3,8 +3,8 @@ const {
   ERR,
   SPOTIFY_CLIENT_ID,
   SPOTIFY_CLIENT_SECRET,
-  SPOTIFY_REDIRECT,
-} = require("../app/constants");
+  SPOTIFY_REDIRECT
+} = require("../common/constants.js");
 
 const crypto = require("crypto");
 
@@ -14,10 +14,10 @@ const {
   sendJsonErr,
   generatePassword,
   setSessionIdAndRedirect,
-  redirect,
-} = require("../app/common");
+  redirect
+} = require("../common/common.js");
 
-const {v4: uuid} = require("uuid");
+const { v4: uuid } = require("uuid");
 
 const fetch = require("node-fetch-commonjs");
 const cookie = require("cookie");
@@ -32,7 +32,7 @@ async function handleRouteAuthSpotify(req, res) {
     response_type: "code",
     client_id: SPOTIFY_CLIENT_ID,
     redirect_uri: SPOTIFY_REDIRECT,
-    scope: scope,
+    scope: scope
   });
 
   const spotifyUrl = `https://accounts.spotify.com/authorize?${spotifyQuery}`;
@@ -53,16 +53,16 @@ async function handleRouteAuthSpotifyCallback(req, res) {
     code: authToken,
     redirect_uri: SPOTIFY_REDIRECT,
     client_id: SPOTIFY_CLIENT_ID,
-    client_secret: SPOTIFY_CLIENT_SECRET,
+    client_secret: SPOTIFY_CLIENT_SECRET
   });
 
   const accessRes = await fetch("https://accounts.spotify.com/api/token", {
     method: "POST",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
-      "Content-Length": formData.length,
+      "Content-Length": formData.length
     },
-    body: formData,
+    body: formData
   });
 
   const tokenData = await accessRes.json();
@@ -73,8 +73,8 @@ async function handleRouteAuthSpotifyCallback(req, res) {
     method: "GET",
     headers: {
       "Content-type": MIME.json,
-      Authorization: `Bearer ${access_token}`,
-    },
+      Authorization: `Bearer ${access_token}`
+    }
   });
 
   const userData = await userRes.json();
@@ -86,20 +86,15 @@ async function handleRouteAuthSpotifyCallback(req, res) {
   if (existingUser) {
     Store.store(spotifySessionId, {
       uid: existingUser._id,
-      spotifyRefreshToken: refresh_token,
+      spotifyRefreshToken: refresh_token
     });
   } else {
     USER_DB.pushUser(
-      new User(
-        spotifyUserId,
-        userData.display_name,
-        userData.email,
-        generatePassword(16)
-      )
+      new User(spotifyUserId, userData.display_name, userData.email, generatePassword(16))
     );
     Store.store(spotifySessionId, {
       uid: spotifyUserId,
-      spotifyRefreshToken: refresh_token,
+      spotifyRefreshToken: refresh_token
     });
   }
 
@@ -111,15 +106,15 @@ async function getSpotifyAccessTokenFromRefreshToken(refreshToken) {
     grant_type: "refresh_token",
     refresh_token: refreshToken,
     client_id: SPOTIFY_CLIENT_ID,
-    client_secret: SPOTIFY_CLIENT_SECRET,
+    client_secret: SPOTIFY_CLIENT_SECRET
   });
 
   const tokenRes = await fetch("https://accounts.spotify.com/api/token", {
     method: "POST",
     body: query,
     headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-    },
+      "Content-Type": "application/x-www-form-urlencoded"
+    }
   });
 
   const data = await tokenRes.json();
@@ -129,5 +124,5 @@ async function getSpotifyAccessTokenFromRefreshToken(refreshToken) {
 module.exports = {
   handleRouteAuthSpotify,
   handleRouteAuthSpotifyCallback,
-  getSpotifyAccessTokenFromRefreshToken,
+  getSpotifyAccessTokenFromRefreshToken
 };

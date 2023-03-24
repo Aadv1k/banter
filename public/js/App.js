@@ -1,7 +1,4 @@
-import {
-  createElement as h,
-  Component,
-} from "https://unpkg.com/preact@latest?module";
+import { createElement as h, Component } from "https://unpkg.com/preact@latest?module";
 import htm from "https://unpkg.com/htm@latest?module";
 import { Router } from "https://unpkg.com/preact-router@3.0.0?module";
 

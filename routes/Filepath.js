@@ -1,5 +1,5 @@
-const { MIME } = require("../app/constants");
-const { renderView } = require("../app/common");
+const { MIME } = require("../common/constants.js");
+const { renderView } = require("../common/common.js");
 const path = require("path");
 const { existsSync, readFileSync } = require("fs");
 

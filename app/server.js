@@ -1,12 +1,6 @@
-const {
-  handleRouteAuthMSCallback,
-  handleRouteAuthMS,
-} = require("../routes/AuthMicrosoft");
+const { handleRouteAuthMSCallback, handleRouteAuthMS } = require("../routes/AuthMicrosoft");
 
-const {
-  handleRouteAuthSpotify,
-  handleRouteAuthSpotifyCallback,
-} = require("../routes/AuthSpotify");
+const { handleRouteAuthSpotify, handleRouteAuthSpotifyCallback } = require("../routes/AuthSpotify");
 
 const routeFilepath = require("../routes/Filepath");
 const routeDashboard = require("../routes/Dashboard");
@@ -26,11 +20,11 @@ const routeUpdatePodcast = require("../routes/UpdatePodcast.js");
 const routeDeleteEpisode = require("../routes/DeleteEpisode.js");
 const routeDeletePodcast = require("../routes/DeletePodcast.js");
 
-const routeUserinfo = require("../routes/UserInfo.js")
+const routeUserinfo = require("../routes/UserInfo.js");
 
 const http = require("http");
-const { renderView } = require("./common");
-const { MIME } = require("./constants");
+const { renderView } = require("../common/common.js");
+const { MIME } = require("../common/constants.js");
 
 module.exports = http.createServer(async (req, res) => {
   const URI = req.url;
@@ -65,7 +59,7 @@ module.exports = http.createServer(async (req, res) => {
   } else if (URI.startsWith("/getEpisode")) {
     routeGetEpisode(req, res);
   } else if (URI.startsWith("/rss")) {
-    routeRSS(req, res)
+    routeRSS(req, res);
   } else if (URI.startsWith("/updateEpisode")) {
     routeUpdateEpisode(req, res);
   } else if (URI.startsWith("/updatePodcast")) {
@@ -76,8 +70,7 @@ module.exports = http.createServer(async (req, res) => {
     routeDeleteEpisode(req, res);
   } else if (URI.startsWith("/deletePodcast")) {
     routeDeletePodcast(req, res);
-  }
-  else {
+  } else {
     renderView(req, res, "404.ejs", 404, {}, true);
   }
 });

@@ -20,14 +20,12 @@ function newID(len) {
 
 function isCookieAndSessionValid(req) {
   const ck = cookie.parse(req.headers.cookie ?? "");
-  return (
-    Object.keys(ck).length !== 0 && Store.get(ck.sessionid)?.uid !== undefined
-  );
+  return Object.keys(ck).length !== 0 && Store.get(ck.sessionid)?.uid !== undefined;
 }
 
 function redirect(res, path) {
   res.writeHead(302, {
-    Location: path,
+    Location: path
   });
   res.end();
 }
@@ -39,7 +37,7 @@ function md5(str) {
 function setSessionIdAndRedirect(res, sid) {
   res.writeHead(302, {
     Location: "/dashboard",
-    "Set-Cookie": `sessionid=${sid}; path=/`,
+    "Set-Cookie": `sessionid=${sid}; path=/`
   });
   res.end();
 }
@@ -55,7 +53,6 @@ function renderView(req, res, file, httpStatusCode, data, cache) {
     res.end();
     return;
   }
-
 
   if (existsSync(viewPath)) {
     ejs.renderFile(viewPath, data ?? {}, (err, data) => {
@@ -91,5 +88,5 @@ module.exports = {
   redirect,
   md5,
   renderView,
-  newID,
+  newID
 };

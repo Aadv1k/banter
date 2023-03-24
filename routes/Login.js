@@ -1,4 +1,4 @@
-const { ERR } = require("../app/constants");
+const { ERR } = require("../common/constants.js");
 
 const {
   isCookieAndSessionValid,
@@ -6,13 +6,12 @@ const {
   md5,
   redirect,
   renderView,
-  newID,
-} = require("../app/common");
+  newID
+} = require("../common/common.js");
 
 const { Store } = require("../models/MemoryStore");
 const { UserModel } = require("../models/UserModel");
-
-const querystring = require("querystring");
+const formidable = require("formidable");
 
 const USER_DB = new UserModel();
 
@@ -25,34 +24,45 @@ module.exports = async (req, res) => {
       return;
     }
     renderView(req, res, "login.ejs", 200, {}, true);
-  } else if (req.method === "POST") {
-    let body = "";
-    req.on("data", (chunk) => (body += chunk.toString()));
-    req.on("end", async () => {
-      const formData = querystring.parse(body);
-      if (![formData.email, formData.password].every((e) => e)) {
-        sendJsonErr(res, ERR.badInput);
-        return;
-      }
-      const sid = newID();
-      const hashedPassword = md5(formData.password);
-      const dbUser = await USER_DB.getUser({ email: formData.email });
-
-      if (!dbUser) {
-        sendJsonErr(res, ERR.userNotFound);
-        return;
-      } else if (dbUser.password != hashedPassword) {
-        sendJsonErr(res, ERR.invalidPassword);
-        return;
-      }
-
-      Store.store(sid, { uid: dbUser._id });
-
-      res.writeHead(302, {
-        Location: "/dashboard",
-        "Set-Cookie": `sessionid=${sid}`,
-      });
-      res.end();
-    });
+    return;
+  } else if (req.method !== "POST") {
+    sendJsonErr(res, ERR.invalidMethod);
+    return;
   }
+
+  const form = formidable({ multiples: false });
+
+  form.parse(req, async (err, fields, _) => {
+    if (err) {
+      sendJsonErr(res, ERR.internalErr);
+      return;
+    }
+
+    let { email, password } = fields;
+
+    if (![email, password].every((e) => e)) {
+      sendJsonErr(res, ERR.badInput);
+      return;
+    }
+
+    const sid = newID();
+    const hashedPassword = md5(password);
+    const dbUser = await USER_DB.getUser({ email: email });
+
+    if (!dbUser) {
+      sendJsonErr(res, ERR.userNotFound);
+      return;
+    } else if (dbUser.password != hashedPassword) {
+      sendJsonErr(res, ERR.invalidPassword);
+      return;
+    }
+
+    Store.store(sid, { uid: dbUser._id });
+
+    res.writeHead(302, {
+      Location: "/dashboard",
+      "Set-Cookie": `sessionid=${sid}`
+    });
+    res.end();
+  });
 };

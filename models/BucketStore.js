@@ -1,5 +1,9 @@
-const cloudinary = require('cloudinary').v2;
-const { CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET, CLOUDINARY_CLOUD_NAME} = require("../app/constants")
+const cloudinary = require("cloudinary").v2;
+const {
+  CLOUDINARY_API_KEY,
+  CLOUDINARY_API_SECRET,
+  CLOUDINARY_CLOUD_NAME
+} = require("../common/constants.js");
 const { statSync } = require("fs");
 
 class BucketStore {
@@ -19,21 +23,23 @@ class BucketStore {
     let fileSizeInMB = fileSize / 8e4;
 
     const response = new Promise((resolve, reject) => {
-      this.bucket.uploader[fileSizeInMB > 100 ? "upload_large": "upload"](
-      filepath, 
-      { resource_type: 'auto' }, 
-      (err, result) => { 
-        if (err) reject(err) 
-        resolve(result);
-      }
-    )});
+      this.bucket.uploader[fileSizeInMB > 100 ? "upload_large" : "upload"](
+        filepath,
+        { resource_type: "auto" },
+        (err, result) => {
+          if (err) reject(err);
+          resolve(result);
+        }
+      );
+    });
 
     try {
-      const output = await response
-      return {path: output.url};
+      const output = await response;
+      return { path: output.url };
     } catch (err) {
       return null;
     }
-}}
+  }
+}
 
 module.exports = { BucketStore };

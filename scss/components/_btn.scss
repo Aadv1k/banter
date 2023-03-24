@@ -29,7 +29,6 @@
     }
   }
 
-
   &--primary {
     background-color: black;
     color: white;
@@ -51,7 +50,7 @@
   }
 
   &--submit {
-      background-color: $accent;
+    background-color: $accent;
     border: 1px solid $accent;
     height: 20px;
     border-radius: 2px;

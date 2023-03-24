@@ -19,9 +19,8 @@ function buildStyles() {
 }
 
 function initBrowser() {
-  browserSync.init(
-    { proxy: `http://localhost:${PORT}`, port: 4000, open: false },
-    () => console.log("started")
+  browserSync.init({ proxy: `http://localhost:${PORT}`, port: 4000, open: false }, () =>
+    console.log("started")
   );
 }
 
@@ -34,7 +33,7 @@ function runServer() {
   nodemon({
     script: serverPath,
     ext: "js",
-    ignore: ["./public/*"],
+    ignore: ["./public/*"]
   }).on("restart", () => {
     setTimeout(browserSync.reload, 1000);
   });
@@ -47,5 +46,5 @@ function watchFiles() {
 
 module.exports = {
   dev: gulp.parallel(watchFiles, gulp.parallel(runServer, initBrowser)),
-  build: gulp.series(buildStyles),
+  build: gulp.series(buildStyles)
 };

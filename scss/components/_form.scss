@@ -13,7 +13,7 @@
     flex-direction: row-reverse !important;
 
     input {
-    all: revert !important;
+      all: revert !important;
     }
   }
 
@@ -44,12 +44,11 @@
 
   .form__select {
     select {
-      padding: .5rem .3rem;
+      padding: 0.5rem 0.3rem;
       background: $text-clr-1;
       border: none;
     }
   }
-
 
   .form__uploaded-bg img {
     border: none;
@@ -67,31 +66,28 @@
     color: $text-clr-2;
   }
 
-
   .form__file {
     position: relative;
     align-items: center;
     flex-direction: row;
     border-radius: 2px;
-    padding: .2rem .5rem;
+    padding: 0.2rem 0.5rem;
     outline: 2px dotted $accent;
     justify-content: space-between;
-
   }
 
-
   .form__file label {
-      display: none;
-    }
+    display: none;
+  }
 
   .form__file i {
-      color: $text-clr-1;
-      font-size: 2.5rem;
-    }
+    color: $text-clr-1;
+    font-size: 2.5rem;
+  }
 
   .form__file p {
     color: $text-clr-2;
-    font-size: .9rem;
+    font-size: 0.9rem;
     font-style: italic;
   }
 

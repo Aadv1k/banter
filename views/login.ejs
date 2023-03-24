@@ -3,8 +3,10 @@
 <head>
   <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta charset="UTF-8">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css" integrity="sha384-b6lVK+yci+bfDmaY1u0zE8YYJt0TZxLEAFyYSLHId4xoVvsrQu3INevFKo+Xir8e" crossorigin="anonymous">
   <title>Banter: Login</title>
   <link rel="stylesheet" href="style.css" media="all">
+  <script src="/js/index.js" defer type="module"></script>
 </head>
 <body>
   <nav class="navbar">
@@ -12,12 +14,12 @@
   </nav>
 
   <section class="login-form">
-  <form method="POST" class="form form--login">
+  <form method="POST" class="form form--login" id="loginForm">
     <h2 class="form__title">Login</h2>
 
     <div class="form__itm">
       <label for="email">Email</label>
-      <input type="email" name="email" placeholder="Eg example@foo.com" required>
+      <input type="email" name="email" placeholder="Eg example@foo.com">
     </div>
 
     <div class="form__itm">

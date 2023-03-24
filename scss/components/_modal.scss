@@ -41,16 +41,16 @@
 
   .modal__control {
     display: flex;
-    gap: .5rem;
+    gap: 0.5rem;
     width: 100%;
 
     .btn {
       border: 1px solid $accent;
       flex: 50%;
       text-align: center;
-      margin-top: .5rem;
+      margin-top: 0.5rem;
       font-size: 1rem;
-      padding-block: .5rem;
+      padding-block: 0.5rem;
       text-transform: capitalize;
       border-radius: 3px;
     }
@@ -110,7 +110,9 @@
     border-radius: 2px;
     border: 1px solid $accent;
 
-    box-shadow: rgba(241, 91, 62, 0.5) 5px 5px, rgba(241, 91, 62, 0.3) 10px 10px, rgba(241, 91, 62, 0.2) 15px 15px, rgba(241, 91, 62, 0.1) 20px 20px, rgba(241, 91, 62, 0.05) 25px 25px;
+    box-shadow: rgba(241, 91, 62, 0.5) 5px 5px, rgba(241, 91, 62, 0.3) 10px 10px,
+      rgba(241, 91, 62, 0.2) 15px 15px, rgba(241, 91, 62, 0.1) 20px 20px,
+      rgba(241, 91, 62, 0.05) 25px 25px;
     //box-shadow: 0 0 0 2px rgba(241, 91, 62, 0.8) , 8px 8px 0 0 darken(rgba(241, 91, 62, 1), 10%);
     top: 50%;
     left: 50%;
