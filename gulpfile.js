@@ -3,7 +3,7 @@ const sass = require("gulp-sass")(require("sass"));
 const nodemon = require("gulp-nodemon");
 const browserSync = require("browser-sync").create();
 const rename = require("gulp-rename");
-const { PORT } = require("./app/constants.js");
+const { PORT } = require("./common/constants.js");
 
 const stylesSrcPath = "./scss/**/*.scss";
 const stylesDestPath = "./public/";
