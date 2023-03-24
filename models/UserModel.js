@@ -11,6 +11,7 @@ class User {
     this.email = email;
     this.password = password;
     this.profileImage = profileImage ?? "";
+    this.podcasts = {};
   }
 }
 
@@ -41,6 +42,7 @@ class UserModel {
       email: user.email,
       password: user.password,
       profileImage: user.profileImage,
+      podcasts: user.podcasts,
     });
   }
 

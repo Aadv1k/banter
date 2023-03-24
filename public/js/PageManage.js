@@ -190,7 +190,7 @@ ${this.state.showEpisodeEditModal && html`
               </div>
             </div>
             <ul class="itm__list">
-              ${podcast?.episodes?.length > 1
+              ${podcast?.episodes?.length !== 0
                 ? podcast.episodes.map((episode) => {
                     return html`
                       <li class="list__itm">
