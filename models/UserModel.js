@@ -184,6 +184,8 @@ class UserModel {
       return null;
     }
 
+    let updateBlob = {};
+
     const updateQuery = `podcasts.${podcastID}`; 
     for (let field of Object.keys(newPodcast)) {
       updateBlob[`${updateQuery}.${field}`] = newPodcast[field];

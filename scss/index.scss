@@ -677,26 +677,27 @@ section.manage {
 
   .podcast__control {
     width: 100%;
-    gap: 0;
   }
 
-  .podcast__control .btn--primary, .podcast__control .btn--secondary {
-    background-color: $text-clr-1;
-    flex: 50%;
-    border-radius: 0;
-    text-align: center;
-    padding: .3rem .4rem;
-    color: white;
-    font-size: .95rem;
+  .podcast__control .btn {
+    background-color: $text-clr-2 !important;
+    color: white !important;
+    border: 1px solid $text-clr-2 !important;
+  }
+
+  .itm__control .btn:not(.podcast__control .btn) {
     border: 1px solid $accent;
   }
 
-  .itm__control .btn--primary, .itm__control .btn--secondary {
-    background-color: $text-clr-2 !important;
+  .itm__control .btn {
     padding: .3rem .4rem;
+    flex: 50%;
+    border-radius: 0;
+    text-align: center;
     color: white;
     font-size: .95rem;
     border: none;
+    background-color: $accent;
   }
 
   .btn i {
@@ -705,11 +706,8 @@ section.manage {
 
   .itm__control .btn--secondary {
     background-color: transparent;
+    border: 1px solid $accent;
     color: $text-clr-2;
-  }
-
-  .podcast__control .btn--secondary {
-    color: white;
   }
 
   .list__itm:not(.list__itm--disabled) {
@@ -747,6 +745,7 @@ section.manage {
       flex-direction: row;
       align-items: center;
     }
+
 
     .podcast__control {
       width: auto;

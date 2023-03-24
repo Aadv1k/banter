@@ -1026,34 +1026,32 @@ section.manage .itm__control {
 }
 section.manage .podcast__control {
   width: 100%;
-  gap: 0;
 }
-section.manage .podcast__control .btn--primary, section.manage .podcast__control .btn--secondary {
-  background-color: #d0c8c4;
+section.manage .podcast__control .btn {
+  background-color: #61544d !important;
+  color: white !important;
+  border: 1px solid #61544d !important;
+}
+section.manage .itm__control .btn:not(.podcast__control .btn) {
+  border: 1px solid #f15b3e;
+}
+section.manage .itm__control .btn {
+  padding: 0.3rem 0.4rem;
   flex: 50%;
   border-radius: 0;
   text-align: center;
-  padding: 0.3rem 0.4rem;
-  color: white;
-  font-size: 0.95rem;
-  border: 1px solid #f15b3e;
-}
-section.manage .itm__control .btn--primary, section.manage .itm__control .btn--secondary {
-  background-color: #61544d !important;
-  padding: 0.3rem 0.4rem;
   color: white;
   font-size: 0.95rem;
   border: none;
+  background-color: #f15b3e;
 }
 section.manage .btn i {
   vertical-align: middle;
 }
 section.manage .itm__control .btn--secondary {
   background-color: transparent;
+  border: 1px solid #f15b3e;
   color: #61544d;
-}
-section.manage .podcast__control .btn--secondary {
-  color: white;
 }
 section.manage .list__itm:not(.list__itm--disabled) {
   border-radius: 2px;

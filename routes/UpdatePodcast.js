@@ -37,7 +37,8 @@ module.exports = async (req, res) => {
     });
   });
 
-  if (![fields.podcastID, fields.episodeID].every((e) => e)) {
+  if (![fields.podcastID].every((e) => e)) {
+    sendJsonErr(res, ERR.badInput);
     return;
   }
 

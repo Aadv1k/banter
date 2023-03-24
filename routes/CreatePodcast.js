@@ -36,7 +36,6 @@ module.exports = async (req, res) => {
     });
   });
 
-
   if (![
   files.cover, 
     fields.title, 

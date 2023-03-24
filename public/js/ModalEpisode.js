@@ -77,7 +77,6 @@ export default class ModalEpisode extends Component {
       });
     } else {
       postFormData.append("podcastID", selectedPodcastName);
-      console.log(postFormData);
       res = await fetch("/createEpisode", {
         method: "POST",
         body: postFormData
@@ -87,13 +86,13 @@ export default class ModalEpisode extends Component {
     if (res.status !== 200) {
       toast("Something went wrong", "danger", "bi bi-exclamation-triangle-fill");
       this.setState({showLoader: false});
+      window.location.reload(false);
       return;
     }
 
     const { data } = await res.json();
     toast(this.props.isEditModal ? `Updated the episode with id ${data.episodeID}` : `Created episode with id ${data.id}`, "success", "bi bi-check-circle-fill");
-    this.setState({showLoader: false})
-    this.props.setModal();
+    this.props.setModal()
   }
 
   render() {

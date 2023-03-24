@@ -31,7 +31,7 @@ export default class PageCreate extends Component {
     this.handlePodcastEditClick = this.handlePodcastEditClick.bind(this);
 
     this.handleEpisodeDelete = this.handleEpisodeDelete.bind(this);
-    this.handlePodcastDelete = this.handleEpisodeDelete.bind(this);
+    this.handlePodcastDelete = this.handlePodcastDelete.bind(this);
 
     this.setEpisodeEditModal = this.setEpisodeEditModal.bind(this);
     this.setPodcastEditModal = this.setPodcastEditModal.bind(this);
@@ -67,21 +67,19 @@ export default class PageCreate extends Component {
       })
   }
 
-  handlePodcastDelete({podcastID}) {
+  handlePodcastDelete({ podcastID }) {
     fetch(`/deletePodcast?podcastID=${podcastID}`, {method: "DELETE"})
       .then(res => {
         if (res.status !== 200) {
           toast("was unable to delete the episode", "warn", "bi bi-exclamation-triangle");
           return;
-        } else {
-          window.location.reload(false);
-        }
+        }       
+        window.location.reload(false);
       })
   }
 
   handlePodcastDeleteClick(e) {
     const podcastID = e.currentTarget.parentElement.getAttribute('data-podcast');
-    console.log(e.currentTarget.parentElement);
     if (!podcastID) {
       toast("episode or podcast ID not found, try refreshing the page", "warn", "bi bi-exclamation-triangle");
       return;
@@ -112,7 +110,7 @@ export default class PageCreate extends Component {
       return;
     }
 
-    this.setState({showPodcastEditModal: true});
+    this.setState({showPodcastEditModal: true, defaultPodcastData: this.state.podcasts.find(e => e.id === podcastID), podcastID: podcastID});
   }
 
   handleEpisodeEditClick(e) {
@@ -139,6 +137,8 @@ export default class PageCreate extends Component {
   }
 
   componentDidMount() {
+    console.log("called");
+
     fetch("/getPodcast")
       .then((d) => d.json())
       .then((data) => {
@@ -167,7 +167,7 @@ ${this.state.showPodcastDeleteModal && html`
 
 
 ${this.state.showPodcastEditModal && html`
-<${ModalPodcast} setModal=${this.setPodcastEditModal} isEditModal=${true} podcastID=${this.state.podcastID} />
+<${ModalPodcast} defaultPodcastData=${this.state.defaultPodcastData} setModal=${this.setPodcastEditModal} isEditModal=${true} podcastID=${this.state.podcastID} />
 ` }
 
 ${this.state.showEpisodeEditModal && html`

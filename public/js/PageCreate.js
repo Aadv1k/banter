@@ -16,7 +16,7 @@ export default class PageCreate extends Component {
     this.state = { 
       episodeModalOpen: false, 
       podcastModalOpen: false,
-      hasPodcasts: true, 
+      hasPodcasts: false, 
       podcasts: [],
     };
     this.setEpisodeModal = this.setEpisodeModal.bind(this);
@@ -25,6 +25,23 @@ export default class PageCreate extends Component {
 
   setPodcastModal() {
     this.setState({modalOpen: false, podcastModalOpen: !this.state.podcastModalOpen})
+  }
+
+  componentDidMount() {
+    fetch("/getPodcast", {
+      headers: {
+        "Access-Control-Allow-Origin": "*"
+      }
+    })
+      .then(d => d.json())
+      .then(data => {
+        const podcastData = data;
+        if (Object.keys(podcastData).length != 0) {
+          this.setState({hasPodcasts: true});
+          this.setState({podcasts: Object.keys(podcastData).map(e => [podcastData[e].title, e] )});
+          return;
+        }
+      }).catch(err => console.log("shit"));
   }
 
   setEpisodeModal() {
@@ -42,6 +59,7 @@ export default class PageCreate extends Component {
           return;
         }
       }).catch(err => console.log("shit"));
+
 
     if (!this.state.hasPodcasts) {
       toast("No podcasts found for the user", "danger", "bi bi-exclamation-circle");
