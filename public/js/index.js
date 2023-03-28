@@ -42,13 +42,13 @@ for (let form of [
       body: postData
     });
 
-    if (response.status !== 302) {
+    if (response.status !== 200) {
       const data = await response.json();
       toast(data.message, "danger", "bi bi-exclamation-triangle");
       return;
     }
 
-    const url = response.headers.location;
+    const url = response.url;
     window.location.replace(url);
   });
 }
