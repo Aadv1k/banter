@@ -14,7 +14,6 @@ module.exports = async (req, res) => {
   if (req.method === "GET") {
     if (isCookieAndSessionValid(req)) {
       res.writeHead(302, { Location: "/dashboard" });
-      res.end();
       return;
     }
     renderView(req, res, "signup.ejs", 200, {}, true);
@@ -58,6 +57,5 @@ module.exports = async (req, res) => {
       Location: "/dashboard",
       "Set-Cookie": `sessionid=${sid}`
     });
-    res.end();
   });
 };
