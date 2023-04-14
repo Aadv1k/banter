@@ -73,5 +73,7 @@ module.exports = http.createServer(async (req, res) => {
   } else {
     renderView(req, res, "404.ejs", 404, {}, true);
   }
+
+
   res.end();
 });

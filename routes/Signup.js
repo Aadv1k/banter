@@ -21,7 +21,6 @@ module.exports = async (req, res) => {
     sendJsonErr(res, ERR.invalidMethod);
     return;
   }
-
   const form = formidable({ multiples: false });
 
   form.parse(req, async (err, fields, _) => {
