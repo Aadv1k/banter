@@ -11,7 +11,6 @@ const cookie = require("cookie");
 function sendJsonErr(res, err) {
   res.writeHead(err.code, { "Content-type": MIME.json });
   res.write(JSON.stringify(err));
-  res.end();
 }
 
 function newID(len) {
@@ -50,7 +49,6 @@ function renderView(req, res, file, httpStatusCode, data, cache) {
 
   if (req.headers?.["if-none-match"] === filehash) {
     res.statusCode = 304;
-    res.end();
     return;
   }
 
@@ -73,7 +71,6 @@ function renderView(req, res, file, httpStatusCode, data, cache) {
   } else {
     renderView(req, res, "404.ejs", 404, {}, true);
   }
-  res.end();
 }
 
 function generatePassword(length) {
