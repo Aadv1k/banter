@@ -1,6 +1,8 @@
-# Banter; the ultimate podcasting platform
+# Banter
 
-![A demo reel of Banter](https://github.com/user-attachments/assets/2c5a2b69-d01f-45af-a0ab-1491391dd97b)
+https://github.com/user-attachments/assets/4c280f75-3b50-4b3a-bd57-f1a79d2f5fca
+
+Banter is an experimental podcasting platform I built to explore [brutalist design principles](https://en.wikipedia.org/wiki/Brutalist_architecture), including a RESTful API designed with best-practice standards and OAuth authentication implemented from scratch without any dependencies.
 
 - [Get Started](#get-started)
 - [Tech Stack](#tech-stack)
