@@ -1,5 +1,7 @@
 # Banter; the ultimate podcasting platform
 
+![A demo reel of Banter](https://github.com/user-attachments/assets/2c5a2b69-d01f-45af-a0ab-1491391dd97b)
+
 - [Get Started](#get-started)
 - [Tech Stack](#tech-stack)
 - [Architecture Overview](#architecture-overview)
