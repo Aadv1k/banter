@@ -1,12 +1,20 @@
 # Banter; the ultimate podcasting platform
 
+- [Get Started](#get-started)
+- [Tech Stack](#tech-stack)
+- [Architecture Overview](#architecture-overview)
+  - [OAuth Flow](#oauth-flow)
+  - [Routes](#routes)
+  - [Models](#models)
+- [Frontend](#frontend)
+  - [Styles](#styles)
+  - [JavaScript Components](#javascript-components)
+- [API Reference](#api-reference)
+  - [Authentication](#authentication)
+  - [Episodes](#episodes)
+  - [Podcasts](#podcasts)
 
-- [Get](#get)
-- [Tech stack](#tech-stack)
-- [Code walkthrough](#codebase)
-- [(API Reference](#api)
-
-## Get
+## Get Started
 
 ```shell
 git clone git@github.com:aadv1k/banter
@@ -40,7 +48,7 @@ The app is loosely based around the [MVC](https://developer.mozilla.org/en-US/do
 - SASS
 - Preact
 
-## Codebase
+## Architecture Overview
 
 ```
 -------------------------------------------------------------------------------
@@ -96,9 +104,9 @@ Here is what a user object looks like looks like
 
 ```
 
-### Frontend
+## Frontend
 
-#### Styles
+### Styles
 
 For the Front-End ![SASS](https://img.shields.io/badge/Sass-CC6699?style=plastic&logo=sass&logoColor=white) is used.
 The `./scss/` folder is structured like so
@@ -113,7 +121,7 @@ The `./scss/` folder is structured like so
   - `_toast.scss`: Style for the Toast component
 - `index.scss`
 
-#### JavaScript
+### JavaScript Components
 
 A large part of the frontend is handled by ![Preact](https://img.shields.io/badge/Preact-20232A?style=plastic&logo=react&logoColor=61DAFB) which is a minified version of the actual React and is pulled as a CDN.  
 When the user accesses `/dashboard`, the server responds with static html, the static html links to a index file, after which point all the dynamic UI of the app is handled as a SPA here is the overview of `./public/js/` Folder
@@ -129,7 +137,7 @@ When the user accesses `/dashboard`, the server responds with static html, the s
 - `index.js`: Component linked to `dashboard.ejs`
 
 
-## API
+## API Reference
 
 ### `/login`
 
